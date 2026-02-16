@@ -1,0 +1,155 @@
+\chapter{Wide Scan}
+
+Over the last decade, fragmented aperture antennas have been developed to support bandwidths up to 33:1 and higher. Largely, these extreme bandwidth apertures have been developed to support receive applications. In this paper, we present a new design approach to increasing the scan volume to beyond 60 deg, a simplified printed circuit board fabrication approach, and a sample whole x-band (8-12 GHz) array antenna that demonstrates the new design and fabrication approach.
+
+\section{Introduction}
+
+Researchers at Georgia Tech have long been at the forefront of wideband array technology [1][2][2][4]-5]. A crowning achievement of this work was the demonstration of a 33:1 bandwidth array. This 33:1 antenna was manufactured and tested in 2004 to verify the accuracy of GTRI's modeling tools. Comparisons between modeled and measured results are provided in Fig. 1. In particular, Fig. 1 shows good measurement-model agreement across three separate measurement facilities validating our models. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,scale=0.4]{/Users/jim/Book/images/5996889-fig-1-hires.pdf}
+\caption{Good agreement between predicted embedded element gain (red
+line) and measured performance at multiple ranges (various lines).
+Notice that the gain tracks the uniform aperture limit (blue line)
+well across the 0.3 to 10 GHz design band. The inset shows array
+on the outdoor measurement range [Used under permission of the IEEE]}
+\end{center}
+\end{figure}
+
+One shortcoming in the 33:1 array can be seen in Fig. 2. Fig. 2 shows the principal plane patterns for the E and H-planes of the antenna over the entire band. The intended +/- 60o scan volume is evident over most of the band. However, near the top of the band (?8.5?10 GHz) a significant narrowing of the scan volume is evident. In the years since the design of the 33:1 antenna, preventing the narrowing of the scan volume has been an active area of our research.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.35]{/Users/jim/Book/images/5996889-fig-2-hires.png}
+\caption{Normalized, principal plane antenna patterns for the 33:1
+bandwidth array antenna showing wide scan volume (\textgreater +/- 60 deg)
+across the majority of the band. Notice that the scan volume
+reduces to only +/- 40 deg in highest 10-20\% of the band.  [Used under permission of the IEEE]}
+\end{center}
+\end{figure}
+
+Another shortcoming of this array is the aperture efficiency. The uniform-aperture gain limit, $4\pi A/\lambda^2$, is also plotted in Fig. 1. The 33:1 array antenna was within 3dB of this limit (better than 50\% efficient), but the majority of loss was due to the lossy backplane required to support the huge bandwidth of the antenna. This high amount of loss in the antenna limits the array to receive only, or low power transmit uses. 
+
+This paper will discuss progress made recently at overcoming these often-cited roadblocks to wider adoption of fragmented array antennas. First, we have upgraded our design processes to alleviate the upper octave scan volume narrowing without needing to use tighter inter-element spacing. Second, for many classes of use, we can avoid the introduction of loss and retain high efficiency, which enables high power transmit usage. Third, we can use simplified fabrication using a laminated printed circuit board (PCB) approach. We will illustrate this improved process and simplified fabrication using a wide scanning (+/- 60 deg.) whole X-band (8-12 GHz) phased array element design. During the presentation, we will discuss designs supporting other bands of operation and we will present relevant measured results.
+
+\section{Printed Circuit Board (PCB) Fabrication}
+
+Early fragmented aperture designs were constructed using a method depicted in Fig. 3. This design consists of an array of elements printed on circuit board material, suspended over a ground plane by feed towers. The feed towers and ground plane are usually machined from aluminum, and can be quite lightweight as long as they are kept to a minimum thickness, e.g. one 0.6m×0.6m array constructed in this manner weighed only 4 kg for the entire antenna assembly. The machined towers enclose differential coaxial lines that feed the dual polarized antenna elements, and combining networks can be connected to these coaxial lines in the space behind the ground plane. 
+
+The basic fragmented aperture shown in Fig. 3 has produced many successful wideband designs over the last decade (see Fig. 11 for a partial summary). However, if one wants a more easily mass-produced, integrated aperture, one can exploit PCB fabrication as shown in Fig. 4. In this case, the entire antenna is built up out of laminated dielectric layers, producing a thinner, more integrated antenna. Feed networks in this design can be implemented as layers as well, producing a highly integrated antenna panel. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,scale=0.4]{/Users/jim/Book/images/5996889-fig-3-hires.pdf}
+\caption{bla bla}
+\end{center}
+\end{figure}
+
+Designing wideband array antennas in a laminated PCB fashion leads to several issues. Thick substrates can support surface waves that lead to scan blindnesses in the band of operation. To prevent this, surface wave suppression vias are incorporated into the laminated stack up to prevent scan blindness as an integral part of the design process. In addition, the feeds are no longer simple 50? coaxial lines, they are now closely spaced vias manufactured using multi-layer PCB manufacturing techniques. This has the benefit of more mass-producible and repeatable antennas, especially for X-band and higher frequencies.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,scale=0.35]{/Users/jim/Book/images/5996889-fig-4-hires.pdf}
+\caption{bla bla}
+\end{center}
+\end{figure}
+
+\section{Improved Scan volume design}
+
+Our design process for fragmented aperture antennas uses a genetic algorithm (GA) to optimize a unit cell of an array terminated by periodic boundary conditions (PBC). For many applications, we need to design an element that performs well over a wide bandwidth and large scan volume. The FDTD method is ideal for designing wideband antennas, since a single simulation gives a complete band of frequency-domain data. While our use of standard FDTD with PBC was sufficient to design extremely wideband elements, they often had the scan volume drawbacks discussed in the Section I.
+
+To efficiently design better scanning arrays, we have incorporated a spectral domain, FDTD approach to PBC [6] into our design suite. While spectral FDTD still implements the PBC as a wraparound boundary, the constant transverse wavenumber assumption means that the steering direction of the infinite array is frequency dependent, as illustrated in Fig. 5. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,scale=0.35]{/Users/jim/Book/images/5996889-fig-5-hires.pdf}
+\caption{bla bla}
+\end{center}
+\end{figure}
+
+The key to successful design is to strike the right balance in sampling the scan volume sufficiently without performing too many simulations. The exact number needed is problem specific. However, a useful observation is that poor scan issues, when they appear, typically happen at higher frequencies and larger scan angles. As can be seen in Fig. 5, we choose the transverse wavenumbers to give us more information in that region.
+
+\section{Example Whole X-Band, Array Element}
+
+In this section, we present a sample design using the new, wide-scan optimization approach with the simplified PCB fabrication style for a practical military application, i.e. an X-band array. Typical, printed circuit board elements, e.g. microstrip patches, are not broadband enough to support the whole X-band in a low profile, PCB.
+
+The design starts by choosing the array lattice constant such that no grating lobes are allowed, 
+
+\begin{equation}
+{s \over \lambda_{\rm h}} = {1 \over 1 + \sin(\theta_{\max}}) = 0.536\ {\rm for}\ 60\ {\rm deg}.
+\end{equation}
+
+We next choose the number of fragmented pixels across the unit cell using our traditional rules-of-thumb [4], i.e. typically 20-30 pixels across the unique quadrant of the element as shown in Fig. 4. The element is designed using the genetic algorithm approach described in [4] modified to use the spectral FDTD as discussed above in Section III for the normalized Kz \& Ky values shown in Fig. 5.
+
+After the design is complete, we evaluate the performance of an embedded element by simulating a large finite array, e.g. 21 by 21 elements. Fig. 6 shows the realized gain for the central element when the other elements are terminated. This embedded element gain (blue line) is seen to be within at worst 0.2 dB from the uniform-aperture gain limit (red dots) across the design band. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.35]{/Users/jim/Book/images/5996889-fig-6-hires.pdf}
+\caption{bla bla}
+\end{center}
+\end{figure}
+
+Fig. 7 shows a comparison of the VSWR for the embedded element with the VSWR for the infinite array when scanned at broadside. While they are both good (better than 2:1), they are not equal because the infinite array VSWR includes the mutual coupling from the adjacent elements. Note that it is this scanned VSWR that needs to be kept small in a phased array, and the embedded element VSWR may be high when lots of mutual coupling being exploited to keep the scanned VSWR low. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,scale=0.4]{/Users/jim/Book/images/5996889-fig-7-hires.pdf}
+\caption{bla bla}
+\end{center}
+\end{figure}
+
+Finally, Figs. 8-10 show the embedded element, realized gain patterns at the bottom, middle and top of the X-band as a function of both azimuth and elevation scan. The scan volume is seen to exceed 60° across the band. There is some slight degradation in the scan in the azimuth direction at 12 GHz. But overall, the scan volume of this example element is considerably better than the scan volume of the 33:1 array element shown in Fig. 2. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,scale=0.35]{/Users/jim/Book/images/5996889-fig-8-hires.pdf}
+\caption{bla bla}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,scale=0.35]{/Users/jim/Book/images/5996889-fig-9-hires.pdf}
+\caption{bla bla}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,scale=0.35]{/Users/jim/Book/images/5996889-fig-10-hires.pdf}
+\caption{bla bla}
+\end{center}
+\end{figure}
+
+
+\section{Conclusion}
+
+Fig. 11 shows a summary of various fragmented array antennas that have been built at GTRI using the traditional approach. The band of operation and thickness of each antenna is shown. Notice, that the figure suggests a design rule of thumb. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,scale=0.4]{/Users/jim/Book/images/5996889-fig-11-hires.pdf}
+\caption{bla bla}
+\end{center}
+\end{figure}
+
+Since the integrated PCB approach has a dielectrically loaded cavity, we should thus expect a similar rule-of-thumb to apply based on the wavelength in the substrate. We hope to have completed enough designs to present such a curve at the conference.
+
+\begin{thebibliography}{9}
+
+\bibitem{MaloneyURSI99} J.G. Maloney, P.H. Harms, M.P. Kesler, T.L. Fountain, and G.S. Smith, ``Novel, Planar Antennas Designed Using the Genetic Algorithm,'' 1999 USNC/URSI Radio Science Meeting, Orlando, FL, pg. 237, July 1999.
+
+\bibitem{MaloneyAP2000} J.G. Maloney, M.P. Kesler, P.H. Harms, T.L. Fountain, and G.S. Smith, ``The Fragmented Aperture Antenna: FDTD Analysis and Measurement,'' Millennium Conference on Antennas and Propagation (AP 2000), Davos, Switzerland, 4 pages, April 2000.
+
+\bibitem{Friederich} P. Friederich, ``A new class of broadband planar apertures'', Antennas and Applications Symposium, 
+
+\bibitem{MaloneyFragPatent} J.G. Maloney, M.P. Kesler, P.H. Harms, and G.S. Smith, Fragmented Aperture Antennas and Broadband Ground Planes, U.S. Patent, No. 6,323,809 B1, November 27, 2001.
+
+\bibitem{BalanisHB} C. A. Balanis, Modern Antenna Handbook, 2008, Wiley.
+
+\bibitem{Aminian} A. Aminian and Y. Rahmat-Samii, ``Spectral FDTD: A novel technique for the analysis of oblique incident plane wave on periodic structures'', IEEE Trans. Antennas Propag., vol. 54, pp. 1818-1825, Jun 2006
+\end{thebibliography}
+
+

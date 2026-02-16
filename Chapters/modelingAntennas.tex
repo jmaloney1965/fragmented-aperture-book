@@ -1,0 +1,568 @@
+\chapter{Computational Modeling of Antennas}
+
+\section{Acknowledgement}
+To start, I would like to personally thank Professor Glenn Smith, Georgia Tech Regents Professor Emeritus, for his tremendous help in compiling this chapter on the modeling of antennas.  The material was recently most published in [41], and earlier in [7].
+
+\section{Introduction}
+The finite-difference time-domain (FDTD) method is a computational procedure for solving Maxwell's equations that is based on a clever algorithm first proposed by Kane S. Yee in 1966 \cite{Yee66}. When Yee proposed his algorithm, the method was computationally intensive in terms of both storage and run time, and only problems of very modest size could be solved using the best computational facilities (mainframe computers). Since then the power of computers has steadily increased, as has the popularity of the FDTD method. The first comprehensive analyses of practical antennas using the method were performed during the early 1990's, and today such computations are routinely performed on personal computers \cite{Maloney1}-\cite{LuebbersGain}.
+
+The purpose of this article is to introduce the reader to the rudiments of the FDTD method as applied to practical antennas. It is hoped that after viewing the article, the reader will understand the power and limitations of the method and be in a position to decide whether or not the FDTD method is suitable for analyzing his/her antenna problem. Because of the limited space, we cannot provide the details for implementing the method in a computer program. Readers interested in writing their own program are referred to reference [7] for the details; others may wish to use one of the commercially available FDTD computer codes.
+
+\section{The Basic FDTD Algorithm}
+In the Yee algorithm, both space and time are discretized, with the increments in space for rectangular coordinates being $\Delta x, \Delta y, \Delta z$  and the increment in time being $\Delta t$ [8], [9]. Figure \ref{fig:ACF1} is a schematic drawing showing a typical volume in which Maxwell's equations are to be solved. The volume is divided into unit cells each of volume. The electromagnetic constitutive parameters ($\epsilon=\epsilon_r \epsilon_o$, $\mu=\mu_r\mu_o$, $\sigma$) can vary from cell to cell, and they are used to define different objects within the volume\footnote{Here we mention only simple materials with constant permittivity, permeability, and electrical conductivity. In the FDTD method there are techniques to handle more complicated materials, such as those with dispersive and anisotropic properties [9].}. The six components of the electromagnetic field $(E_x, E_y, E_z; H_x, H_y, H_z)$ are distributed over a unit cell (Yee cell) as shown in the inset. Notice that all of the components are located at different points within the cell, and the components of $H$ are displaced from those of $E$ by one half of a spatial increment, e.g., $\Delta x/2$. Although not shown in the figure, the components of $H$  are also evaluated at points displaced by one half of a time increment, viz, $\Delta t/2$ , from those of $E$.
+
+\begin{figure} \begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig1.png}
+\caption{Schematic drawing showing the computational volume, FDTD spatial lattice, and unit cell.}
+\label{fig:ACF1}
+\end{center}\end{figure}
+
+The partial derivatives in Maxwell's equations are approximated by ratios of differences, for example, 
+
+\begin{equation}
+\frac{\partial E_x}{\partial z} \approx \frac{\Delta E_x}{\Delta z}, \quad
+\frac{\partial H_y}{\partial t} \approx \frac{\Delta H_y}{\Delta t}
+\label{eqn:ACE1}
+\end{equation}
+
+For the spatial derivatives, the increment that occurs in the numerator is formed by differencing corresponding field components from adjacent unit cells, and for the temporal derivatives, it is formed by differencing field components from two adjacent time steps, e.g., $t$ and $t+\Delta t$. The discretized Maxwell's equations are arranged to form two sets of difference equations known collectively as ``update equations.'' The first set of difference equations, which we will call A, determines the change in the magnetic field, $H(t+\Delta t/2) - H(t-\Delta t/2)$ , from the electric field at an intermediate time step, $E(t)$, and the second set of difference equations, which we will call B, determines the change in the electric field, $E(t+\Delta t) - E(t)$ , from the magnetic field at an intermediate time step, $H(t+\Delta t/2)$.
+
+At the start of the computation, we have the initial conditions: Throughout the computational volume, the electric field is known at time $t=0$, and the magnetic field is known at the earlier time $t = -\Delta t/2$ . The update equations A are then used with the initial conditions to obtain the magnetic field at time $t=\Delta t/2$. Next, the update equations B are used with the magnetic field that we just obtained at time  and the electric field at time $t=0$  to obtain the electric field at time $t=\Delta t$. This procedure of alternately applying update equations A and B to advance the solution in time is known as ``marching-in-time'' or ``stepping-in-time.'' It is repeated until the electromagnetic field is known throughout the computational volume at the desired time $t=t_\text{max} = N_t \Delta t$.
+
+The choice for the increments of space and time ($\Delta x, \Delta y, \Delta z,$ and $\Delta t$) is critical to the success of the algorithm, because their size determines how well the solution to the difference equations approximates the solution to Maxwell's equations. The spatial and temporal increments cannot be chosen independently; we can show that for convergence (as $\Delta x \rightarrow 0$, $\Delta t \rightarrow 0$, etc.) and stability of the algorithm the increments must satisfy the Courant-Friedrichs-Lewy condition, which for free space is
+
+\begin{equation}
+c \Delta t \sqrt{ \frac{1}{\Delta x^2} +  \frac{1}{\Delta y^2} + \frac{1}{\Delta z^2} } \leq 1.
+\label{eqn:ACE2}
+\end{equation}
+
+For cubical cells, $\Delta x = \Delta y = \Delta z$, (2) becomes $S=c \Delta t \Delta x \leq \sqrt{1/3}$, where S is referred to as the ``Courant number,'' and a  reasonable choice is $S=1/2$.
+
+Additional restrictions for the spatial and temporal increments can only be obtained from knowledge of the variation of the field (the solution) in space and time. We basically have to make $\Delta z$ and $\Delta t$ in (\ref{eqn:ACE1}) small enough that the errors incurred by replacing the derivatives by the ratios of differences are acceptable. One obvious requirement is that the size of the spatial cells must be small enough to resolve all of the important structural features and the local field surrounding these features. Another requirement is that the error introduced by a phenomenon known as ``numerical dispersion'' must be negligible.
+
+When there is numerical dispersion, a pulse that starts out with one shape ends up with a different shape after propagating through the FDTD lattice. Numerical dispersion is caused by the different frequency components of the pulse propagating through the lattice with different phase velocities. It can be quantified by considering a time-harmonic plane wave of angular frequency  propagating in free space along one of the axes of the FDTD lattice, say the x axis. Assuming cubical cells, the numerical phase velocity, $\bar{v_p}$ , for the wave, normalized to the speed of light in free space c, is
+
+\begin{equation}
+\frac{\bar{v_p}}{c} = \pi \left \{ N_\lambda \text{sin}^{-1} \left[ \frac{1}{S} \left( \frac{\pi S}{N_\lambda} \right) \right] \right \} ^{-1},
+\label{eqn:ACE3}
+\end{equation}
+
+\noindent in which $N_\lambda = \lambda / \Delta x$ is the number of cells per wavelength [10]. Figure 2 is a graph of this equation showing the relative error in the phase velocity in percent (solid line) and a related quantity, the error in the phase per cell in degrees (dashed line). Notice that the phase velocity is less than the speed of light, and that the error decreases monotonically with an increase in $N_\lambda$. For large (say $N_\lambda > 10$), the error in the phase velocity is approximately $(\pi^2 / 6)(1-S^2)/N^2_\lambda$ , so halving the cell size reduces the error by a factor of four. In theory, any desired accuracy can be obtained by increasing $N_\lambda$.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,scale=0.6]{/users/jim.maloney/Book/images/AntChapOrigFig2.png}
+\label{fig:ACF2}
+\end{center}
+\caption{Numerical dispersion as a function of the number of cells per wavelength, $N_\lambda$, for a time-harmonic plane wave propagating along one of the axes of an FDTD lattice of cubical cells. Solid line, the relative error in the phase velocity in percent. Dashed line, the error in the phase per cell in degrees. $S=0.5$.}
+\end{figure}
+
+Ideally, given an electromagnetics problem, we would like to be able to estimate accurately the computational resources (computer memory and execution time) required to solve the problem using the FDTD method. Of course, this estimate is highly dependent on the problem and the computer being used. In practice, the estimate is usually made by comparing the requirements for the problem under consideration with those of a ``benchmark problem'' that has been run using a particular FDTD code on a particular computer. Even though the specific requirements for the algorithm are computer dependent, general rules for the scaling of the required memory and execution time with cell size are easily obtained.
+
+Consider a computational volume that is a cube composed of cubical FDTD cells, then the total number of cells is $N=N^3_x$. Because only the most recent values of the electric and magnetic fields are needed at each step of the algorithm, the total storage required scales as $N$ or $N^3_x$, i.e., as the third power of the number of cells along the edge of the cubical volume. The simulation must be run for a time roughly proportional to that required for light to cross the volume, $t_\text{max} \propto N_x \Delta x /c $ . Thus, the number of time steps required is $N_t = t_\text{max} / \Delta t \propto N_x / D \propto N_x$ . Now the execution time is proportional to the product of the number of cells with the number of times the cells must be updated: $N \times N_t \propto N^4_x $. The execution time scales as the fourth power of the number of cells along the edge of the cubical volume. Thus, if we half the dimensions of the cells, the storage will increase by a factor of 8, and the execution time will increase by a factor of 16.
+
+\section{Formulation of the Antenna Problem in the FDTD Method}
+
+Antennas are customarily used in two states: transmission and reception. While the two states are related due to the reciprocity inherent in Maxwell's equations, not all quantities for one state can be obtained from the other. Thus, we must have two separate FDTD formulations for the antenna problem, one for the transmitting antenna and the other for the receiving antenna.
+
+\subsection{Transmitting Antenna}
+
+Figure 3(a) is a schematic drawing showing the basic elements involved in the FDTD analysis of a transmitting antenna. The figure is for a cross section through the computational volume, and the antenna is located near the center of the volume. The arrangement used to excite the antenna is shown in Figure 4(a). The antenna is connected to the source by a transmission line (waveguide) of characteristic impedance , and the source is matched to the characteristic impedance (there is no reflection for a wave entering the source).\footnote{Throughout the chapter we will assume that the characteristic impedance of a transmission line is real, a resistance.} The specified excitation is the outward-propagating (incident) voltage wave $V^\text{+}_t(t)$  for a single mode at the reference plane in the line. Notice, at this reference plane there is also a voltage $V^\text{-}_t(t)$   associated with an inward-propagating (reflected) wave.
+
+The finite computational volume in Figure 3(a) is surrounded by an absorbing boundary. The objective for this boundary is to reproduce at its interior surface the same conditions for the electromagnetic field that would exist if the volume were infinite. Stated differently, if we consider the electromagnetic field within the volume to be composed of a spectrum of plane waves, both outward propagating and evanescent, all of these waves should be absorbed without reflection by the boundary. At this time, the most effective absorbing boundaries are the perfectly matched layers (PMLs). Their implementation is discussed in the literature [11], [12].
+
+\begin{figure}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig3.png}
+\caption{(a) Schematic drawing showing the basic elements involved in the FDTD analysis of a transmitting antenna. (b) Details for the near-field to far-field transformation.}
+\end{figure}
+
+\begin{figure}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig4.png}
+\caption{The details for the feed region of (a) the transmitting antenna and (b) the receiving antenna. The characteristic impedance of the transmission line is $R_o$, and the source and termination are matched to this impedance}
+\end{figure}
+
+The FDTD method provides the electromagnetic field for all lattice points within the finite computational volume. However, for many antenna applications, we would like to
+know the radiated or far-zone field, which is the field in the limit as the radial distance from the antenna becomes infinite ($r\rightarrow\infty$). This field can be obtained by applying what
+is known as a near-field to far-field (NFFF) transformation. For the implementation of this transformation, a closed surface S is placed around the antenna and inside the
+absorbing boundary. It is shown by the dashed line in Figure 3. The field ( $E^t$ and $H^t$) on this surface is obtained for the time period of interest, and it is used to calculate the following electric and magnetic surface current densities:
+
+\begin{equation}
+J_s(r^\prime,t) = \hat{n}\times H^t(r^\prime,t),
+\end{equation}
+\begin{equation}
+M_s(r^\prime,t) = -\hat{n}\times E^t(r^\prime,t),
+\end{equation}
+
+\noindent Here, as shown in Figure 3(b), $r^\prime$ locates a point on the surface, and $\hat{n}$ is the outward-pointing unit vector normal to the surface at that point. Outside the surface S, these currents produce the same electromagnetic field as the transmitting antenna ($E^t$, $H^t$), and inside the surface they produce a null field ($E=0$, $H=0$).
+
+At the position $r$, the radiated or far-zone field (indicated by the additional superscript r) is obtained using these currents with a version of Huygens' principle for electromagnetic fields [8]:
+
+\begin{equation}
+E^{tr}(r,t) = \frac{\mu_o}{4\pi r} \iint \limits_S  \left\{  \hat{r} \times \hat{r} \times \frac{\partial}{\partial t^\prime} \left[ J_s(r^\prime,t^\prime) \right]  + \frac{1}{\eta_o}\hat{r} \times \frac{\partial}{\partial t^\prime} \left[ M_s(r^\prime,t^\prime) \right] \right\}_{t^\prime = t_r} dS^\prime ,
+\end{equation}
+
+\begin{equation}
+H^{tr}(r,t) =  \frac{1}{\eta_o}\hat{r} \times E^{tr}(r,t) ,
+\end{equation}
+
+\noindent in which the retarded time is
+
+\begin{equation}
+t_r = t-(r-\hat{r}\cdot\vec{r}^{\text{ }\prime}) / c
+\end{equation}
+
+\noindent and $\eta_o = \sqrt{\mu_o /  \epsilon_o}$ is the wave impedance of free space
+
+In some situations, we may require the near field at points that are so far from the antenna that it is impractical to extend the computational volume to include these points. We can then use a near-field to near-field (NFNF) transformation to obtain these results: The FDTD analysis is performed for a volume, such as that shown in Figure 3(a), and the field on the surface of the volume is transformed to obtain the near field outside the volume. Details for the NFNF transformation can be found in [13], [14].
+
+\subsection{Receiving Antenna}
+
+Figure 5(a) is a schematic drawing showing the basic elements involved in the FDTD analysis of a receiving antenna. As for the transmitting antenna, the figure is for a cross section through the computational volume, and the finite computational volume is surrounded by an absorbing boundary. The excitation for the antenna is an incident, transverse electromagnetic (TEM) plane wave propagating in the direction $\hat{k}_i$  with the field
+
+\begin{equation}
+E^i(t,t), \quad H^i(r,t) = \frac{1}{\eta_o}\hat(k)_i \times E^i(r,t) .
+\end{equation}
+
+\noindent Here, the vector $E^i$ is transverse to $\hat{k}_i$, viz, $\hat{k}_i \cdot E^i = 0$.
+
+The closed surface $S$ with outward-pointing unit normal vector $\hat{n}$  is placed around the antenna and inside the absorbing boundary. And, as shown in Figure 5(b), the following electric and magnetic surface currents densities are placed on this surface to produce the incident field ($E^i$, $H^i$) inside the surface and a null field ($E=0$, $H=0$) outside the surface:
+
+\begin{equation}
+J_s(r,t) =-\hat{n}\times H^i(r,t),  \quad M_s(r,t)=\hat{n}\times E^i(r,t) .
+\end{equation}
+
+For the receiving antenna, we generally want to know the voltage produced in the antenna by the incident wave, and the arrangement used to accomplish this is shown in Figure 4(b). The antenna is connected to the termination by a transmission line (waveguide) of characteristic impedance $R_o$, and the termination is matched to the characteristic impedance (there is no reflection for a wave entering the termination). The desired response is the inward-propagating voltage wave  $V^\text{-}_r(t)$ for a single mode at the reference plane in this line.
+
+The scattered field is the field produced by the currents induced in the antenna by the incident field. Notice from Figure 5(a) that the field inside the surface S is the total field, i.e., the sum of the incident and scattered fields ($E^r=E^i+E^s$, $H^r=H^i+H^s$). However, the field outside the surface, in the region between the surface and the absorbing boundary, is only the scattered field ($E^s$, $H^s$). If we are interested in the scattering properties of the antenna, we can obtain them from knowledge of the field in this region. For example, the far-zone scattered field can be determined using a near-field to far-field 
+transformation, as in the case for the transmitting antenna. The surface for the transformation must be placed between the surface for the plane-wave source and the absorbing boundary.
+
+\begin{figure}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig5.png}
+\caption{(a) Schematic drawing showing the basic elements involved in the FDTD analysis of a receiving antenna. (b) Details for the plane-wave source.}
+\end{figure}
+
+\subsection{Reciprocity}
+
+As mentioned earlier, some quantities for the states of transmission and reception are related through reciprocity. For example, when the arrangements shown in Figure 4 are used for the source and termination, the following relationship applies [15]:
+
+\begin{equation}
+V^\text{+}_t(t) \ast V^\text{-}_r(t) = \frac{2\pi R_o}{\eta_o} \left[ c \int \limits_{t^\prime = -\infty}^{t} E^i(0,t^\prime)dt^\prime \right] \cdot \ast \left[ r E^tr(-r\hat{k}_i,r+r/c)\right] ,
+\end{equation}
+
+in which $\ast$ indicates time convolution, and $\cdot\ast$ indicates the scalar product with time convolution. Here, the origin for the spherical coordinate system is centered on the antenna, as in Figure 4(a), and the incident electric field $E^i$  is evaluated at the origin ($r=0$) of this system. The radiated electric field $E^{tr}$ is evaluated at the radial distance $r$ in the direction ($-\hat{k}_i$) from which the incident field arrives and at the time $t+r/c$. Sometimes this relationship can be used to eliminate the need for analyzing one of the two states (transmission or reception) when the other is known, or it can be used for verifying results from one state with results from the other.
+
+\subsection{Frequency Domain}
+
+The FDTD method is inherently a time-domain technique. When quantities are needed in the frequency domain (angular frequency $\omega$ ), they are obtained using the Fourier transformation (discrete), which is indicated by $V(t) \leftrightarrow V(w)$. The quantities customarily used for evaluating the performance of an antenna in the frequency domain are determined from the transformed variables. For the transmitting antenna, the voltage reflection coefficient $\Gamma_A$ and input impedance $Z_A$ are
+
+\begin{equation}
+\Gamma_A(\omega) = \frac{V^\text{-}_t(\omega)}{V^\text{+}_t(\omega)} ,
+\end{equation}
+
+\begin{equation}
+Z_A(\omega) = R_o \left[ \frac{1+\Gamma_A(\omega)}{1-\Gamma_A(\omega)} \right],
+\end{equation}
+
+\noindent and the realized gain  (gain including mismatch) and gain G in the direction  are
+
+\begin{equation}
+G_\text{Rel}(\hat{r},\omega) = \frac{4\pi r^2\hat{r} \cdot \text{Re} [ S^{tr}_c(r,\omega) ] }{\text{Power available from source}} = \frac{4\pi R_o r^2 | E^{tr}(r,\omega) |^2}{\eta_o | V^\text{+}_t(\omega) |^2} ,
+\end{equation}
+
+\begin{equation}
+G_{Rel}(\hat{r},\omega) = \frac{4\pi r^2\hat{r} \cdot \text{Re} [ S^{tr}_c(r,\omega) ] }{\text{Power accepted by antenna}} = \frac{1}{1 - | \Gamma_A(\omega) |^2} G_\text{Rel}(\hat{r},\omega) ,
+\end{equation}
+
+\noindent in which $S_c$ is the complex Poynting vector.
+
+For the receiving antenna, the realized effective area $A_\text{Rel} ( \hat{k}_i, \omega)$ and the effective area $A_e(\hat{k}_i,\omega)$ for an incident plane wave propagating in the direction $\hat{k}_i$ are
+
+\begin{equation}
+A_\text{Rel}(\hat{k}_i,\omega) = \frac{\text{Power accepted by termination}}{\hat{k}_i \cdot \text{Re} [ S^{i}_c(r,\omega) ] } =  \frac{\eta_o}{R_o}  \frac{| V^\text{-}_r(r,\omega) |^2}{| E_i(\omega) |^2} ,
+\end{equation}
+
+\noindent and
+
+\begin{equation}
+A_\text{e}(\hat{k}_i,\omega) = \frac{\text{Power available from antennna}}{\hat{k}_i \cdot \text{Re} [ S^{i}_c(r,\omega) ] } = \frac{1}{1 - | \Gamma_A(\omega) |^2} A_\text{Rel}(\hat{k}_i,\omega) ,
+\end{equation}
+
+The gain and the effective area are related through reciprocity (11); for a polarization match, i.e., , we have\footnote{For a polarization match, the state of polarization for the incident plane wave in a particular direction (reception) is matched to the state of polarization for the radiated field in the same direction (transmission). For example, if the radiated electric field is linearly polarized, the electric field of the incident plane wave is linearly polarized and points in the same direction. If the radiated electric field is right-handed circularly polarized, the electric field of the incident plane wave is right-handed circularly polarized.}
+
+\begin{align}
+\begin{split}
+f(t) & =\text{exp} \left[ -(t/\tau_p)^2 / 2 \right], \\
+F(\omega) & =\sqrt{2\pi}\tau_p\text{exp}\left[-(\omega \tau_p)^2/2 \right],
+\end{split}
+\end{align}
+
+\noindent in which  is the characteristic time. However, the spectrum for the Gaussian pulse contains significant low-frequency content (including dc), and this usually is not radiated by the antenna (the dc component never is). Thus, the field near the antenna may take an unacceptably long time to settle when a Gaussian pulse is used.
+
+When we are interested in the performance of an antenna over a band of frequencies, a pulsed input signal with zero mean is useful, followed by the Fourier transform to obtain the desired frequency-domain response. For this case, the appropriate choice for the input signal might be the differentiated Gaussian pulse shown as a dashed line in Figure 6(a),
+
+\begin{align}
+\begin{split}
+f(t) & =-\left( \frac{t}{\tau_p} \right) \text{exp} \left\{ -\left[ (t/\tau_p)^2-1 \right] / 2 \right\}, \\
+F(\omega) & =j\sqrt{2\pi}\omega \tau^2_p\text{exp}\left\{-\left[(\omega \tau_p)^2-1\right]/2 \right\},
+\end{split}
+\end{align}
+
+\noindent or the sinusoid of frequency  amplitude modulated by a Gaussian pulse shown in Figure 6(b),
+
+\begin{align}
+\begin{split}
+f(t) & =\text{exp} \left[ -(t/\tau_p)^2 / 2 \right] \sin(\omega_o t), \\
+F(\omega) & =j\sqrt{2/\pi}\tau_p
+\end{split}
+\end{align}
+
+\begin{table}
+\caption{Characteristics for Various Input Signals}
+\end{table}
+
+The differentiated Gaussian pulse has a rather large fractional bandwidth that is fixed; for example, the bandwidth associated with the points at which the spectrum is 10\% (-20dB) of the maximum is , where $w_{pk}=1/tau_p$ is the frequency at the peak. The modulated sinusoid has a variable fractional bandwidth that is controlled by the relative width of the modulating pulse, $\omega_o\tau_p$; for example, the bandwidth associated with the points at which the spectrum is 10\% of the maximum is $\Delta\omega / \omega_o \approx 4.29/\omega_o\tau_p$ (when $w_o\tau_p < 1$). For the case shown in Figure 6(b), $\omega_o\tau_p=15$, so the fractional bandwidth is $\Delta\omega/\omega_o \approx 0.29$, which is much narrower than the fractional bandwidth for the differentiated Gaussian pulse shown in Figure 6(a).
+
+
+
+\begin{figure}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig6.png}
+\caption{(a) The Gaussian pulse (solid line) and the differentiated Gaussian pulse (dashed line) and the magnitude of their Fourier transforms. (b) The sinusoid of frequency  amplitude modulated by a Gaussian pulse and the magnitude of its Fourier transform, . All waveforms are normalized to have a maximum value of 1.0.}
+\end{figure}
+
+\section{Examples of the Use of the Method for Antenna Analysis}
+
+In the previous sections, we presented the rudiments of the FDTD method and described in general how the method is used to analyze an antenna for both transmission and reception. In this section, we will show results obtained by applying the method to analyze particular antennas. These examples were chosen to illustrate specific issues that arise and must be dealt with when applying the method.
+
+\subsection{Cylindrical Monopole: Theoretical Model Versus Experimental Model}
+
+The ultimate test for any physical theory is how well its predictions agree with experimental measurements, and, of course, this is the case for electromagnetic theory when applied to antennas. One of the most important factors that affect the agreement is how closely the theoretical model for the antenna agrees with the experimental model. To examine this issue we will consider the FDTD analysis of the cylindrical monopole, the image equivalent of the cylindrical dipole, which is arguably the most fundamental antenna.
+
+The monopole antenna, shown in Figure 7(a), is formed by extending the metallic center conductor of a coaxial line the distance $h$ above an infinite metallic image plane [2], [8]. The dimensions of the transmission line, inner conductor radius $a$ and outer conductor radius $b$, are chosen so that only the TEM mode propagates in the line for the signals of interest. The FDTD model for the transmitting monopole is shown in Figure 7(b). All of the conductors in the model are perfect (perfect electric conductors, PECs), and the structure is surrounded by a PML, not shown in the figure [16]. Because of the rotational symmetry of the structure and the excitation, a two-dimensional cylindrical lattice  $(\rho,z)$ with the spatial increments $\Delta\rho$ and $\Delta z$ is used in the FDTD analysis. A ``one-way source'' excites the coaxial line. This consists of the electric and magnetic surface currents
+
+\begin{figure}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig7.png}
+\caption{(a) Cylindrical monopole antenna fed through an image plane from a coaxial transmission line. (b) FDTD model for the cylindrical monopole antenna. The PML that surrounds the computational space is not shown.}
+\end{figure}
+
+\begin{equation}
+J_s(\rho,t) = - \frac{V^\text{+}_t(t)}{2\pi R_o\rho} \hat{\rho}, M_s(\rho,t)=-\frac{\eta_o V^\text{+}_t(t)}{2\pi R_o \rho} \hat{\phi}
+\end{equation}
+
+
+\noindent  on the plane $z=-l$ that produce the incident TEM voltage wave, $V^\text{+}_t$, above the source and a null field below the source. An absorbing boundary is placed at the bottom of the line. With this configuration, only the reflected TEM voltage wave, $V^\text{-}_t$, appears below the source, so it is easily determined. Notice the similarity of this arrangement to the plane wave source used with the receiving/scattering antenna in Figure 5.
+
+Figure 8 is a comparison of results from the FDTD simulation (solid line) with measurements (dots) made on an experimental model corresponding to the geometry in Figure 7(a). The height of the monopole is $h$ = 5.0 cm, and the dimensions of the coaxial line (precision line with APC-7 connector) are $a$ = 1.52 mm, $b$ = 3.5 mm, which gives a characteristic impedance of $R_o = (\eta_o/2\pi) \text{ln}(b/a) = 50 \Omega$. The excitation $V^\text{+}_t$ is a unit-amplitude Gaussian pulse in time (19), with the characteristic time $\tau_p = 0.161\tau_a$, where $tau_a=h/c$ is the time for light to travel the length of the monopole. In the experiment the reflections from the edges of the finite sized image plane were windowed out in time.
+
+Figure 8(a) is for the reflected voltage, $V^\text{-}_t$, in the transmission line, and Figure 8(b) is for the electric field on the image plane at the radial distance $\rho/h=12.7$ , both are shown as a function of the normalized time $t/\tau_a$. In Figure 8(a), we see the initial reflection of the incident pulse from the drive point (A), followed by its initial reflection from the open end of the monopole (B). As expected, these events are separated by roughly the time for light to make a round trip on the monopole, $(t_B-t_A)/\tau_a \approx 2$. Additional reflections of decreased amplitude occur each time the pulse encounters the drive point and the open end. In Figure 8(b), we see that radiation occurs each time the pulse encounters the drive point or the open end of the monopole. As expected, the initial radiation from the drive point (A) is separated from the initial radiation from the open end of the monopole (B) by roughly the time for light to travel the length of the monopole, $(t_B-t_A)/\tau_a \approx 1$ . The agreement of the theoretical and measured results is seen to be very good.
+
+\begin{figure}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig8.png}
+\caption{Comparision of theoretical and measured results for the cylindrical monopole antenna. (a) Reflected voltage in the coaxial line. (b) Electric field on the image plane at $\rho/h = 12.7$.}
+\end{figure}
+
+The FDTD method inherently provides information about the electromagnetic field within the computational volume over the entire period of the simulation. Only a small fraction of this information is used when investigating conventional antenna parameters, such as the results shown in Figure 8. Sometimes this additional information can be used to perform ``numerical experiments'' that improve our understanding of the radiation process for the antenna. This is illustrated in Figure 9, where we show the instantaneous Poynting vector in the region surrounding the monopole [17]. On the right-hand side of these figures, the logarithm of the magnitude of the Poynting vector, $| S |$, is plotted on a color scale. The intensity of the field increases as the hue goes from blue to red, and the range for the values of  $| S |$ displayed is $10^4:1$. On the left-hand side of these figures, the arrows indicate the direction of the Poynting vector, and the length of an arrow is proportional to the logarithm of  $| S |$. The excitation is a Gaussian voltage pulse with $\tau_p = 0.0537 \tau_a$. For this value of $\tau_p$, about three non-overlapping pulses fit along the length of the monopole, so the reflections associated with different points are separated and easily identified.
+
+\begin{figure}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig9.png}
+\caption{Three snapshots in time showing the magnitude (right) and direction (left) of the Poynting vector surrounding the cylindrical monopole antenna: (a) near the coaxial aperture at time , (b) near the open end of the monopole at time , and (c) around the whole structure at time . Logarithmic scaling is used for both plots. Notice that (a) and (b) only show a portion of the monopole. (After Smith and Hertel [17], 2001 IEEE.)}
+\end{figure}
+
+In Figure 9(a), the pulse has just left the drive point and is traveling up the monopole. A spherical wavefront $W_1$ centered on the drive point has formed, and it is attached to the outward propagating pulses of charge/current on the monopole and image plane. In Figure 9(b), the pulse has encountered the open end of the monopole, and it is traveling back down the monopole. A second spherical wavefront $W_2$  centered on the open end has formed, and it connects the inward propagating pulse of charge/current on the monopole with the wavefront $W_1$ . Additional wavefronts, $W^\prime_2$, $W_3$ , etc., shown in Figure 9(c), are produced each time the pulse encounters the drive point and the open end. All of these spherical wavefronts travel outward at the speed of light. The Poynting vectors are seen to be predominantly normal to the wavefronts, which indicates that energy is being transported away from both the drive point and the open end.
+
+The input impedance  or admittance $Y_A(\omega) = 1/Z_A(\omega) = G_A(\omega) + jB_A(\omega)$  of the monopole antenna is a useful parameter for practical applications, and it is also a sensitive measure of the accuracy of any theoretical model. It is easily calculated from the FDTD time-domain results using (12) and (13). In Figure 10 the input admittance is graphed as a function of frequency for a monopole with the same dimensions as used for Figure 8 [18]. FDTD results (lines) for three different levels of discretization (A, B, C) are compared with measurements (dots). The parameters for the three levels of discretization are given in Table 2. In this graph we observe the convergence of the FDTD method. Consider the input susceptance, ; the result for dicretization A is slightly displaced from the measured values, while the results for discretizations B and C are essentially the same as the measured values. Hence, we can conclude that, for practical purposes, the FDTD results for the input admittance have converged to the measured values at discretization B, which is for four FDTD cells across the gap in the coaxial line or 101 cell along the length of the monopole. We should mention that the dimensions of the FDTD cell for this example had to be chosen so that an integral number of cells fit along the dimensions of the antenna, so the cells are not perfectly square. Notice that discretization B corresponds to 135 cells per wavelength at the highest frequency ($f$ =4.5 GHz) and a relative error in the phase velocity ((3) and Figure 2 for $S=0.5$) of only $6.77\times10^{-3}\%$. For this example, it is not the error in the phase velocity that determines the accuracy of the solution. The fine details of the structure must be accurately modeled, and this requires cells that are much smaller than needed for a small error in the phase velocity.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,scale=0.5]{/users/jim.maloney/Book/images/AntChapOrigFig10.png}
+\end{center}
+\caption{Comparison of theoretical and measured results for the input admittance of the cylindrical monopole antenna. Results are shown for three levels of discretization (A, B, C) in the FDTD method. (After Hertel and Smith [18], 2003 IEEE.)}
+\end{figure}
+
+
+The very good agreement of the theoretical results with the measurements evident in Figs. 8 and 10 is a consequence of the close match of the theoretical model for the monopole, Figure 7(b), to the experimental model, Figure 7(a). In some cases, additional constraints on the analysis require a reduction in the fidelity of the FDTD model, and such good agreement cannot be expected. To illustrate the effect a reduction in the fidelity of the model can have on the accuracy of the results, we will examine some common simplifications used for the FDTD model of the monopole.
+
+For the models shown in Figure 11, the cylindrical conductor of the monopole has been replaced by an equivalent square conductor of side  [19]. Thus, the monopole now can be analyzed using the conventional three-dimensional rectangular FDTD lattice rather than the two-dimensional cylindrical lattice of Figure 7(b).
+
+\begin{figure}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig11.png}
+\caption{Simplified models for the cylindrical monopole antenna. (a) Model incorporating a ?hard source.? (b) Model incorporating a virtual one-dimensional transmission line. The monopole conductor has a square cross section in both models.}
+\end{figure}
+
+The excitation for the monopole has also been changed from that in Fig 7(b). For the model in Figure 11(a), the so called ``hard source'' is used. This specifies the total voltage $V_t=V^\text{+}_t + V^\text{-}_t$ across the gap of length $l_g$ at the base of the monopole. And for the model in Figure 11(b), a virtual one-dimensional transmission line is connected across the gap at the base of the monopole [20]. This transmission line contains the same elements as the transmission line in Figure 7(b), in particular, a one-way source that specifies the incident voltage $V^\text{+}_t$. We refer to this line as virtual because it does not appear in the FDTD lattice surrounding the monopole. It is in a different location and coupled to the monopole through the voltage and current at its terminals. The hard source, while simple to implement, suffers from two drawbacks not present with the transmission line feed. There is no damping in the hard source, unless resistance is added, so the currents, etc. on the antenna can ring for a long period of time. And the total voltage is specified, so the reflected voltage, a quantity often of interest in time-domain simulations, is not readily available.
+
+
+
+In Figure 12, FDTD results for the input admittance for both models in Figure 11 are compared with measurements made with the configuration shown in Figure 7(b) [18]. The level of discretization used is such that the simulations have converged for practical purposes. The theoretical results for the input conductance, $G_A$, for both models are in very good agreement with the measurements; however, those for the input susceptance, $B_A$ , differ from the measurements, particularly for the hard source (dashed line). The difference in susceptance is a consequence of the geometry for the simplified models not accurately representing the experimental model, Figure 7(a), in the vicinity of the drive point (the aperture of the coaxial line). The susceptance for the simplified models can be brought into better agreement with the measured results by adding a small capacitance in parallel with the terminals of the monopole [18].
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,scale=0.5]{/users/jim.maloney/Book/images/AntChapOrigFig12.png}
+\end{center}
+\caption{Comparison of theoretical and measured results for the input admittance of the cylindrical monopole antenna. Results are shown for the two simplified FDTD models. (After Hertel and Smith [18], 2003 IEEE.)}
+\end{figure}
+
+\subsection{Metallic Horns and Spirals: Stair-Stepped Surfaces}
+
+For the monopole antennas discussed in the previous section, the boundaries of the FDTD cells as well as the boundaries of all material regions (PECs) coincided with surfaces of constant coordinate. Thus, the boundaries of material regions never passed obliquely through an FDTD cell. This is a special case that is not encountered for most antennas.
+
+Figure 13(a) illustrates the more general case. It shows the cross section of a PEC object with the rectangular FDTD lattice superimposed. The curved surface of the object does not coincide with any of the lattice lines. Note, for the computation we only need to know the field in the FDTD cells that are exterior to the PEC, because both $E$ and $H$  are zero inside the PEC. There are different approaches that can be used for this case. One approach is to introduce non-rectangular FDTD cells that conform to the surface of the object; these cells could be used throughout the computational volume or just adjacent to the object [21]-[23]. Another much simpler approach, shown in Figure 13(b), is to deform the curved surface of the object so that it conforms to the rectangular FDTD lattice. The surface of the object is said to be replaced by a ``stair-stepped'' or ``staircase'' approximation. The stair-stepped approximation will introduce an error, and often the error can be made negligible by simply choosing the size of the staircase to be small compared to the physical dimensions of the object [24], [25]. The stair-stepped approximation is commonly used, and it is the only approach we will consider in this introductory treatment.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,scale=0.8]{/users/jim.maloney/Book/images/AntChapOrigFig13.png}
+\end{center}
+\caption{(a) Rectangular FDTD lattice superimposed on the cross section of an object that is a perfect electric conductor (PEC). (b) The surface of the object has been deformed to conform to the rectangular lattice; the surface of the object has been replaced by a stair-stepped approximation.}
+\end{figure}
+
+We will now consider two practical antennas for which the stair-stepped approximation was used in modeling the structure in the FDTD analysis. As these examples will show, when properly used, the approximation can yield results that are in good agreement with experimental measurements. The first example is the metallic, pyramidal horn shown in Figure 14 (Flann Microwave Instruments Ltd. Model 1624-20). Antennas like this are used in many microwave applications, and sometimes they serve as gain standards (standard gain horns). The small drawings at the bottom of the figure show the lengths and angles that describe this particular horn antenna: $a$ = 10.95 cm, $b$ = 7.85 cm, $D$ = 2.284 cm, $l_w$ = 5.08 cm, $\alpha = 10.74^o$, and $\beta = 8.508^o$. The waveguide feeding the horn is type WR-90 (X-Band, with the operational bandwidth 8.2 GHz ? 12.4 GHz).
+
+\begin{figure}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig14.png}
+\caption{Schematic drawing for the pyramidal horn antenna. The inset shows the FDTD cells used to model the bottom of the horn.}
+\end{figure}
+
+In the FDTD model, the cubical cells have the side length $\Delta x$ = 0.635 mm, and the perfectly-conducting walls are plates two cells thick. The inset shows the faces of the individual cells that model the bottom wall of the horn; the cells are shown seven times actual size. The slanted sides of the horn are stair stepped, as indicated in the figure, with a ``tread length-to-rise'' of approximately six cells to one. The horn is fed by a probe inserted into the section of rectangular waveguide, and the incident and reflected voltages in a one-dimensional transmission line ($R_o=50 \Omega$) connected to the probe are used in the analysis.
+
+The structure is symmetrical about the x-z plane, and this symmetry was used in the analysis to reduce the size of the computational volume, which was 519 x 116 x 183 cells. The sides of the antenna were 20 cells from the PML absorbing boundary (10 cells thick), except the front side (radiating aperture), which was 40 cells from the absorbing boundary.
+
+The pyramidal horn was first analyzed as a transmitting antenna. The excitation in the transmission line, $V^\text{+}_t(t)$ , was a differentiated Gaussian pulse (20) with the characteristic time $\tau_p = 1.59\times 10^{-11} s$. This pulse has significant energy over the operational bandwidth of the horn: 8.2 - 12.4 GHz. The peak of the spectrum for the pulse is at 10.0 GHz, and the spectrum drops to 10\% of the peak at 600 MHz and 27.6 GHz.
+
+At the highest frequency (shortest wavelength) within the operational bandwidth of the horn we have $\Delta x=0.0226\lambda$, which corresponds roughly to 38 cells per wavelength. From this result, we can estimate the numerical dispersion using Figure 2 or equation (3). The relative error in the phase velocity is about 0.1\%, which is equivalent to $8.1\times 10^{-3}$ degrees of phase error per cell, or a total error of 4.2 degrees of phase error for propagation across the longest side of the computational volume.
+
+Figure 15 is a comparison of the FDTD results (solid line) for this antenna with measurements (dots). The measured data were kindly supplied by Dr. David G. Gentle of the National Physical Laboratory, Teddington, Middlesex, U.K. Figures 15(a) and 15(b) show the E- and H-plane field patterns at the frequency 10 GHz, and Figure 15(c) shows the gain on boresite as a function of frequency. The results from the FDTD calculations are seen to be in very good agreement with the measurements. The small differences that do exist in the H-plane field pattern are for angles at which the field is very weak, 50 dB below the peak. We note that the precise details of the probe feeding the waveguide in the FDTD model do not affect the calculation of the gain (15) of the horn. This would not be the case if the realized gain (14) (gain including mismatch) were determined.
+
+\begin{figure}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig15.png}
+\caption{Comparison of theoretical and measured results for the pyramidal horn antenna. (a) E-plane pattern and (b) H-plane pattern at 10 GHz. (c) Boresite gain versus frequency.}
+\end{figure}
+
+The pyramidal horn was also analyzed as a receiving antenna. For this case, a plane wave was incident from the boresite direction ($\hat{k}_i = -\hat{x}$) with the electric field pointing in the $z$ direction. The incident electric was a differentiated Gaussian pulse in time (20) with the same characteristic time as used for the transmitting case, $\tau_p = 1.59 \times 10^{-11} s$ . The effective area obtained from the receiving analysis was converted to a gain using equation (18), and the result is shown as a dashed line in Figure 15(c). As expected from reciprocity, the results from the two FDTD calculations (transmitting and receiving) are nearly identical.
+
+The FDTD method provides the field throughout the computational volume, and it can be used to construct graphical results that illustrate the process of radiation for the transmitting horn antenna. For such illustrations, we want an excitation whose spectrum lies within the operational bandwidth of the antenna. Frequencies outside of this band will either be cutoff in the waveguide or overmode the waveguide. A good choice for the voltage $V^{\text{+}}_t(t)$ is the sinusoid of frequency $\omega_o$  amplitude modulated by a Gaussian pulse, i.e., (21) shown in Figure 6(b). With $f_o = \omega_o/2\pi = 10.0 \text{ GHz}$, and $\tau_p = 7.96 \times 10^{-11} s$, the spectrum for this signal is 10\% of its peak at $f = 5.7 \text{ GHz}$ and $f = 14.3 \text{ GHz}$.
+
+Figure 16 shows three gray scale plots for the magnitude of the electric field on the x-z plane of the transmitting antenna. In Figure 16(a) the pulse has entered the horn from the waveguide, but it has not reached the aperture. The spacing between the white lines (nulls) roughly corresponds to one half of a guide wavelength. Notice that this spacing decreases on going from the throat of the horn towards the aperture. In the rectangular waveguide, the guide wavelength is about 1.3 times the free-space wavelength, whereas at the aperture of the horn it is closer to the free-space wavelength. Figure 16(b) is for a time when the pulse has reached the aperture. Notice that the white lines in the horn near the aperture are distorted; there is a small segment that is concave to the right. This is caused by the reflection from the aperture that is traveling back toward the throat of the horn. Directly in front of the aperture, the radiated wave is roughly planar. In Figure 16(c), the field has propagated away from the horn, and a spherical wavefront has formed that is approximately centered on the aperture. The change in the shade of gray in going around the antenna (dark in front to light in back) clearly shows a large ``front-to-back ratio'' for the horn. In the forward direction, minima appear along the wavefront, and these minima will define the main beam in the far zone. Back in the horn, the field has several minima and maxima across its width. They indicate the presence of higher order modes that were excited when the initial pulse encountered the aperture.
+ 
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig16.png}
+\caption{Gray scale plots for the magnitude of the electric field on the vertical symmetry plane of the transmitting horn antenna. The excitation is a sinusoid amplitude modulated by a Gaussian pulse.}
+\label{fig:ACF16}
+\end{center}\end{figure}
+
+The second example we will consider is the two-arm, conical spiral antenna shown in Figure 17 [26]. It is used in applications that require an antenna to radiate circular polarization over a broad bandwidth. This antenna is formed by winding two metallic strips around the surface of a truncated cone. The angles and dimensions for the particular antenna we will consider are $d=1.9 \text{ cm}$, $D=15.2 \text{ cm}$, $\theta_o = 7.5^o$, $\alpha=75^o$, and $\delta = 90^o$. It is designed to have constant gain and input impedance ($Z_A \approx 100 \Omega$) over an operational bandwidth extending from $f_\text{min} = 0.5 \text{ GHz}$ to $f_\text{max}=3.3 \text{ GHz}$.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig17.png}
+\caption{Geometry for the two-arm conical spiral antenna. (After Hertel and Smith [26], 2002 IEEE.)}
+\label{fig:ACF17}
+\end{center}\end{figure}
+
+In the FDTD model, the arms of the spiral are formed by making selected faces of the cubical cells ($\Delta x=0.8 \text{mm}$) PEC. The result is the stair-stepped approximation in Figure 18. For clarity, only the lower 10\% of the antenna is shown in the figure. The spiral is fed by a one-dimensional transmission line ($R_o = 100 \Omega$) connected at the bottom of the antenna; the same arrangement as used with the monopole antenna in Figure 11(b). The excitation in the transmission line, $V^\text{+}_t(t)$, is a differentiated Gaussian pulse (20), whose spectrum is centered on the operational bandwidth of the antenna.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,scale=0.75]{/users/jim.maloney/Book/images/AntChapOrigFig18.png}
+\caption{Schematic drawing showing the arrangement of FDTD cells used to model the conical spiral antenna. For clarity, only the lower 10\% of the antenna is shown. (After Hertel and Smith [26], 2002 IEEE.)}
+\label{fig:ACF18}
+\end{center}\end{figure}
+
+The computational volume was 691 x 240 x 240 cells, with the sides of the antenna 15 cells from the PML absorbing boundary (10 cells thick), except the bottom side (main direction for radiation), which was 30 cells from the absorbing boundary. At the highest frequency (shortest wavelength) within the operational bandwidth of the horn we have $\Delta x = 0.0093\lambda$, which corresponds roughly to 107 cells per wavelength. From this result, we can estimate the numerical dispersion using Figure 2 or equation (3). The relative error in the phase velocity is about 0.01\%, which is equivalent to $3.6\times 10^{-4}$ degrees of phase error per cell, or a total error of 0.25 degrees of phase error for propagation across the longest side of the computational volume. As with the earlier case of the monopole antenna, it is not the error in the phase velocity that determines the accuracy of the solution but the degree to which the fine details of the structure are modeled.
+
+Figure 19 is a comparison of the FDTD results (solid line) for this antenna with measurements (dashed line). Figure 19(a) shows the magnitude of the reflection coefficient at the terminals of the antenna, and Figure 19(b) shows the realized gain (14) at boresite ($-\hat{z}$ direction) as a function of frequency. The results from the FDTD calculations are seen to be in fairly good agreement with the measurements. The differences that do exist are most likely caused by elements in the experimental model that were not included in the theoretical model. In the experimental model, the metallic arms were on a very thin dielectric substrate (Kapton, thickness 0.051 mm), which was not included in the theoretical model. In addition, the terminal measurements were made through a balun, and the imperfections in the balun were not taken into account.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,scale=0.8]{/users/jim.maloney/Book/images/AntChapOrigFig19.png}
+\caption{Comparison of theoretical and measured results for the conical spiral antenna. (a) Magnitude of reflection coefficient versus frequency. (b) Realized gain in the boresite direction versus frequency. (After Hertel and Smith [26], 2002 IEEE.)}
+\label{fig:ACF19}
+\end{center}\end{figure}
+
+The FDTD method provides detailed information about the electromagnetic field surrounding the spiral, and it can be used to graphically illustrate how energy is radiated from this structure [27]. Figure 20 shows three gray scale plots of the magnitude of the x component of the electric field on the x-z plane. Each plot is for a different normalized time $t/\tau_L$, where $\tau_L$ is the time for light to travel the length of the spiral arm. We can see that the radiation is roughly periodic with the spacing between the nulls (white lines) being $\lambda/2$ . The frequency corresponding to this wavelength is indicated on each plot. These plots clearly show that the region from which radiation leaves the antenna changes with the wavelength, moving from the small end (diameter $d$) for the shortest wavelengths (highest frequencies) to the large end (diameter $D$) for the longest wavelengths (lowest frequencies). This is in keeping with the ?active-region concept,? which states that the radiation originates at the cross section of the spiral that is approximately one wavelength in circumference [28].
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig20.png}
+\caption{Gray scale plots for the magnitude of the electric field near the conical spiral antenna for three instants in time: (a) $t/\tau_L=0.1$, (b) $t/\tau_L=0.6$, and (c) $t/\tau_L=1.1$, where $\tau_L$ is the time for light to travel the length of the spiral arm. (After Hertel and Smith [27], 2003 IEEE.)}
+\label{fig:ACF20}
+\end{center}\end{figure}
+
+In the previous two examples, the stair-stepped approximations used for the geometry of the antennas in the FDTD models were adequate for obtaining theoretical results that were in good agreement with the measurements. This is a consequence of choosing the size of the steps to be small compared to the dimensions defining the geometry of the antennas. For example, for the pyramidal horn, the height of the stair step is only about 10\% of the smallest dimension of the antenna (the height of the rectangular waveguide).  We will now consider a case in which the stair-stepped approximation leads to significant errors in the calculated results.
+
+The transverse electromagnetic (TEM) horn is a simple antenna used for applications that require broad bandwidth. The FDTD model for the monopole version of this antenna is shown in Figure 21(a). It is formed from a PEC plate that is an isosceles triangle of side length $s$ and angle at the apex $\alpha$. The plate is inclined at the angle $\beta/2$  to the PEC image plane, and the antenna is fed by a transmission line connected between the apex of the plate and the image plane. The plate/image plane forms a TEM transmission line, and for the example to be discussed ($\alpha=25.4^o$, $/beta=11.2^o$), the characteristic impedance of this line is $R_o \approx 50 \Omega$ [29]-[31]. The transmission line feeding the antenna has the same characteristic impedance.
+
+The plate for this antenna is stair stepped in the FDTD model in the manner shown in Figure 21(b). Two different sizes for the staircase will be examined: Case A for which the rise is $\Delta z=1 \text{mm}$ and the tread length is $\Delta s=1 \text{cm}$, and case B for which $\Delta z=2 \text{mm}$ and $\Delta s = 2 \text{cm}$. Notice that the level of discretization for case B is twice as coarse as that for case A. The smallest dimensions for the horn are at the drive point, where the initial tread for both cases is 4 mm above the image plane. So for case A, the rise of the staircase, $\Delta z$, is about 25\% of the smallest dimension of the horn; whereas, for case B it is about 50\% of the smallest dimension of the horn.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/AntChapOrigFig21.png}
+\caption{(a) Schematic drawing for the TEM horn antenna (monopole configuration). (b) Cross sections showing the stair-stepped approximation to the plate for two different cases, A and B.}
+\label{fig:ACF21}
+\end{center}\end{figure}
+
+Figure 22(a) shows the reflected voltage, $V^\text{-}_t(t)$, in the feeding transmission line of the horn when the incident voltage, $V^\text{+}_t(t)$ , is a unit-amplitude, differentiated Gaussian pulse (20) with the characteristic time $\tau_P=5.31\times 10^{-11} \text{s}$. The peak of the spectrum for the pulse is at 3.0 GHz. The solid line is for case A and the dashed line is for case B. The initial reflection from the drive point is evident and is similar for both cases, and the reflection from the open end of the horn has been windowed out. There is a pronounced ripple in the result for the coarser staircase, case B. The ripple is clearly due to the staircase, because its period roughly corresponds to the round trip time on a tread, which is $\Delta t = 2\Delta s_B/c \approx 2.5\tau_P$. Notice that the amplitude of the ripple decreases with time. This is because the reflections that occur later in time are from stair steps further out along the antenna, where the rise of the staircase, $\Delta z$, is a smaller fraction of the separation between the plate and the image plane.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,scale=0.7]{/users/jim.maloney/Book/images/AntChapOrigFig22.png}
+\caption{Results for two different stair-stepped approximations (A and B) applied to the TEM horn antenna. (a) The reflected voltage in the feeding transmission line; the reflection from the open end of the horn has been windowed out. (b) The magnitude of the Fourier transform of the reflection coefficient for the antenna.}
+\label{fig:ACF22}
+\end{center}\end{figure}
+
+Figure 22(b) shows the magnitude of the Fourier transform (spectrum) of the reflection coefficient for the antenna. Notice that the results for the two cases, A and B, are quite different. Specifically, for case B there is a distinct dip in the reflection coefficient near $2f\Delta s_B/c = 1$  ($f=7.5 \text{GHz}$). At this frequency, $\Delta s_B/\lambda = 1/2$, so the small reflections from all of the steps in the staircase add in phase.
+
+To avoid the problem described above, we must use a finer staircase, such as in case A. For TEM horns with low characteristic impedance (generally small $\beta$), this can require a very fine level of discretization. A similar problem is encountered with bow-tie antennas with low characteristic impedance [32].
+
+\subsection{Microstrip Patches: Excessive Ringing for Narrow-Band Antennas}
+
+The antennas we examined in the previous section, a conical spiral and horns, are fairly wideband antennas. Now we will consider the other extreme, namely, narrowband antennas. For our example, we will use the basic, rectangular microstrip patch antenna shown in Figure 23.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,scale=0.7]{/users/jim.maloney/Book/images/AntChapOrigFig23.png}
+\caption{Rectangular microstrip patch antenna fed by a coaxial line probe.}
+\label{fig:ACF23}
+\end{center}\end{figure}
+
+In the mid 1980?s, Chang et al. made extensive measurements of this antenna, and first we will compare our FDTD results with their measurements [33]. The dimensions for a patch designed for frequencies around f = 7.0 GHz are $s$ = 1.1 cm, $w$ = 1.7 cm, and $h$ = 3.175 mm. As shown in the figure, the probe of the feeding coaxial line ($R_o=50 \Omega$) is displaced from the broad side of the patch by $l_p$ = 1.5 mm. In the model, the dielectric substrate is 10 cm x 10 cm with the electrical properties $\epsilon_r=2.33$ and $sigma=2.1\times 10^{-3} \text{ S/m}$, and the ground plane is infinite. The incident voltage, $V^\text{+}_t(t)$, in the feeding transmission line is a unit-amplitude, differentiated Gaussian pulse (20) with the characteristic time $\tau_P=2.65\times 10^{-11} \text{s}$. The peak of the spectrum for this pulse is at 6.0 GHz.
+
+The dimensions of the FDTD rectangular cells ($\Delta x=0.529 \text{ mm}$, $\Delta y=0.500 \text{ mm}$, $\Delta z=0.500 \text{ mm}$) were chosen so that all of the details of the coaxial feed line could be included in the model, and the time step was $\Delta t=9.44\times 10^{-13}$ sec. The number of time steps, , required for the simulation was determined by observing the magnitude of the reflected voltage  in the feeding transmission line versus the normalized time ; this is shown in Figure 24(a). Notice that the vertical scale is logarithmic. When $t/\Delta t=3000$, the reflected voltage has dropped by six orders of magnitude from its peak, and it is at the noise level for the computation. So any number of time steps greater than three thousand was deemed adequate for the simulation ( $N_t=4000$ was actually used).
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,scale=0.7]{/users/jim.maloney/Book/images/AntChapOrigFig24.png}
+\caption{The magnitude of the reflected voltage in the feeding coaxial line versus the normalized time. (a) Rectangular microstrip patch. (b) Narrow-band, rectangular microstrip patch.}
+\label{fig:ACF24}
+\end{center}\end{figure}
+
+Figure 25 is a comparison of the FDTD theoretical results with the measurements. The graph in Figure 25(a) shows the magnitude of the reflection coefficient versus frequency: theory (solid line) and measurement (dots). The agreement is reasonably good, particularly when we consider that some of geometrical detail for the measurement, such as the precise geometry at the feed, were not known for use in the FDTD model.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,scale=0.7]{/users/jim.maloney/Book/images/AntChapOrigFig25.png}
+\caption{Comparison of theoretical and measured results for the rectangular microstrip patch antenna. (a) Magnitude of reflection coefficient versus frequency. (b) Field patterns for E and H planes at the frequency  f = 6.8 GHz. Measured results from [33]}
+\label{fig:ACF25}
+\end{center}\end{figure}
+
+The field patterns were measured with the 10 cm x 10 cm substrate mounted at the center of a circular aluminum image plane of diameter 1 m. We chose not to model this configuration with the same fine resolution used for the FDTD calculation of the reflection coefficient, because of the large amount of memory that would be required. Instead, larger cells were used with the dimensions $\Delta x=1.59 \text{ mm}$, $\Delta y=1.42 \text{ mm}$, $\Delta z=1.57 \text{ mm}$. The use of the larger cells causes little error in the far-zone field patterns.  The FDTD and measured field patterns for the frequency f = 6.8 GHz are compared in Fig. 25(b). These plots show the gain (15) versus the angle , normalized to 0 dB at the peak. Results are given for both the E plane (x-z plane, solid line and dots) and the H plane (y-z plane, dashed line and triangles). Again the agreement is reasonably good.
+
+For our second example, we chose a rectangular microstrip patch antenna designed to operate around f = 1.9 GHz that is similar to one reported in the literature [34]. The dimensions for the patch are $s$ = 5.12 cm, $w$ = 6.0 cm, and $h$ = 1.575 mm, and the probe of the feeding coaxial line ($R_o=50\Omega$) is displaced from the broad side of the patch by $l_p$ = 1.64 cm. The dielectric substrate ($\epsilon_r=2.2$ and $\sigma=1.1\times 10^{-3}$ S/m) and the ground plane are the same size: 11.5 cm x 11.5 cm. The incident voltage, $V^\text{+}_t(t)$, in the feeding transmission line is a unit-amplitude, differentiated Gaussian pulse (20) with the characteristic time $\tau_p=1.061\times 10^{-10}$ s , and the peak of the spectrum for this pulse is at 1.5 GHz. Again, the parameters for the FDTD simulation allow complete modeling of the details of the coaxial feed line ($\Delta x=0.529 \text{ mm}$, $\Delta y=0.500 \text{ mm}$, $\Delta z=0.500 \text{ mm}$), $\Delta t=9.91\times 10^{-14} \text{ sec}$.). The electrical thickness of the substrate for this example is about one eighth of that for the previous example, $h/\lambda = 0.010$ (for f = 1.9 GHz) versus $h/\lambda=0.077$  (for f = 7.3 GHz), so we expect this antenna to have a significantly narrower bandwidth [35].
+
+Figure 24(b) shows the magnitude of the reflected voltage $|V^\text{-}_t|$ in the feeding transmission line (logarithmic scale) versus the normalized time $t/\Delta t$. As a consequence of the narrower bandwidth, the reflected voltage decreases much more slowly with increasing $t/\Delta t$ than in the previous example, Fig. 24(a). The reflected voltage has dropped by six orders of magnitude from its peak and is approaching the noise level for the computation when $t/\Delta t=50,000$ . So about fifty thousand time steps ($N_t=50,000$) are required for the simulation, as compared to three thousand for the previous example! The inset in the Fig. 24(b) shows the magnitude of the reflected voltage, plotted on a linear scale, for times around $t/\Delta t=40,000$. The voltage is seen to be a slowly decaying sinusoid at the frequency $f\approx 1.89$ GHz.
+
+In Fig. 26 we show the magnitude of the reflection coefficient versus frequency for simulations with different numbers of time steps: $N_t=8,000$, $N_t=24,000$, and $N_t=50,000$. For each case, a Hanning window is applied in time to eliminate truncation artifacts. The antenna is seen to be matched at the frequency $f=1.89$ GHz, and the``apparent'' bandwidth for the match is seen to depend on the number of time steps used for the simulation. Thus, if one were to underestimate the number of time steps required for the simulation to converge, one would think that the antenna had a much wider bandwidth for the reflection coefficient than it actually has. With the detailed analysis presented above, this point may appear to be obvious. However, sometimes, particularly when a computation is automated, this degree of analysis may not be performed every time a parameter for the antenna, such as the thickness of the substrate, is changed.
+
+In some cases, special techniques can be applied to shorten the computation for a narrow bandwidth antenna. For example, because of the well-defined, decaying sinusoidal waveform in the reflection coefficient for this antenna, a shorter computation time, say $N_t=20,000$, could be used with an extrapolation for the remainder of the waveform. Such techniques are discussed in the literature \cite{Chebolu}.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,scale=1.0]{/users/jim.maloney/Book/images/AntChapOrigFig26.png}
+\caption{Narrow-band, rectangular microstrip patch antenna. Magnitude of reflection coefficient versus frequency for three different numbers of time steps.}
+\label{fig:ACF26}
+\end{center}\end{figure}
+
+\section{Summary and Conclusions}
+
+In this chapter, we have presented an introduction to the finite-difference time-domain method, aimed at individuals who have little or no experience with the method. Thus, we have limited the presentation to the basics of the method, and we have avoided mention of many refinements that are generally restricted to particular applications. To give the reader a sense of the breadth of application allowed by these refinements we present a partial list below.
+\begin{itemize}
+  \item{Techniques for handling materials with dispersive properties (properties that are a function of the frequency), anisotropic properties (properties that depend on the direction of the field components), and nonlinear properties.}
+  \item{Methods for incorporating impedance boundary conditions.}
+  \item{Subcell methods for treating material sheets that are thinner than a FDTD cell.}
+  \item{Methods for incorporating periodic boundary conditions, which are useful in treating antenna arrays.}
+  \item{Higher order FDTD schemes that have lower error (numerical dispersion) than the conventional Yee algorithm.}
+  \item{Techniques for incorporating nonuniform and nonorthogonal grids.}
+  \item{Special procedures for handling objects that are bodies of revolution.}
+\end{itemize}
+
+The brevity of the contribution precluded the derivation of the mathematical formulas associated with the method, e.g., FDTD update equations, equations for the perfectly matched layer, etc. These formulas can be found in the in-depth treatment of the method contained in the book edited by A. Taflove and S. C. Hagness \cite{Taf2005}. A comprehensive web site on the method is maintained by J. B. Schneider at Washington State University: www.fdtd.org. This site contains searchable lists of books, journal papers, conference papers, and dissertations.
+
+To assess the popularity of the FDTD method, a search was done with INSPEC for documents that included either ``finite-difference time-domain'' or ``FDTD'' in the title\footnote{A few of these documents apply the finite-difference time-domain method to problems other than electromagnetic, such as acoustic problems.}. The results of the search, presented in Fig. 27, clearly show the rapid growth in the popularity of the method over the last twenty-five years.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,scale=1.0]{/users/jim.maloney/Book/images/AntChapOrigFig27.png}
+\caption{Number of documents published over the a twenty year span that include the words ?finite-difference time-domain? or ?FDTD? in the title. Each bar shows the total number of documents published during a five year period.}
+\label{fig:ACF27}
+\end{center}\end{figure}
+
+The emphasis throughout the chapter has been on the application of the FDTD method to the analysis of antennas. After brief discussions of the special formulations associated with transmitting and receiving antennas, the details for the analysis of a few different types of antennas were presented. Again, because of the brevity of the contribution, no attempt was made to mention all of the different antennas that have been analyzed with the method. Many individuals have used the method to treat antennas; as an indication of the number, the INSPEC search mentioned above listed over 500 documents with FDTD and antenna(s) in the title.
+
+All of the numerical results presented in the examples were obtained by us or our students. Thus, we have very detailed knowledge for each example, and can make fairly accurate statements about the results. These examples were chosen not only to show the power of the FDTD method, particularly the good agreement with experimental measurements, but also to show that the method has some limitations; albeit, the limitations are sometimes due to the crudeness of the theoretical model for the antenna or the choice of the parameters for the simulation. The refinement of the FDTD method and its application to practical problems is an ongoing story. Undoubtedly, there will be some exciting accomplishments made in the future. 
+
+\emph{One area with great promise is the use of the method for antenna synthesis}. Here we do not mean the conventional approach in which the method is coupled with an optimization routine and used to choose the parameters for a standard antenna (dipole, horn, etc.) so that certain criteria for the performance are met. What we have in mind for antenna synthesis is a quite different, a more modern approach. In this approach, the structure of the antenna is not completely predetermined with only a few parameters to be chosen, but the structure of the antenna is actually developed as part of the synthesis! The FDTD method is well suited for use in such schemes; because of the flexibility of the method, a new structure can easily be introduced. The antenna structure is changed by simply changing the electromagnetic constitutive parameters associated with individual cells. \emph{The early chapters in this book discussed the "fragmented aperture" concept which relied heavily on the FDTD method as described in this chapter} \cite{MaloneyURSI99}-\cite{RECAP}.
+
+\begin{thebibliography}{99}
+
+ \bibitem{Yee66} K. S. Yee, ``Numerical Solution of Initial Boundary Value Problems Involving Maxwell's Equations in Isotropic Media,'' IEEE Trans. Antennas Propagat., Vol. AP-14, pp. 302-307, May 1966.
+
+\bibitem{Maloney1} J. G. Maloney, G. S. Smith, and W. R. Scott, Jr., ``Accurate Computation of the Radiation from Simple Antennas Using the Finite-Difference Time-Domain Method,'' IEEE Trans. Antennas Propagat., Vol. AP-38, pp. 1059-1068, July 1990.
+
+\bibitem{BoonPist} J. J. Boonzaaier and C. W. Pistorius, ``Thin Wire Dipoles: A Finite-Difference Time-Domain Approach,'' Electronics Lett., Vol. 26, pp. 1891-1892, 25 October, 1990.
+
+\bibitem{KatzHorn} D. S. Katz, M. J. Picket-May, A. Taflove, and K. R. Umashankar, ``FDTD Analysis of Electromagnetic Wave Radiation from Systems Containing Horn Antennas,'' IEEE Trans. Antennas Propagat., Vol. AP-39, pp. 1203-1212, August 1991.
+
+\bibitem{TirkusRad} P. A. Tirkus and C. A. Balanis, ``Finite-Difference Time-Domain Method for Antenna Radiation,'' IEEE Trans. Antennas Propagat., Vol. AP-40, pp. 334-340, March 1992.
+
+\bibitem{LuebbersGain} R. J. Luebbers and J. Beggs, ``FDTD Calculation of Wide-Band Antenna Gain and Efficiency,'' IEEE Trans. Antennas Propagat., Vol. AP-40, pp. 1403-1407, November 1992.
+
+\bibitem{MaloneySmithAntChapters} J. G. Maloney and G. S. Smith, ``Modeling of Antennas,'' Chapter 7 in A. Taflove, Editor, Advances in Computational Electrodynamics, The Finite-Difference Time-Domain Method, pp. 409-460, Artech House, Boston, 1998. Also, J. G. Maloney, G. S. Smith, E. Thiele, O. Ghandi, N. Chavannes, and S. Hagness, Chapter 14 in A. Taflove, and S. Hagness, Editors, Computational Electrodynamics: The Finite-Difference Time-Domain Method, 3rd Edition, pp. 607-676, Artech House, Boston, 2005.
+
+\bibitem{SmithBook}, G. S. Smith, An Introduction to Classical Electromagnetic Radiation, Cambridge University Press, Cambridge, UK, 1997.
+
+\bibitem{Taf2005} A. Taflove and S. C. Hagness, Editors, Computational Electrodynamics: The Finite-Difference Time-Domain Method, Artech House, Boston, 2005.
+
+\bibitem{Schneider99} J. B. Schneider and C. L. Wagner, ``FDTD Dispersion Revisited: Faster-Than-Light Propagation,'' IEEE Microwave and Guided Wave Let., Vol. 9, pp. 54-56, Feb. 1999.
+
+\bibitem{Gedney96} S. Gedney, ``An Anisotropic Perfectly Matched Layer-Absorbing Medium for the Truncation of FDTD Lattices,'' IEEE Trans. Antennas Propagat., Vol. AP-44, pp. 1630-1639, December 1996.
+
+\bibitem{Gedney2005} S. Gedney, ``Perfectly Matched Layer Absorbing Boundary Conditions,'' Chapter 7 in A. Taflove and S. C. Hagness, Editors, Computational Electrodynamics: The Finite-Difference Time-Domain Method, 3rd Edition, pp. 273-328, Artech House, Boston, 2005.
+
+\bibitem{Shlager94} K. L. Shlager and G. S. Smith, ``Near-Field to Near-Field Transformation for Use With FDTD Method and Its Application to Pulsed Antenna Problems,'' Electronics Lett., Vol. 30, pp. 1262-1264, 4th, August, 1994.
+
+\bibitem{Shlager95} K. L. Shlager and G. S. Smith, ``Comparison of Two Near-Field to Near-Field Transformations Applied to Pulsed Antenna Problems'' Electronics Lett., Vol. 31, pp. 936-938, 8th, June, 1995.
+
+\bibitem{Smith2004} G. S. Smith, ``A Direct Derivation of a Single-Antenna Reciprocity Relation for the Time Domain,'' IEEE Trans. Antennas Propagat., Vol. AP-52, pp. 1568-1577, June 2004.
+
+\bibitem{Maloney97} J. G. Maloney, M. P. Kesler, and G. S. Smith, ``Generalization of PML to Cylindrical Geometries,'' 13th Annual Review of Progress in Applied Computational Electromagnetics, Monterey, CA, pp. 900-908, March 1997.
+
+\bibitem{Smith2001} G. S. Smith and T. W. Hertel, ``On the Transient Radiation of Energy from Simple Current Distributions and Linear Antennas,'' IEEE Antennas Propagat. Magazine, Vol. 43, pp. 49-62, June 2001.
+
+\bibitem{Smith2003} T. W. Hertel and G. S. Smith, ``On the Convergence of Common FDTD Feed Models for Antennas,'' IEEE Trans. Antennas Propagat., Vol. AP-51, pp. 1771-1779, August 2003.
+
+\bibitem{King56} R. W. P. King, The Theory of Linear Antennas, pg. 20, Harvard Univ. Press, Cambridge, MA, 1956.
+
+\bibitem{Maloney94} J. G. Maloney, K. L. Shlager, and G. S. Smith, ``A Simple FDTD Model for Transient Excitation of Antennas by Transmission Lines,'' IEEE Trans. Antennas Propagat., Vol. AP-42, pp. 289-292, February 1994.
+
+\bibitem{DeyMittra} S. Dey and R. Mittra, ``A Locally Conformal Finite-Difference Time-Domain (FDTD) Algorithm for Modeling Three-Dimensional Perfectly Conducting Objects,'' IEEE Microwave and Guided Wave Lett., Vol 7, pp. 273-275, September 1997.
+
+\bibitem{Taf05} A. Taflove, M. Celuch-Marcysiak, and S. Hagness, ``Local Subcell Models of Fine Geometrical Features,'' Chapter 10 in A. Taflove and S. C. Hagness, Editors, Computational Electrodynamics: The Finite-Difference Time-Domain Method, 3rd Edition, pp. 407-462, Artech House, Boston, 2005.
+
+\bibitem{Gedney05} S. Gedney, F. Lansing, and N. Chavannes, ``Nonuniform Grids, Nonorthogonal Grids, Unstructured Grids, and Subgrids,'' Chapter 11 in A. Taflove and S. C. Hagness, Editors, Computational Electrodynamics: The Finite-Difference Time-Domain Method, 3rd Edition, pp. 463-516, Artech House, Boston, 2005.
+
+\bibitem{Cangellaris} A. C. Cangellaris and D. B. Wright, ``Analysis of the Numerical Error Caused by the Stair-Stepped Approximation of a Conducting Boundary in FDTD Simulations of Electromagnetic Phenomena,'' IEEE Trans. Antennas Propagat., Vol. AP-39, pp. 1518-1525, October 1991.
+
+\bibitem{Holland} R. Holland, ``Pitfalls of Staircase Meshing,'' IEEE Trans. Electromagnetic Compatibility, Vol. 35, pp. 434-439, November 1993.
+
+\bibitem{Hertel02} T. W. Hertel and G. S. Smith, ``Analysis and Design of Two-Arm Conical Spiral Antennas,'' IEEE Trans. Electromagnetic Compatibility, Vol. 44, pp. 25-37, February 2002.
+
+\bibitem{Hertel03} T. W. Hertel and G. S. Smith, ``On the Dispersive Properties of the Conical Spiral Antenna and Its Use for Pulsed Radiation,'' IEEE Trans. Antennas Propagat., Vol. AP-51, pp. 1426-1433, July 2003.
+
+\bibitem{Dyson65} J. D. Dyson, ``The Characteristics and design of the Conical Log-Spiral Antenna,'' IEEE Trans. Antennas Propagat., Vol. AP-13, pp. 488-499, July 1965.
+
+\bibitem{Shlager96} K. L. Shlager, G. S. Smith, and J. G. Maloney, ``Accurate Analysis of TEM Horn Antennas for Pulse Radiation,'' IEEE Trans. Electromagnetic Compatibility, Vol. 38, pp. 414-423, August 1996.
+
+\bibitem{LeeImpedTEM} R. T. Lee and G. S. Smith, ``On the Characterteristic Impedance of the TEM Horn Antenna'' IEEE Trans. Antennas Propagat., Vol. AP-52, pp. 315-318, January 2004.
+
+\bibitem{LeeHornTEM} R. T. Lee and G. S. Smith, ``A Design Study for the Basic TEM Horn Antenna,'' IEEE Antennas Propagat. Magazine, Vol. 46, pp. 86-92, February 2004.
+
+\bibitem{Shlager94} K. L. Shlager, G. S. Smith, and J. G. Maloney, ``Optimization of Bow-Tie Antennas for Pulse Radiation,'' IEEE Trans. Antennas Propagat., Vol. AP-42, pp. 975-982, July 1994.
+
+\bibitem{Change} E. Chang, S. A. Long, and W. F. Richards, ``An Experimental Investigation of Electrically Thick Rectangular Microstrip Antennas,'' IEEE Trans. Antennas Propagat., Vol. AP-34, pp. 767-772, June 1986.
+
+\bibitem{Abdallah} H. Abdallah, W. Wasylkiwskyj, K. Parikh, and A. Zaghloul, ``Comparison of Return Loss Calculations with Measurements of Narrow-Band Microstrip Patch Antennas,'' ACES Journal, Vol. 19, pp. 184-186, November 2004.
+
+\bibitem{Jackson} D. R. Jackson and N. G. Alexopoulos, ``Simple Approximate Formulas for the Input Resistance, Bandwidth, and Efficiency of a Resonant Rectangular Patch,'' IEEE Trans. Antennas Propagat., Vol. AP-39, pp. 407-410, March 1991.
+
+\bibitem{Chebolu} S. Chebolu, R. Mittra, and W. D. Becker, ``The Analysis of Microwave Antennas Using the FDTD Method,'' Microwave Journal, Vol. 39, pp. 134-150, January 1996.
+
+\bibitem{MaloneyURSI99} J.G. Maloney, P.H. Harms, M.P. Kesler, T.L. Fountain, and G.S. Smith, ``Novel, Planar Antennas Designed Using the Genetic Algorithm,'' 1999 USNC/URSI Radio Science Meeting, Orlando, FL, pg. 237, July 1999.
+
+\bibitem{MaloneyAP2000} J.G. Maloney, M.P. Kesler, P.H. Harms, T.L. Fountain, and G.S. Smith, ``The Fragmented Aperture Antenna: FDTD Analysis and Measurement,'' Millennium Conference on Antennas and Propagation (AP 2000), Davos, Switzerland, 4 pages, April 2000.
+
+\bibitem{MaloneyFragPatent} J.G. Maloney, M.P. Kesler, P.H. Harms, and G.S. Smith, Fragmented Aperture Antennas and Broadband Ground Planes, U.S. Patent, No. 6,323,809 B1, November 27, 2001.
+
+\bibitem{RECAP} L. N. Pringle, P. H. Harms, S. P. Blalock, G. N. Kiesel, E. J. Kuster, P. G. Friederich, R. J. Prado, J. M. Morris, and G. S. Smith, ``A Reconfigurable Aperture Antenna Based on Switched Links Between Electrically Small Metallic Patches,''  IEEE Trans. Antennas Propagat., Vol. AP-52, pp. 1434-1445, June 2004.
+
+\bibitem{BalanisHB} Balanis HB, Chapter ?
+
+\end{thebibliography}
+
+

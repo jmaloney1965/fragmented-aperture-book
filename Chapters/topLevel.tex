@@ -1,0 +1,94 @@
+\documentclass{book}
+\renewcommand\bibname{References}
+\usepackage{etoolbox}
+\patchcmd{\thebibliography}{\chapter*}{\section*}{}{}	% this removes blank pages before references
+%\usepackage[nottoc,notlot,notlof]{tocbibind}		% this forces placement of references in TOC
+
+
+\usepackage{geometry}
+\usepackage{xcolor,placeins}
+\usepackage{amssymb,amsmath}
+\geometry{paperwidth=6.14in,paperheight=9.21in,
+  left=0.75in,right=0.60in,top=0.75in,bottom=0.75in,twoside}
+
+\usepackage{times} % default: times 11pt, \baselinestretch=1.06
+\usepackage{fancyhdr} % headers
+\pagestyle{fancy} % style for headers
+\usepackage{pifont} % for the copyright symbol
+\headheight 0.25in % height of header
+\headsep 0.25in % dist between top of text and bottom of header
+\parskip 0in
+\parindent 0.25in % = 6.35mm
+\newcommand{\str}{\rule{0pt}{16pt}} % strut used in toc
+%%% header stuff
+\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{#1}}{}}
+\newcommand{\currpage}{\footnotesize\thepage} 	% use in headers
+\fancyhead{} 								% clear header fields, required
+\fancyfoot{} 								% clear footer fields, required
+\fancyhead[RO,LE]{\currpage} 					% Odd page, Right side; Even page, left side
+\newcommand{\lo}{\footnotesize{}\textcolor{black}{FRAGMENTED APERTURE ANTENNAS}}
+\fancyhead[LO]{\lo} 							% Odd page, Left side
+\newcommand{\re}{\footnotesize{}James G. Maloney}
+\fancyhead[RE]{\footnotesize\re} 				% Even Page, Right side
+%\renewcommand\headrulewidth{0pt} 			% for no rule line under header
+
+
+\usepackage{etoolbox}		% This makes chapter first page have fancy headers
+\patchcmd{\chapter}{\thispagestyle{plain}}{\thispagestyle{fancy}}{}{}
+
+\makeatletter
+\DeclareRobustCommand\authortoctext[1]{{\addvspace{0pt}\nopagebreak\leftskip0em\relax\rightskip\@tocrmarg\relax\noindent\hspace{15pt}\itshape#1\par\addvspace{10pt}}}
+\makeatother
+\newcommand\authortoc[1]{\addtocontents{toc}{\authortoctext{#1}}}
+% \gdef\chapterauthor{#1}
+\usepackage{graphicx}
+\graphicspath{/Users/jim.maloney/Book/images}
+
+\usepackage{chapterbib}
+
+\title{Fragmented Aperture Antennas:  Computational Design of Antenna Structure}
+
+\date{Sep 3, 2016}
+
+\author{Dr. James G. Maloney}
+
+\begin{document}
+
+\fancyhead{} 								% clear header fields, required
+\fancyhead[RO,LE]{\currpage} 					% Odd page, Right side; Even page, left side
+\newcommand{\ko}{\footnotesize{}{\leftmark}}
+\fancyhead[LO]{\ko} 							% Odd page, Left side
+\newcommand{\rf}{\footnotesize{}FRAGMENTED APERTURE ANTENNAS}
+\fancyhead[RE]{\footnotesize\rf} 				% Even Page, Right side
+
+\tableofcontents{}
+\listoffigures{}
+\listoftables{}
+
+\newcommand{\chapterauthor}[1]{{\parindent0pt\vspace*{-25pt}\linespread{1.1}\large\scshape#1\par\nobreak\vspace*{35pt}}}
+
+\include{dedication}
+\include{acknowledgement}
+
+\include{introductionFragmented}		% ch 1	
+\include{origFragmented} 				% ch2
+\include{improvedFragmented}			% ch3
+\include{singleElemFragmented}		% ch4
+\include{reconfigurableFragmented}		% ch5
+\include{FragArrays}					% ch6
+\include{WidebandArrays}				% ch7
+\include{metaMaterialsAndAntennas}	% ch8
+\include{reconfigurableArrays}			% ch9	show improved scan loss, dynamic polarization, etc.
+
+\appendix
+\include{modelingAntennas}			% For Zander
+
+
+%\include{introArrayModeling}			% Appendix B
+%\include{antennaMeas}
+%\include{WideScan}
+
+% some other publication
+%\include{ModelingAntennas}
+
+\end{document}

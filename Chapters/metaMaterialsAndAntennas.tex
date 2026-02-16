@@ -1,0 +1,48 @@
+\chapter{MetaMaterials and Antennas}
+\authortoc{John Schultz and James G. Maloney}
+\chapterauthor{John Schultz and James G. Maloney}
+
+\section{Introduction To MetaMaterials}
+
+Bla Bla BLA
+
+\section{Slicing}
+\label{sec:slicing}	% specifying a section label to be used by a \ref
+In the Yee algorithm, both space and time are discretized, with the increments in space for rectangular coordinates being $\Delta x, \Delta y, \Delta z$  and the increment in time being $\Delta t$ \cite{Yee66}-\cite{Maloney1}.
+
+\begin{figure}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/AntChapOrigFig1.png}
+\caption{Schematic drawing showing the computational volume, FDTD spatial lattice, and unit cell.}
+\label{fig:ACF1}		% figure references have to be below the \caption line
+\end{figure}
+
+Figure \ref{fig:ACF1} is a schematic drawing showing a typical volume in which Maxwell's equations are to be solved. The volume is divided into unit cells each of volume. 
+The partial derivatives in Maxwell's equations are approximated by ratios of differences, as shown in \ref{eq:exFirstDiff}.
+
+\begin{equation}
+\label{eq:exFirstDiff}
+\frac{\partial E_x}{\partial z} \approx \frac{\Delta E_x}{\Delta z}, \quad
+\frac{\partial H_y}{\partial t} \approx \frac{\Delta H_y}{\Delta t}
+\end{equation}
+
+\subsection{examples}
+
+This section contains some example designs based on Figure \ref{fig:ACF1}
+
+\section{Dicing}
+
+In section \ref{sec:slicing}, slicing was introduced.   In this section we will discuss dicing the material in a cubical fashion.
+
+\begin{thebibliography}{99}
+
+ \bibitem{Yee66} K. S. Yee, ``Numerical Solution of Initial Boundary Value Problems Involving Maxwell's Equations in Isotropic Media,'' IEEE Trans. Antennas Propagat., Vol. AP-14, pp. 302-307, May 1966.
+
+\bibitem{Maloney1} J. G. Maloney, G. S. Smith, and W. R. Scott, Jr., ``Accurate Computation of the Radiation from Simple Antennas Using the Finite-Difference Time-Domain Method,'' IEEE Trans. Antennas Propagat., Vol. AP-38, pp. 1059-1068, July 1990.
+
+\bibitem{BoonPist} J. J. Boonzaaier and C. W. Pistorius, ``Thin Wire Dipoles ? A Finite-Difference Time-Domain Approach,'' Electronics Lett., Vol. 26, pp. 1891-1892, 25 October, 1990.
+
+\bibitem{KatzHorn} D. S. Katz, M. J. Picket-May, A. Taflove, and K. R. Umashankar, ``FDTD Analysis of Electromagnetic Wave Radiation from Systems Containing Horn Antennas,'' IEEE Trans. Antennas Propagat., Vol. AP-39, pp. 1203-1212, August 1991.
+
+\end{thebibliography}
+
+

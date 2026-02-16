@@ -1,0 +1,167 @@
+\chapter{Introduction to Fragmented Aperture Antennas}
+%\authortoc{James G. Maloney}
+%\chapterauthor{James G. Maloney}
+
+\section{Overview}
+
+This book describes a class of antennas called Fragmented Aperture Antennas.  Unlike traditional antennas whose physical shapes are guided by analytical insight and engineering intuition, fragmented aperture antennas are designed computationally.  A planar conducting surface is divided into many sub-wavelength regions, or pixels, each of which may be either conducting or non-conducting.  A genetic algorithm, working in concert with a full-wave electromagnetic simulation, determines which pixels should be conducting and which should not, so as to best satisfy a given set of antenna performance requirements.  The resulting antenna structures are complex, non-intuitive metallic patterns that often approach the theoretical limits of antenna performance for a given aperture size.
+
+The fragmented aperture concept was invented in the late 1990s \cite{MaloneyKeslerHarms}, and the term ``Fragmented Aperture Antenna'' was coined by the author upon visual inspection of the optimized designs, which consistently showed metallic pixels forming many connected and disconnected fragments across the aperture surface.  Since then, the concept has been extended to reconfigurable antennas, ultra-wideband phased arrays with bandwidths exceeding 33:1, and metamaterial-enhanced designs.  Fragmented aperture antennas have been successfully designed, fabricated, and measured for a wide variety of applications spanning frequencies from UHF through millimeter wave.
+
+This introductory chapter provides background on fundamental antenna concepts, motivates the need for a computational approach to antenna design, introduces the fragmented aperture concept, and concludes with a roadmap for the remainder of the book.
+
+\section{Antenna Fundamentals}
+
+An antenna is a transducer between guided electromagnetic waves, such as those on a transmission line or waveguide, and free-space electromagnetic waves that propagate away from the antenna.  When used for transmission, an antenna converts a guided signal into radiation; when used for reception, it captures incident radiation and converts it into a guided signal.  By the principle of reciprocity, the properties of an antenna are the same whether it is transmitting or receiving \cite{IEEEstd}.
+
+Several key parameters characterize the performance of an antenna:
+
+\subsection{Radiation Pattern}
+The radiation pattern describes the spatial distribution of electromagnetic energy radiated by an antenna as a function of direction.  It is typically represented as a plot of radiated power (or field strength) versus angle, normalized to the direction of maximum radiation.  Important features of the radiation pattern include the main beam (or main lobe), which is the angular region of strongest radiation; the sidelobes, which are regions of lesser radiation surrounding the main beam; and the back lobe, which is radiation in the direction opposite the main beam.  The beamwidth, usually defined as the angular width between the half-power ($-3$~dB) points of the main beam, quantifies how directional the antenna is.
+
+\subsection{Directivity and Gain}
+Directivity is a measure of how effectively an antenna concentrates radiated energy in a particular direction compared to an isotropic radiator (a hypothetical antenna that radiates equally in all directions).  The directivity $D$ in a given direction is defined as the ratio of the radiation intensity in that direction to the radiation intensity averaged over all directions:
+\begin{equation}
+D = \frac{U(\theta,\phi)}{U_{\text{avg}}} = \frac{4\pi U(\theta,\phi)}{P_{\text{rad}}}
+\end{equation}
+where $U(\theta,\phi)$ is the radiation intensity (power per unit solid angle) and $P_{\text{rad}}$ is the total radiated power.
+
+Gain is closely related to directivity but also accounts for losses within the antenna.  The gain $G$ is related to the directivity $D$ by the radiation efficiency $\eta$:
+\begin{equation}
+G = \eta \, D
+\end{equation}
+where $\eta$ accounts for ohmic and dielectric losses in the antenna structure.
+
+In practice, it is often useful to work with the \emph{realized gain}, which further accounts for impedance mismatch between the antenna and its feed:
+\begin{equation}
+G_{\text{realized}} = (1 - |\Gamma|^2) \, G
+\end{equation}
+where $\Gamma$ is the voltage reflection coefficient at the antenna terminals.  The realized gain captures the overall effectiveness of the antenna in converting guided-wave power into radiation in a given direction.
+
+\subsection{Aperture and Aperture Efficiency}
+
+A fundamental result in antenna theory relates the maximum achievable gain of an antenna to its physical aperture area $A$:
+\begin{equation}
+\label{eq:apGain}
+G_{\text{max}} = \frac{4\pi A}{\lambda^2}
+\end{equation}
+where $\lambda$ is the free-space wavelength.  This result applies to a uniformly illuminated aperture radiating into one hemisphere (i.e., with a ground plane or reflector behind it).  For an aperture that radiates equally into both hemispheres (no ground plane), the limit becomes $2\pi A / \lambda^2$.
+
+The aperture efficiency $\eta_a$ describes how closely an antenna approaches this theoretical limit:
+\begin{equation}
+\eta_a = \frac{G}{G_{\text{max}}} = \frac{G \lambda^2}{4\pi A}
+\end{equation}
+Traditional antenna designs rarely achieve aperture efficiencies above 50--70\%.  As will be shown throughout this book, fragmented aperture antennas routinely approach the theoretical aperture gain limit, often achieving efficiencies that exceed those of conventional designs.
+
+\subsection{Bandwidth}
+
+Every antenna has a finite bandwidth over which it operates satisfactorily.  Bandwidth may be defined in terms of several criteria, but the most common is the impedance bandwidth: the range of frequencies over which the antenna maintains an acceptable impedance match to its feed line.  A common threshold is a voltage standing wave ratio (VSWR) of 2:1, corresponding to a return loss of approximately 10~dB, meaning that no more than 10\% of the incident power is reflected back to the source.  More demanding applications may require a VSWR below 1.5:1 (return loss better than 14~dB) or even 1.3:1.
+
+Bandwidth can be expressed as a ratio of the upper to lower frequency limits (e.g., 10:1 bandwidth for an antenna operating from 1 to 10~GHz) or as a fractional bandwidth:
+\begin{equation}
+\text{BW}_{\text{frac}} = \frac{f_H - f_L}{f_c}
+\end{equation}
+where $f_H$ and $f_L$ are the upper and lower frequency limits and $f_c$ is the center frequency.  Antennas with bandwidths of 2:1 or greater are often called wideband, while those exceeding roughly 10:1 are called ultra-wideband.
+
+Achieving wide bandwidth while maintaining high gain and an acceptable impedance match is one of the central challenges in antenna design and a particular strength of the fragmented aperture approach.
+
+\subsection{Polarization}
+
+The polarization of an antenna describes the orientation of the electric field vector of the radiated wave.  Common polarizations include linear (vertical or horizontal), circular (right-hand or left-hand), and elliptical.  The polarization of the radiated field is determined by the currents flowing on the antenna structure, and achieving a desired polarization is an important design goal.  Fragmented aperture antennas can be designed for any of these polarizations, including cases where the polarization varies with beam direction.
+
+\section{Antenna Arrays}
+
+A single antenna element has a radiation pattern determined by its geometry and size.  To achieve higher gain, narrower beams, or the ability to steer the beam electronically, multiple antenna elements are arranged in an array.  In an array, the signals from the individual elements combine coherently, and the resulting radiation pattern is the product of the individual element pattern and the array factor, which depends on the element spacing, number of elements, and the relative amplitude and phase of the excitation at each element.
+
+Electronic beam steering is accomplished by adjusting the relative phases of the signals at each element.  This is the basis of the phased array, which can rapidly redirect its beam without physically moving the antenna.  Phased arrays are essential in modern radar, communications, and electronic warfare systems.
+
+However, the design of wideband phased arrays presents significant challenges.  Mutual coupling between array elements---the electromagnetic interaction between neighboring elements---can cause scan blindness, a condition where the array is poorly matched at certain combinations of frequency and scan angle.  Traditional array design approaches attempt to minimize mutual coupling, but as will be shown in this book, the fragmented aperture approach embraces mutual coupling, and in some cases exploits direct electrical connections between elements to achieve bandwidths that far exceed those of conventional array elements.
+
+\section{Limitations of Traditional Antenna Design}
+
+Traditional antenna design relies on a library of known antenna types---dipoles, patches, horns, spirals, log-periodic structures, and others---each with well-understood behavior that can be predicted analytically or with simple numerical models.  The designer selects an antenna type appropriate for the application and then adjusts a relatively small number of geometric parameters (lengths, widths, feed positions, spacings) to optimize performance.
+
+This approach has been enormously successful and has produced the antenna designs in widespread use today.  However, it is inherently constrained by the set of geometries that have been studied and understood.  The designer is limited to exploring variations within known antenna topologies.  The number of degrees of freedom available for optimization is small---typically fewer than a dozen parameters---and the design space is correspondingly limited.
+
+Consider, by contrast, an antenna aperture divided into a grid of 200 sub-wavelength pixels, each of which may be independently set to conducting or non-conducting.  This seemingly simple description defines a design space of $2^{200} \approx 10^{60}$ possible antenna geometries.  The vast majority of these configurations have never been conceived by any antenna designer, and many of them produce antenna characteristics that are unlike any known antenna type.  The challenge, of course, is finding the configurations that produce useful antennas among this enormous number of possibilities.
+
+This is precisely the challenge that the fragmented aperture design approach addresses.
+
+\section{The Fragmented Aperture Concept}
+
+The fragmented aperture antenna design approach combines three essential elements:
+
+\begin{enumerate}
+
+\item \textbf{A pixelated aperture.}  The antenna surface is divided into a grid of sub-wavelength regions, or pixels.  Each pixel is assigned a binary state: conducting (metal) or non-conducting (absent).  The set of all pixel states defines the antenna geometry.  Early fragmented apertures used rectangular pixels on a rectilinear grid, but as described in Chapter~3, improved pixel shapes and lattice geometries have been developed to address fabrication challenges.
+
+\item \textbf{A full-wave electromagnetic simulation.}  A rigorous numerical solution of Maxwell's equations is used to predict the antenna performance for any given pixel configuration.  The finite-difference time-domain (FDTD) method has been used exclusively in the author's work because a single time-domain simulation efficiently produces antenna characteristics across the entire frequency band of interest.  A detailed description of the FDTD method as applied to antennas is provided in Appendix~A.
+
+\item \textbf{An evolutionary optimization algorithm.}  Because the design space is far too large for exhaustive search, a genetic algorithm (GA) is used to efficiently explore the space of possible pixel configurations.  The GA maintains a population of candidate antenna designs, evaluates each design using the FDTD simulation, and evolves the population over many generations using selection, crossover, and mutation operations.  The algorithm converges toward designs that best satisfy the specified performance goals.
+
+\end{enumerate}
+
+The result of this design process is an antenna whose physical structure has been computationally optimized to meet a particular set of performance requirements.  The antenna shapes that emerge from this process are invariably complex and non-intuitive.  Inspection of the metallic regions on the aperture reveals many interconnected and isolated fragments of conductor---hence the name \emph{fragmented aperture}.
+
+A critical advantage of this approach is that the full-wave simulation captures all of the relevant physics: mutual coupling, surface wave effects, feed interactions, dielectric loading, and diffraction from edges and discontinuities.  The optimizer therefore has access to the true electromagnetic behavior of each candidate design, not an approximate or simplified model.  This is what allows fragmented aperture designs to routinely approach theoretical performance limits.
+
+\section{Novelty and Significance}
+
+The fragmented aperture antenna represents a fundamentally different philosophy of antenna design.  Rather than starting from an analytical understanding of how a particular geometric shape radiates and then perturbing that shape to improve performance, the fragmented aperture approach starts from a general description of the design space (the set of all possible pixel configurations) and uses computation to discover structures that meet the desired specifications.  In this sense, the antenna structure itself is the output of the design process, not the input.
+
+This computational approach to designing antenna structure has produced several notable results:
+
+\begin{itemize}
+\item Single-element fragmented aperture antennas that approach the theoretical aperture gain limit $2\pi A / \lambda^2$ for apertures without a ground plane, across bandwidths exceeding an octave.
+
+\item Reconfigurable fragmented aperture antennas (Agile Aperture Antennas) that can electronically switch between different operating modes---changing beam direction, bandwidth, or polarization---by opening and closing switched links between metallic pads.
+
+\item Ultra-wideband phased array elements based on the fragmented aperture concept that achieve bandwidths of 33:1, with preliminary work suggesting that 100:1 bandwidths are achievable.  A key insight enabling these designs was that electrical connections between array elements should be exploited rather than avoided.
+
+\item Improved pixel geometries that eliminate the fabrication issue of ``diagonal touching''---a problem that plagued early fragmented aperture designs and caused poor agreement between modeled and measured antenna performance.
+
+\item An improved mutation algorithm for the genetic algorithm that significantly accelerates convergence for designs with large numbers of pixels.
+\end{itemize}
+
+These results, and others, are described in detail in the chapters that follow.
+
+\section{Organization of the Book}
+
+The remainder of this book is organized as follows:
+
+\textbf{Chapter~2: Original Approach to Design Fragmented Apertures.}  This chapter describes the original fragmented aperture concept as disclosed in U.S.\ Patent 6,323,809.  The genetic algorithm design approach is presented, along with early design results that demonstrated the viability of the concept.
+
+\textbf{Chapter~3: Improved Approach to Design Fragmented Apertures.}  The original fragmented aperture approach suffered from the problem of diagonal touching, where pixels that touch only at corners lead to fabrication difficulties and poor model-measurement agreement.  This chapter presents three improved pixel geometries that inherently avoid diagonal touching, along with an improved mutation algorithm that accelerates the convergence of the genetic algorithm for designs with many pixels.
+
+\textbf{Chapter~4: Sample Antenna Designs.}  This chapter presents a gallery of fragmented aperture antenna designs that illustrate the versatility of the approach.  Topics include various feed strategies, bandwidth tailoring, fixed beam steering, polarization control (linear and circular), beamwidth tailoring, and out-of-band rejection.
+
+\textbf{Chapter~5: Reconfigurable Fragmented Aperture Antennas.}  This chapter describes the Agile Aperture Antenna, a reconfigurable antenna in which switched links between metallic pads allow the antenna to be electronically reconfigured to meet different performance specifications.  Static and reconfigurable proof-of-concept designs are presented with measured results.
+
+\textbf{Chapter~6: Fragmented Array Elements.}  This chapter extends the fragmented aperture concept to the design of individual elements for phased array antennas.  The approach for incorporating scan performance into the design process is described, and example designs spanning multiple octaves of bandwidth are presented.
+
+\textbf{Chapter~7: Wideband Antenna Arrays.}  This chapter describes the development of ultra-wideband phased arrays using fragmented aperture design principles.  Key innovations include connected arrays, broadband screen backplanes using resistive card layers to mitigate ground-plane nulls, and multi-layer radiators for improved front-to-back ratio.  Measured results for arrays with bandwidths up to 33:1 are presented.
+
+\textbf{Chapter~8: Metamaterials and Antennas.}  This chapter, co-authored with Dr.\ John Schultz, explores the intersection of metamaterial design and fragmented aperture antennas.  Techniques for designing metamaterial structures using slicing and dicing approaches are presented.
+
+\textbf{Chapter~9: Reconfigurable Arrays.}  This chapter describes reconfigurable phased array antennas that combine the fragmented aperture design approach with electronic reconfiguration, enabling improved scan performance and dynamic polarization control.
+
+\textbf{Appendix~A: Computational Modeling of Antennas.}  This appendix provides a self-contained introduction to the finite-difference time-domain (FDTD) method as applied to antenna analysis.  The basic algorithm is described, the formulation for both transmitting and receiving antennas is presented, and several examples are provided to illustrate the accuracy and utility of the method.
+
+
+\begin{thebibliography}{99}
+
+\bibitem{MaloneyKeslerHarms}  J. G. Maloney, M. P. Kesler, P. H. Harms, T. L. Fountain and G. S. Smith, ``The fragmented aperture antenna: FDTD analysis and measurement'', Proc. ICAP/JINA Conf. Antennas and Propagation, 2000, pg. 93.
+
+\bibitem{IEEEstd} IEEE Standard for Definitions of Terms for Antennas, IEEE Std 145-2013.
+
+\bibitem{MaloneyFragPatent} J.G. Maloney, M.P. Kesler, P.H. Harms, and G.S. Smith, Fragmented Aperture Antennas and Broadband Ground Planes, U.S. Patent, No. 6,323,809 B1, November 27, 2001.
+
+\bibitem{MaloneyAMTA2012} J. Maloney, J. Fraley, M. Habib, J. Schultz, K. C. Maloney, ``Focused Beam Measurement of Antenna Gain Patterns'', AMTA, 2012.
+
+\bibitem{SchultzBook} John W. Schultz, Focused Beam Methods, 2012.
+
+\bibitem{ReidThesis} David Reid, A full electromagnetic analysis of fresnel zone plate antennas and the application to a free-space focused-beam measurement system, PhD. Thesis, Georgia Tech, Nov. 2009.
+
+\end{thebibliography}
+
+

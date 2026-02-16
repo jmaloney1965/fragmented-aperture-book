@@ -1,0 +1,61 @@
+\\chapter{Validation of Convergence}
+%\authortoc{James G. Maloney}
+%\chapterauthor{James G. Maloney}
+
+\section{Introduction}
+
+bla bla bla
+
+\begin{itemize}
+\item{feed strategies}
+\item{in-plane self-balun}
+\item{in-Plane twin feed}
+\item{unbalanced fed thru ground plane}
+\item{balanced fed thru ground plane}
+\item{tailor bandwidth}
+\item{fixed steering}
+\item{broadside}
+\item{forward and backward 45} 
+\item{end fire}
+\item{Polarization}
+\subitem{linear}
+\subitem{circular}
+\subitem{non-broadside cp}
+\item{tailor beamwidth}
+\item{out-band-rejection}
+\end{itemize}
+
+
+\section{24 Bit}
+\label{sec:24Bit}	% specifying a section label to be used by a \ref
+GTRI has a long history pioneering a wideband antenna concept known as the
+fragmented aperture (FA). Unlike other concepts that use scale invariance to utilize a specific region of the aperture that changes with frequency (known as the active region), the FA is designed to utilize the entire aperture over the entire frequency band. The result is that FA antennas routinely approach the theoretical limit of antenna performance based on a uniformly illuminated aperture. However, because FAs consist of complex printed metallic patterns on single or multi layer substrates, the design necessarily is heavily simulation driven. Our proprietary design processes have been very successful in designing apertures for a wide variety of applications. The metallic pattern is described using a binary code (typically hundreds of bits), and the pattern is designed using a genetic algorithm on a large computer cluster. Because the design space for these antennas is enormous, it is unclear if a well-designed ?good? antenna is near the best possible antenna. An additional question is whether or not our genetic search algorithms are efficiently searching the design space. To address these questions, over a decade ago
+GTRI researchers created a very limited antenna design that could be described using
+only 18 bits. Every possible antenna in this space was evaluated and algorithm
+convergence was proven. In the last decade, computers have been much more powerful,
+and our design process has evolved to allow much more complicated patterns. To update
+the previous results, ACL researchers recently used a large computer cluster to evaluate every possible antenna in a 24-bit design (2^24 possible antennas, which is 64 times larger than the previous dataset). The evaluation took nearly a month of cluster time and produced gigabytes of simulation results. Using this library of known solutions, we can quickly test design algorithms for convergence time. The encoding strategy is shown below. Bits 1-23 specify on/off regions of metal. The 24th bit specifies a choice of two feed regions (compare the cells marked 24 below). Detailed results based on this dataset will be presented at the conference.
+
+\cite{Maloney1}.
+
+\begin{figure}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/origPatentFig3.png}
+\caption{Comparison of fragmented design to uniform aperture limit $2\pi A/\lambda^2$}
+\label{fig:IFAF1}		% figure references have to be below the \caption line
+\end{figure}
+
+Figure \ref{fig:ACF1} is a schematic drawing showing a typical volume in which Maxwell's equations are to be solved. The volume is divided into unit cells each of volume. 
+
+\begin{thebibliography}{99}
+
+ \bibitem{Yee66} K. S. Yee, ``Numerical Solution of Initial Boundary Value Problems Involving Maxwell's Equations in Isotropic Media,'' IEEE Trans. Antennas Propagat., Vol. AP-14, pp. 302-307, May 1966.
+
+\bibitem{Maloney1} J. G. Maloney, G. S. Smith, and W. R. Scott, Jr., ``Accurate Computation of the Radiation from Simple Antennas Using the Finite-Difference Time-Domain Method,'' IEEE Trans. Antennas Propagat., Vol. AP-38, pp. 1059-1068, July 1990.
+
+\bibitem{BoonPist} J. J. Boonzaaier and C. W. Pistorius, ``Thin Wire Dipoles ? A Finite-Difference Time-Domain Approach,'' Electronics Lett., Vol. 26, pp. 1891-1892, 25 October, 1990.
+
+\bibitem{KatzHorn} D. S. Katz, M. J. Picket-May, A. Taflove, and K. R. Umashankar, ``FDTD Analysis of Electromagnetic Wave Radiation from Systems Containing Horn Antennas,'' IEEE Trans. Antennas Propagat., Vol. AP-39, pp. 1203-1212, August 1991.
+
+\end{thebibliography}
+
+

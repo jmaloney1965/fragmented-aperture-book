@@ -1,0 +1,169 @@
+\chapter{Original Approach to Design Fragmented Apertures}
+%\authortoc{James G. Maloney}
+%\chapterauthor{James G. Maloney}
+
+\section{Aperture Utilization}
+
+A central goal in antenna design is to make effective use of the available aperture area.  As discussed in Chapter~1, the theoretical maximum gain for a uniformly illuminated planar aperture of area $A$ radiating into one hemisphere is $4\pi A/\lambda^2$, and for an aperture radiating into both hemispheres (no ground plane), the limit is $2\pi A/\lambda^2$.  Traditional antenna designs---dipoles, patches, spirals, and the like---typically utilize only a fraction of the available aperture area at any given frequency.  For example, a spiral antenna uses an ``active region'' whose size scales with frequency; at any given operating frequency, much of the physical aperture is not contributing to the radiation.
+
+The original fragmented aperture concept was motivated by a simple question: \emph{can one design a planar antenna that utilizes the entire aperture area across a wide frequency band, thereby approaching the theoretical gain limit?}  The answer, as demonstrated in this chapter, is yes---provided one is willing to abandon traditional antenna geometries in favor of computationally optimized structures.
+
+\section{Original Genetic Design Approach}
+
+\subsection{Binary Encoding of Antenna Geometry}
+
+The fundamental idea behind the fragmented aperture antenna is to represent the antenna geometry as a binary string that can be manipulated by an evolutionary optimization algorithm.  The antenna surface is divided into a grid of sub-wavelength rectangular pixels, as illustrated in Figure~\ref{fig:OFA1}.  Each pixel is assigned a single binary value: 1 for conducting (metal present) and 0 for non-conducting (metal absent).  The collection of all pixel states defines the antenna geometry and constitutes the ``genetic code'' of the antenna.
+
+\begin{figure}
+\includegraphics[angle=0.5,width=\linewidth]{/Users/jim.maloney/Book/images/origPatentFig1.png}
+\caption{The fragmented aperture concept: a planar surface divided into a grid of sub-wavelength pixels, each either conducting (black) or non-conducting (white).  The pattern of conducting and non-conducting elements defines the antenna geometry \cite{MaloneyFragPatent}.}
+\label{fig:OFA1}
+\end{figure}
+
+This binary representation maps naturally onto a genetic algorithm (GA).  The GA maintains a population of candidate antenna designs, each represented by a binary string.  Over successive generations, the population evolves toward better antenna designs through the standard genetic operations of selection, crossover, and mutation.
+
+\subsection{Two-Stage Optimization}
+
+The original design process employed a two-stage optimization approach, as illustrated in Figure~\ref{fig:OFA4}.  In the first stage, the aperture area is described using a relatively small number of trapezoidal conducting strips arranged symmetrically about a coaxial feed point.  Each strip has a variable length that is encoded in the binary representation.  This coarse description of the antenna geometry allows the GA to quickly explore the design space and identify promising regions.
+
+\begin{figure}
+\includegraphics[angle=0.5,width=\linewidth]{/Users/jim.maloney/Book/images/origPatentFig4.png}
+\caption{First optimization stage: the aperture is described using trapezoidal conducting strips of variable length arranged about a coaxial feed.  This coarse parameterization enables rapid exploration of the design space \cite{MaloneyFragPatent}.}
+\label{fig:OFA4}
+\end{figure}
+
+In the second stage, the best design from the first stage is converted to the full pixel representation and the GA continues to optimize at the pixel level, refining the antenna geometry to improve performance.  The flowchart for this second stage is shown in Figure~\ref{fig:OFA5}.
+
+\begin{figure}
+\includegraphics[angle=0.5,width=0.85\linewidth]{/Users/jim.maloney/Book/images/origPatentFig5.png}
+\caption{Flowchart of the genetic optimization process for fragmented aperture design.  The algorithm iteratively toggles pixels between conducting and non-conducting states, evaluating the antenna performance at each step using full-wave electromagnetic simulation \cite{MaloneyFragPatent}.}
+\label{fig:OFA5}
+\end{figure}
+
+\subsection{Fitness Evaluation with FDTD}
+
+At each generation of the GA, every candidate antenna in the population must be evaluated to determine how well it meets the design objectives.  This evaluation requires a full-wave electromagnetic simulation of each candidate antenna.  The finite-difference time-domain (FDTD) method was used exclusively for this purpose because a single time-domain simulation produces the antenna response across the entire frequency band of interest via Fourier transformation (see Appendix~A for details).
+
+The fitness function used to evaluate each candidate antenna was typically based on the broadside realized gain across the design bandwidth.  Designs that achieved good impedance match (low VSWR) and high broadside gain over the specified frequency range received higher fitness scores.  The GA then preferentially selected high-fitness individuals for reproduction, driving the population toward better antenna designs over successive generations.
+
+Even with the efficiency of the FDTD method, the computational cost of evaluating hundreds or thousands of candidate antennas over many GA generations was substantial.  This was one of the earliest applications of large-scale parallel computing to antenna design, with populations of antennas evaluated simultaneously on clusters of workstations.
+
+\subsection{Symmetry Constraints}
+
+To reduce the size of the design space and to ensure that the resulting antenna designs had desirable radiation characteristics, symmetry constraints were typically imposed during the optimization.  For a vertically polarized broadside antenna, left-right and top-bottom symmetry were enforced, reducing the number of independent pixels (and hence the length of the binary string) by a factor of four.  For example, an aperture with 400 pixels and both symmetries enforced has only 100 independent degrees of freedom, corresponding to a design space of $2^{100}$ possible configurations---still enormous, but significantly more tractable for the GA.
+
+\section{First Success}
+\label{sec:origFirstSuccess}
+
+The first successful fragmented aperture antenna design was a planar aperture optimized to operate from 800~MHz to 2.5~GHz (a bandwidth of approximately 3:1).  The aperture was 10 inches $\times$ 10 inches (25.4~cm $\times$ 25.4~cm) and was excited at a feed point near the center of the aperture.  The optimized design is shown in Figure~\ref{fig:OFA3}.
+
+\begin{figure}
+\includegraphics[angle=0.5,width=\linewidth]{/Users/jim.maloney/Book/images/origPatentFig3.png}
+\caption{The first successful fragmented aperture antenna: a 10-inch $\times$ 10-inch aperture optimized for 800~MHz to 2.5~GHz.  The complex pattern of conducting (black) and non-conducting (white) regions was determined entirely by the genetic algorithm and FDTD simulation.  The feed is located at the right side of the aperture.  Left-right and top-bottom symmetry lines are indicated by the dashed lines \cite{MaloneyFragPatent}.}
+\label{fig:OFA3}
+\end{figure}
+
+The visual complexity of the design in Figure~\ref{fig:OFA3} is striking.  The conducting regions form an intricate pattern of connected and disconnected fragments that bears no resemblance to any traditional antenna geometry.  It was this visual character---the many fragments of conductor scattered across the aperture---that led to the name ``Fragmented Aperture Antenna.''
+
+Despite the non-intuitive appearance of the design, the measured performance was excellent.  Figure~\ref{fig:OFA7} compares the measured broadside gain with the FDTD prediction and with two reference curves: the uniform aperture gain limit ($2\pi A/\lambda^2$, since there is no ground plane) and the gain of a spiral antenna of the same aperture size.
+
+\begin{figure}
+\includegraphics[angle=0.5,width=\linewidth]{/Users/jim.maloney/Book/images/origPatentFig7.png}
+\caption{Measured and predicted broadside gain for the first fragmented aperture antenna (Figure~\ref{fig:OFA3}).  The fragmented design closely approaches the uniform aperture gain limit across the 800~MHz to 2.5~GHz optimization range, and significantly outperforms a spiral antenna of the same aperture size.  The measured and FDTD-predicted gains are in excellent agreement \cite{MaloneyFragPatent}.}
+\label{fig:OFA7}
+\end{figure}
+
+Several important observations can be drawn from Figure~\ref{fig:OFA7}:
+
+\begin{itemize}
+
+\item Within the optimization range of 800~MHz to 2.5~GHz, the fragmented aperture closely approaches the uniform aperture gain limit.  This demonstrates that the GA/FDTD design process is effective at utilizing the full aperture area.
+
+\item The measured and FDTD-predicted gains are in excellent agreement across the entire frequency range, validating the accuracy of the FDTD model used in the design process.
+
+\item The fragmented aperture significantly outperforms a spiral antenna of the same physical aperture size.  The spiral, being a traveling-wave antenna with a frequency-dependent active region, does not utilize the full aperture at any given frequency.
+
+\item Outside the optimization range, the antenna performance degrades, as expected.  The GA optimized the design specifically for the 800~MHz to 2.5~GHz band, and performance outside this band was not part of the fitness function.
+
+\end{itemize}
+
+\section{Bidirectional Radiation}
+
+Because the first fragmented aperture antennas were single-layer planar structures with no ground plane, they radiated into both hemispheres.  Figure~\ref{fig:OFA8} shows the H-plane radiation pattern of the first successful design, comparing the FDTD prediction with the measured pattern.
+
+\begin{figure}
+\includegraphics[angle=0.5,width=\linewidth]{/Users/jim.maloney/Book/images/origPatentFig8.png}
+\caption{H-plane radiation pattern of the first fragmented aperture antenna, comparing the measured pattern with the FDTD model prediction.  The pattern is clearly bidirectional, with roughly equal radiation into the forward and backward hemispheres \cite{MaloneyFragPatent}.}
+\label{fig:OFA8}
+\end{figure}
+
+The bidirectional radiation pattern is clearly visible in Figure~\ref{fig:OFA8}, with the antenna producing roughly equal radiation in the forward and backward directions.  The model-measurement agreement is again excellent.  This bidirectional behavior is a natural consequence of the single-layer planar geometry: since the antenna structure is symmetric about the plane of the aperture (to within the thickness of the conductor), there is no physical mechanism to preferentially direct radiation into one hemisphere.
+
+For many applications, bidirectional radiation is undesirable---half of the radiated power is directed away from the intended coverage area.  This motivates the use of a ground plane behind the aperture.  However, as will be discussed in detail in Chapter~7, a simple conducting ground plane introduces half-wave nulls at frequencies where the aperture-to-ground-plane spacing is an integer multiple of $\lambda/2$.  Addressing this challenge led to the development of broadband screen backplanes and multi-layer radiating structures that are key features of the wideband fragmented array designs.
+
+\section{Fragmented Broadband Ground Planes}
+
+An interesting early application of the fragmented aperture concept was the design of broadband ground planes.  Just as the pixel pattern on the radiating aperture can be optimized to achieve desired antenna characteristics, the pixel pattern on a surface behind the aperture can be optimized to function as a broadband ground plane.
+
+A conventional conducting ground plane placed a quarter wavelength behind a radiating aperture provides constructive interference at the design frequency: the backward-radiated wave reflects off the ground plane and, after traveling an additional half wavelength (round trip), arrives back at the aperture in phase with the forward-radiated wave.  However, this constructive interference is inherently narrowband.
+
+By replacing the solid conducting ground plane with a fragmented surface---a pixelated pattern of conducting and non-conducting regions---it is possible to design a reflector that provides a more uniform phase response over a wider bandwidth.  Figure~\ref{fig:OFA2} shows the transmission phase through a fragmented surface compared with a reference.
+
+\begin{figure}
+\includegraphics[angle=0.5,width=\linewidth]{/Users/jim.maloney/Book/images/origPatentFig2.png}
+\caption{Transmission phase comparison demonstrating the broadband properties of a fragmented surface \cite{MaloneyFragPatent}.}
+\label{fig:OFA2}
+\end{figure}
+
+This early exploration of fragmented ground planes laid the groundwork for the more sophisticated broadband screen backplane designs described in Chapter~7, which use resistive card (r-card) layers in combination with a conducting ground plane to achieve wideband operation.
+
+\section{The Original Patent and Early Publications}
+
+The original fragmented aperture antenna concept, including both the radiating aperture and the broadband ground plane, was disclosed in U.S.\ Patent 6,323,809, ``Fragmented Aperture Antennas and Broadband Ground Planes,'' granted November 27, 2001 \cite{MaloneyFragPatent}.  The inventors were J.~G.~Maloney, M.~P.~Kesler, P.~H.~Harms, and G.~S.~Smith.
+
+The first public presentation of the fragmented aperture concept occurred at the ICAP/JINA Conference on Antennas and Propagation in 2000 \cite{MaloneyKeslerHarms}.  The reconfigurable version of the concept (switched fragmented apertures) was presented at the IEEE Antennas and Propagation Symposium later that same year \cite{MaloneyKeslerLust}.  The concept was subsequently described in a number of conference papers and symposium presentations \cite{FriederichPringle}, and was included as part of a chapter on wideband arrays in the Modern Antenna Handbook \cite{BalanisHB12}.
+
+Since the original publications, several other research groups have independently adopted the fragmented aperture design approach for their own applications.  Herscovici et al.\ applied the concept to aperture-coupled microstrip antennas \cite{Herscovici}.  Thors et al.\ used fragmented apertures for broadband phased array element design \cite{Thors}.  Ellgardt and Persson investigated wide-angle scanning fragmented aperture arrays \cite{EllgardtPersson}.  These and other efforts confirm the broad applicability of the fragmented aperture design philosophy.
+
+\section{Lessons Learned}
+
+The success of the original fragmented aperture antenna validated the fundamental premise that computational optimization could discover antenna geometries far beyond those accessible through traditional design approaches.  However, the early work also revealed important limitations that would drive subsequent research:
+
+\begin{itemize}
+
+\item \textbf{Diagonal touching.}  The original rectangular pixel geometry led to situations where conducting pixels touched only at their corners.  In the FDTD simulation, these diagonally touching pixels are always electrically connected, but when fabricated (e.g., by printed circuit board etching), the connection is unreliable.  This issue, and the solutions to it, are the subject of Chapter~3.
+
+\item \textbf{Convergence for large pixel counts.}  As the number of pixels increased beyond approximately 100, the standard GA mutation operator became increasingly ineffective at exploring the design space.  An improved mutation strategy tailored for fragmented apertures is described in Chapter~3.
+
+\item \textbf{Bidirectional radiation.}  Single-layer fragmented apertures without a ground plane radiate equally into both hemispheres, limiting the achievable gain to $2\pi A/\lambda^2$.  Addressing this limitation motivated the development of broadband backplanes (Chapter~7) and multi-layer radiating structures (Chapter~7).
+
+\item \textbf{Fixed designs.}  Once fabricated, a fragmented aperture antenna operates with a single set of characteristics.  The desire for antennas that could dynamically change their operating characteristics led to the development of reconfigurable fragmented apertures (Chapter~5).
+
+\end{itemize}
+
+Despite these limitations, the original fragmented aperture concept established a powerful new paradigm for antenna design: one in which the physical structure of the antenna is determined by computation rather than by analytical insight alone.  The remaining chapters of this book describe how this paradigm has been extended and refined to address an increasingly wide range of antenna design challenges.
+
+
+\FloatBarrier
+\begin{thebibliography}{99}
+
+\bibitem{MaloneyFragPatent} J.G. Maloney, M.P. Kesler, P.H. Harms, and G.S. Smith, Fragmented Aperture Antennas and Broadband Ground Planes, U.S. Patent, No. 6,323,809 B1, November 27, 2001.
+
+\bibitem{MaloneyKeslerHarms}  J. G. Maloney, M. P. Kesler, P. H. Harms, T. L. Fountain and G. S. Smith, ``The fragmented aperture antenna: FDTD analysis and measurement'', Proc. ICAP/JINA Conf. Antennas and Propagation, 2000, pg. 93.
+
+\bibitem{MaloneyKeslerLust} J. G. Maloney, M. P. Kesler, L. M. Lust, L. N. Pringle, T. L. Fountain, and P. H. Harms, ``Switched Fragmented Aperture Antennas'', in Proc. 2000 IEEE Antennas and Propagations Symposium, Salt Lake City, 2000, pp. 310-313.
+
+\bibitem{FriederichPringle} P. Friederich, L. Pringle, L. Fountain, P. Harms, D. Denison, E. Kuster, S. Blalock, G. Smith, J. Maloney and M. Kesler, ``A new class of broadband planar apertures,'' Proc. 2001 Antenna Applications Symp, Sep 19, 2001, pp. 561-587.
+
+\bibitem{BalanisHB12} W. Croswell, T. Durham, M. Jones, D. Schaubert, P. G.
+Friederich and J. G. Maloney, ``Wideband Arrays,'' Chapter 12, Modern Antenna Handbook, Balanis, 2011.
+
+\bibitem{Herscovici} N. Herscovici, J. Ginn, T. Donisi, B. Tomasic, ``A fragmented aperture-coupled microstrip antenna,'' Proc. 2008 Antennas and Propagation Symp, July 2008, pp. 1-4.
+
+\bibitem{Thors} B. Thors, H. Steyskal, H. Holter, ``Broad-band fragmented aperture phased array element design using genetic algorithms,'' IEEE Trans. Antennas Propagation, Vol. 53.10, 2005, pp. 3280-3287.
+
+\bibitem{EllgardtPersson} A. Ellgardt, P. Persson, ``Characteristics of a broad-band wide-scan fragmented aperture phased array antenna'', EuCAP 2006, Nov 2006, pp. 1-5.
+
+\end{thebibliography}
+
+

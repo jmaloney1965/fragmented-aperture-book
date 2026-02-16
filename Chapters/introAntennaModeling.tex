@@ -1,0 +1,184 @@
+\chapter{Computational Modeling of Antennas}
+
+\section{Introduction}
+The finite-difference time-domain (FDTD) method is a computational procedure for solving Maxwell's equations that is based on a clever algorithm first proposed by Kane S. Yee in 1966 \cite{Yee66}. The first comprehensive analyses of practical antennas using this method were performed on main-frame computers during the early 1990's; today such computations are routinely performed on personal computers. The full details for the method are presented in a number of textbooks \cite{Taf2005}-\cite{Gedney2011}.
+
+\section{The Basic FDTD Algorithm}
+In the Yee algorithm, both space and time are discretized, with the increments in space for rectangular coordinates being $\Delta x, \Delta y, \Delta z$  and the increment in time being $\Delta t$ [8], [9]. Figure \ref{fig:IAM1} is a schematic drawing showing a typical volume in which Maxwell's equations are to be solved. The volume is divided into $N=N_x N _y N_z$ unit cells each of volume $\Delta V=\Delta x\Delta y\Delta_z$. The electromagnetic constitutive parameters ($\epsilon=\epsilon_r\epsilon_o$, $\mu=\mu_r\mu_o$, $\sigma$) can vary from cell to cell, and they are used to define different objects within the volume. Here we mention only simple materials with constant permittivity, permeability, and electrical conductivity. In the FDTD method there are techniques to handle more complicated materials, such as those with dispersive and anisotropic properties. Notice that the representation of material regions in the FDTD method by electrically-small unit cells in space is ideally suited to the design of fragmented aperture antennas. Each unit cell or a group of unit cells can represent a pixel in the fragmented aperture structure with specified electrical properties representing a conductor, a dielectric, or a magnetic material.
+
+\begin{figure} \begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/IAM1.pdf}
+\caption{Schematic drawing showing the computational volume, FDTD spatial lattice, and unit cell.}
+\label{fig:IAM1}
+\end{center}\end{figure}
+
+The six components of the electromagnetic field ($E_x$, $E_y$, $E_z$; $H_x$, $H_y$, $H_z$) are distributed over a unit cell (Yee cell) as shown in the inset of Figure \ref{fig:IAM1}. Notice that all of the components are located at different points within the cell, and the components of $\vec{H}$ are displaced from those of $\vec{E}$  by one half of a spatial increment, e.g., $\Delta x/2$. Although not shown in the figure, the components of  $\vec{H}$ are also evaluated at points displaced by one half of a time increment, viz, $\Delta t/2$, from those of  $\vec{E}$. The partial derivatives in Maxwell?s equations are approximated by ratios of differences, for example, 
+\begin{equation}
+\frac{\partial E_x}{\partial z} \approx \frac{\Delta E_x}{\Delta z}, \quad
+\frac{\partial H_y}{\partial t} \approx \frac{\Delta H_y}{\Delta t}
+\label{eqn:IAM1}
+\end{equation}
+
+For the spatial derivatives, the increment that occurs in the numerator is formed by differencing corresponding field components from adjacent unit cells, and for the temporal derivatives, it is formed by differencing field components from two adjacent time steps, e.g., $t$ and $t+\Delta t$. The discretized Maxwell's equations are arranged to form two sets of difference equations known collectively as ``update equations.'' The first set of difference equations, which we will call A, determines the change in the magnetic field, $H(t+\Delta t/2) - H(t-\Delta t/2)$, from the electric field at an intermediate time step, $E(t)$, and the second set of difference equations, which we will call B, determines the change in the electric field, $E(t+\Delta t)-E(t)$, from the magnetic field at an intermediate time step, $H(t+\Delta t/2)$.
+
+At the start of the computation, we have the initial conditions: Throughout the computational volume, the electric field is known at time $t=0$ , and the magnetic field is known at the earlier time $t=-\Delta t/2$. The update equations A are then used with the initial conditions to obtain the magnetic field at time . Next, the update equations B are used with the magnetic field that we just obtained at time $t=\Delta t/2$ and the electric field at time $t=0$ to obtain the electric field at time $t=\Delta t$. This procedure of alternately applying update equations A and B to advance the solution in time is known as ``marching-in-time'' or ``stepping-in-time.'' It is repeated until the electromagnetic field is known throughout the computational volume at the desired time $t=t_\text{max}=N_t \Delta t$.
+
+The choice for the increments of space and time ($\Delta x$, $\Delta y$, $\Delta z$, and $\Delta t$) is critical to the success of the algorithm, because their size determines how well the solution to the difference equations approximates the solution to Maxwell?s equations. The spatial and temporal increments cannot be chosen independently; we can show that for convergence (as $\Delta x\rightarrow 0$, $\Delta t\rightarrow 0$, etc.) and stability of the algorithm the increments must satisfy the Courant-Friedrichs-Lewy condition, which for free space is
+\begin{equation}
+c \Delta t \sqrt{ \frac{1}{\Delta x^2} +  \frac{1}{\Delta y^2} + \frac{1}{\Delta z^2} } \leq 1.
+\label{eqn:IAM2}
+\end{equation}
+
+For cubical cells, $\Delta x = \Delta y = \Delta z$, (\ref{eqn:IAM2}) becomes $S=c \Delta t \Delta x \leq \sqrt{1/3}$, where S is referred to as the ``Courant number,'' and a  reasonable choice is $S=1/2$.
+
+Additional restrictions for the spatial and temporal increments can only be obtained from knowledge of the variation of the field (the solution) in space and time. We basically have to make $\Delta z$ and $\Delta t$ in (\ref{eqn:IAM1}) small enough that the errors incurred by replacing the derivatives by the ratios of differences are acceptable. One obvious requirement is that the size of the spatial cells must be small enough to resolve all of the important structural features and the local field surrounding these features. Another requirement is that the error introduced by a phenomenon known as ``numerical dispersion'' must be negligible.  When there is numerical dispersion, a pulse that starts out with one shape ends up with a different shape after propagating through the FDTD lattice. Numerical dispersion is caused by the different frequency components of the pulse propagating through the lattice with different phase velocities. It can be made insignificant for a particular computation by choosing an appropriately small cell size.
+
+General rules for the scaling of the required memory and execution time with cell size are easily obtained. Consider a computational volume that is a cube composed of cubical FDTD cells, then the total number of cells is $N=N^3_x$. Because only the most recent values of the electric and magnetic fields are needed at each step of the algorithm, the total storage required scales as $N$ or $N^3_x$, i.e., as the third power of the number of cells along the edge of the cubical volume. The simulation must be run for a time roughly proportional to that required for light to cross the volume, $t_\text{max}\propto N_x \Delta x/c$. Thus, the number of time steps required is $N_t = t_\text{max}/\Delta t \propto N_x/S \propto N_x$. Now the execution time is proportional to the product of the number of cells with the number of times the cells must be updated: $N \times N_t \propto N^4_x$. The execution time scales as the fourth power of the number of cells along the edge of the cubical volume. Thus, if we half the dimensions of the cells, the storage will increase by a factor of 8, and the execution time will increase by a factor of 16.
+
+\section{Transmission}
+
+Antennas are customarily used in two states: transmission and reception. Here we will only discuss the application of the FDTD method to the transmitting antenna. A comparable discussion for the receiving antenna is presented in references \cite{MaloneySmithAntChapters} and \cite{BalanisHB}. Figure \ref{fig:IAM2}(a) is a schematic drawing showing the basic elements involved in the FDTD analysis. The figure is for a cross section through the computational volume, and the antenna is located near the center of the volume. The arrangement used to excite the antenna is shown in Figure \ref{fig:IAM2}(b). The antenna is connected to the source by a transmission line (waveguide) of characteristic impedance  $R_o$ (assumed to be a real number), and the source is matched to the characteristic impedance (there is no reflection for a wave entering the source). The specified excitation is the outward-propagating (incident) voltage wave $V^\text{+}_t(t)$ for a single mode at the reference plane in the line. Notice, at this reference plane there is also a voltage $V^\text{-}_t(t)$ associated with an inward-propagating (reflected) wave. The finite computational volume in Figure \ref{fig:IAM2}(b) is surrounded by an absorbing boundary, sometimes referred to as a perfectly matched layer (PML). The objective for this boundary is to reproduce at its interior surface the same conditions for the electromagnetic field that would exist if the volume were infinite.
+
+\begin{figure} \begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/IAM2.pdf}
+\caption{(a) Schematic drawing showing the basic elements involved in the FDTD analysis of a transmitting antenna. (b) The details for the feed region of the transmitting antenna The characteristic impedance of the transmission line is , and the source is matched to this impedance.}
+\label{fig:IAM2}
+\end{center}\end{figure}
+
+The FDTD method provides the electromagnetic field for all lattice points within the finite computational volume. However, for many antenna applications, we would like to know the radiated or far-zone field, which is the field in the limit as the radial distance from the antenna becomes infinite ($r\rightarrow\infty$). This field can be obtained by applying what is known as a near-field to far-field (NFFF) transformation. For the implementation of this transformation, a closed surface $S$ is placed around the antenna and inside the absorbing boundary; it is shown by the dashed line in Figure \ref{fig:IAM2}(a). The field ($\vec{E}^t$ and $\vec{H}^t$) on this surface is obtained for the time period of interest, and it is used with a form of Huygens' principle to obtain the radiated field (superscript r), $\vec{E}^{tr}$, $\vec{H}^{tr}$.
+The FDTD method is inherently a time-domain technique. When quantities are needed in the frequency domain (angular frequency $\omega$), they are obtained using the Fourier transformation (discrete), which is indicated by $V(t) \leftrightarrow V(\omega)$. The quantities customarily used for evaluating the performance of an antenna in the frequency domain are determined from the transformed variables. For the transmitting antenna, the voltage reflection coefficient $\Gamma_A$  is
+\begin{equation}
+\Gamma_A = \frac{V^\text{-}_t(t)}{V^\text{+}_t(t)},
+\label{eqn:IAM3}
+\end{equation}
+
+\noindent and the realized gain $\vec{G}_\text{Rel}$ (gain including mismatch) and gain $\vec{G}$  in the direction $\hat{r}$   are\footnote{I believe we should show that these are vectors and explain that the vector weights give the polarization}
+\begin{equation}
+\vec{G}_\text{Rel}(\hat{r},\omega) = \frac{4\pi r^2\hat{r} \cdot \text{Re} [ S^{tr}_c(r,\omega) ] }{\text{Power available from source}} = \frac{4\pi R_o r^2 | \vec{E}^{tr}(r,\omega) |^2}{\eta_o | V^\text{+}_t(\omega) |^2} ,
+\label{eqn:IAM4}
+\end{equation}
+\begin{equation}
+\vec{G}(\hat{r},\omega) = \frac{4\pi r^2\hat{r} \cdot \text{Re} [ S^{tr}_c(r,\omega) ] }{\text{Power accepted by antenna}} = \frac{1}{1 - | \Gamma_A(\omega) |^2} \vec{G}_\text{Rel}(\hat{r},\omega) ,
+\label{eqn:IAM5}
+\end{equation}
+
+\noindent in which $\vec{S}_c(\omega) = (1/2) \vec{E}(\omega) \times \vec{H}^\text{*}(\omega)$ is the complex Poynting vector (the $^\text{*}$ indicates complex conjugate.
+
+As we have seen, there is generally an input signal, , required for the antenna problem. For the transmitting antenna it is the incident voltage in the feeding transmission line. The temporal behavior for some typical input signals used with the FDTD method is shown in Figure A3, and some of the characteristics for these signals are given in Table AI. The choice for the input signal will depend upon the particular application. For example, when we are determining the locations on an antenna at which reflections or radiation originate, a narrow pulse, such as the Gaussian pulse shown as a solid line in Figure \ref{fig:IAM3}(a), may be an appropriate choice:
+\begin{align}
+\begin{split}
+f(t) & =\text{exp} \left[ -(t/\tau_p)^2 / 2 \right], \\
+F(\omega) & =\sqrt{2\pi}\tau_p\text{exp}\left[-(\omega \tau_p)^2/2 \right],
+\end{split}
+\label{eqn:IAM6}
+\end{align}
+
+\noindent in which $\tau_p$ is the characteristic time.
+
+\begin{figure} \begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/IAM3.pdf}
+\caption{The Gaussian pulse (solid line) and the differentiated Gaussian pulse (dashed line) and the magnitude of their Fourier transforms. (b) The sinusoid of frequency $\omega_o$ amplitude modulated by a Gaussian pulse and the magnitude of its Fourier transform, $\omega_o\tau_p=15$. All waveforms are normalized to have a maximum value of 1.0.}
+\label{fig:IAM3}
+\end{center}\end{figure}
+
+\begin{table}
+\caption{Characteristics for Various Input Signals}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/IAMtable1.png}
+\label{tab:IAMT1}
+\end{table}
+
+When we are interested in the performance of an antenna over a band of frequencies, a pulsed input signal with zero mean is useful, followed by the Fourier transform to obtain the desired frequency-domain response. For this case, the appropriate choice for the input signal might be the differentiated Gaussian pulse shown as a dashed line in Figure \ref{fig:IAM3}(a),
+\begin{align}
+\begin{split}
+f(t) & =-\left( \frac{t}{\tau_p} \right) \text{exp} \left\{ -\left[ (t/\tau_p)^2-1 \right] / 2 \right\}, \\
+F(\omega) & =j\sqrt{2\pi}\omega \tau^2_p\text{exp}\left\{-\left[(\omega \tau_p)^2-1\right]/2 \right\},
+\end{split}
+\label{eqn:IAM7}
+\end{align}
+
+\noindent or the sinusoid of frequency amplitude $\omega_o$ modulated by a Gaussian pulse shown in Figure \ref{fig:IAM3}(b),
+\begin{align}
+\begin{split}
+f(t) & =\text{exp} \left[ -(t/\tau_p)^2 / 2 \right] \sin(\omega_o t), \\
+F(\omega) & =j\sqrt{\pi/2}\tau_p \left( \exp \left\{ -\left[ (\omega-\omega_o)\tau_p\right]^2/2\right\} - \exp  \left\{ -\left[ (\omega+\omega_o)\tau_p \right]^2/2 \right\} \right)
+\end{split}
+\label{eqn:IAM8}
+\end{align}
+
+\section{Standard Gain Horn}
+
+In the previous discussion, we presented the rudiments of the FDTD method and described in general how the method is used to analyze a transmitting antenna. Now we will show results obtained by applying the method to analyze a particular antenna. This example was chosen to show the accuracy that can be obtained when the method is carefully applied to a standard antenna: the metallic, pyramidal horn shown in Figure \ref{fig:IAM4} (Flann Microwave Instruments Ltd. Model 1624-20). The small drawings at the bottom of the figure show the lengths and angles that describe this particular horn antenna: $a = 10.95$ cm, $b = 7.85$ cm, $D = 2.284$ cm, $l_w = 5.08$ cm, $\alpha = 10.74^o$, and $\beta = 8.508^o$. The waveguide feeding the horn is type WR-90 (X-Band, with the operational bandwidth 8.2 GHz - 12.4 GHz). The excitation in the transmission line, $V^\text{+}_t(t)$ , was a differentiated Gaussian pulse (\ref{eqn:IAM3}) with the characteristic time $\tau_p=15.9$  ps. This pulse has significant energy over the operational bandwidth of the horn: 8.2 - 12.4 GHz.
+
+\begin{figure} \begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/IAM4.pdf}
+\caption{Schematic drawing for the pyramidal horn antenna. The inset shows the FDTD cells used to model the bottom of the horn.}
+\label{fig:IAM4}
+\end{center}\end{figure}
+
+Figure \ref{fig:IAM5} is a comparison of the FDTD results (solid line) for this antenna with measurements (dots). The measured data were kindly supplied by Dr. David G. Gentle of the National Physical Laboratory, Teddington, Middlesex, U.K.  Figures \ref{fig:IAM5}(a) and  \ref{fig:IAM5}(b) show the E- and H-plane field patterns at the frequency 10 GHz, and Figure \ref{fig:IAM5}(c) shows the gain on boresite as a function of frequency. The results from the FDTD calculations are seen to be in very good agreement with the measurements. The small differences that do exist in the H-plane field pattern are for angles at which the field is very weak, 50 dB below the peak.
+
+\begin{figure} \begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/IAM5.pdf}
+\caption{Comparison of theoretical and measured results for the pyramidal horn antenna. (a) E-plane pattern and (b) H-plane pattern at 10 GHz. (c) Boresite gain versus frequency.}
+\label{fig:IAM5}
+\end{center}\end{figure}
+
+The FDTD method provides the field throughout the computational volume, and it can be used to construct graphical results that illustrate the process of radiation for the transmitting horn antenna. For such illustrations, we want an excitation whose spectrum lies within the operational bandwidth of the antenna. Frequencies outside of this band will either be cutoff in the waveguide or overmode the waveguide. A good choice for the voltage $V^\text{+}_t(t)$ is the sinusoid of frequency $\omega_o$ amplitude modulated by a Gaussian pulse, (\ref{eqn:IAM8}). With $f_o=\omega_o/2\pi = 10.0$ GHz, and $\tau_p=79.6$ ps, the spectrum for this signal is 10\% of its peak at $f = 5.7$ GHz and $f = 14.3$ GHz.
+
+Figure \ref{fig:IAM6} shows three gray scale plots for the magnitude of the electric field on the x-z plane of the transmitting antenna. In Figure \ref{fig:IAM6} the pulse has entered the horn from the waveguide, but it has not reached the aperture. The spacing between the white lines (nulls) roughly corresponds to one half of a guide wavelength. Notice that this spacing decreases on going from the throat of the horn towards the aperture. In the rectangular waveguide, the guide wavelength is about 1.3 times the free-space wavelength, whereas at the aperture of the horn it is closer to the free-space wavelength. Figure \ref{fig:IAM6}(b) is for a time when the pulse has reached the aperture. Notice that the white lines in the horn near the aperture are distorted; there is a small segment that is concave to the right. This is caused by the reflection from the aperture that is traveling back toward the throat of the horn. Directly in front of the aperture, the radiated wave is roughly planar. In Figure \ref{fig:IAM6}(c), the field has propagated away from the horn, and a spherical wavefront has formed that is approximately centered on the aperture. The change in the shade of gray in going around the antenna (dark in front to light in back) clearly shows a large ``front-to-back ratio'' for the horn. In the forward direction, minima appear along the wavefront, and these minima will define the main beam in the far zone. Back in the horn, the field has several minima and maxima across its width. They indicate the presence of higher order modes that were excited when the initial pulse encountered the aperture.
+
+\begin{figure} \begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/IAM6.pdf}
+\caption{Gray scale plots for the magnitude of the electric field on the vertical symmetry plane of the transmitting horn antenna. The excitation is a sinusoid amplitude modulated by a Gaussian pulse.
+}
+\label{fig:IAM6}
+\end{center}\end{figure}
+
+\section{Fragmented Aperture Antenna}
+
+In this final section, we will present the application of the Finite-Difference Time-Domain (FDTD) method to the analysis of a Fragmented Aperture antenna.
+
+A typical 
+
+Does modeling recommendations:
+\begin{itemize}
+\item{a minimum of 2x2 yell cells to model each pixel in the fragmented aperture.}
+\item{a minimum of 20 cells between the antenna perimeter and the start of the PML}
+\item{a 10 cell PML}
+\item{exploit all symetry for speed}
+\end{itemize}
+
+\begin{figure} \begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/IAM6.pdf}
+\caption{Schematic representation of the FDTD method applied to the analysis of a Fragmented Aperture antenna.}
+\label{fig:IAM7}
+\end{center}\end{figure}
+
+A comparison of measured, broadside realized gain and FDTD model predictions in shown in Figure \ref{fig:IAM8}
+
+\begin{figure} \begin{center}
+\includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/IAM6.pdf}
+\caption{comparison of measured, broadside realized gain and FDTD model predictions.  Also shown is the gain of two typical wideband elements, the spiral and the bowtie.}
+\label{fig:IAM8}
+\end{center}\end{figure}
+
+\section{Acknowledgement}
+The author would like to thank Professor Glenn Smith for his patient efforts over two decades in co-authoring book chapters on the modeling of antennas with FDTD that are source material for this chapter \cite{MaloneySmithAntChapters},\cite{BalanisHB}.
+
+\begin{thebibliography}{99}
+
+\bibitem{Yee66} K. S. Yee, ``Numerical Solution of Initial Boundary Value Problems Involving Maxwell's Equations in Isotropic Media,'' IEEE Trans. Antennas Propagat., Vol. AP-14, pp. 302-307, May 1966.
+
+\bibitem{Taf2005} A. Taflove and S. C. Hagness, Editors, Computational Electrodynamics: The Finite-Difference Time-Domain Method, Artech House, Boston, 2005.
+
+\bibitem{Elsherbeni2009}  A Elsherbeni and V. Demir, The Finite-Difference Time-Domain Method for Electromagnetics with MATLAB Simulations, Scitech, Rayleigh, NC, 2009.
+
+\bibitem{Gedney2011} S. D. Gedney, Introduction to the Finite-Difference Time-Domain Method for Electromagnetics, Morgan and Claypool, www.morganclaypool.com, 2011.
+
+\bibitem{MaloneySmithAntChapters} J. G. Maloney and G. S. Smith, ``Modeling of Antennas,'' Chapter 7 in A. Taflove, Editor, Advances in Computational Electrodynamics, The Finite-Difference Time-Domain Method, pp. 409-460, Artech House, Boston, 1998. Also, J. G. Maloney, G. S. Smith, E. Thiele, O. Ghandi, N. Chavannes, and S. Hagness, Chapter 14 in A. Taflove, and S. Hagness, Editors, Computational Electrodynamics: The Finite-Difference Time-Domain Method, 3rd Edition, pp. 607-676, Artech House, Boston, 2005.
+
+\bibitem{BalanisHB} G. S. Smith and J. G. Maloney, "Finite-Difference Time-Domain Method Applied to Antennas," Chapter 30, Modern Antenna Handbook, Balanis, 2011.
+
+\end{thebibliography}
+
+

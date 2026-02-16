@@ -1,0 +1,69 @@
+\chapter{Computational Modeling of Array Antennas}
+
+\section{Introduction}
+Many structures of electromagnetic interest posses a periodicity in one or more dimensions.  For example, a frequency selective surface (FSS) is commonly used in a radome to control the energy that reaches an antenna.  A typical FSS consists of one or more layers of material, each of which is formed from an element periodically replicated in two dimensions.  Another periodic structure that has received considerable attention n recent years is the photonic bandgap (PBG) or electronic bandgap (EBG) structure.  A PBG is a type of periodic dielectric structure that has frequency regions in which electromagnetic propagation is forbidden.  A third type of structure that can be considered periodic is an antenna array.  If large enough, many of the important paramaters of an array can be analyzed by assuming that the structure is infinitely periodic.  
+
+\section{Analysis of Periodic Structures}
+
+The FDTD technique, introduced in Appendix A, can be applied to the analysis of periodic structures such as the ones mentioned above.  Such structures often have fine details at the element level that must be accurately modeled in order to predict the correct electromagnetic behavior.  Couple with the fact that the overall structure may consist of many replicas of the basic element, this level of detail leads to computational problems that are unmanagable.  One way to alleviate the computational burden is to model only the individual element and use boundary conditions to simulate the effect of periodic replication.  As an example of a periodic structure, consider the two-dimensional, electromagnetic screen shown in Figure \ref{fig:CMAAF1}.  The screen consists of infinitely long, periodic conducting bars of width $w$; thickness $d$; separated by a gap $g$.  The illumination is an electromagnetic plane wave with the electric field parallel to the bars (z polarized) and the direction of propagation is at angle $\phi_i$ with respect to the $x$ axis as shown in the figure. This is a two-dimensional electromagnetic problem; only the TE fields ($E_z$, $H_x$, and $H_y$) are nonzero.  Because of the periodicty inherent in the geometry. only fields in the ``unit cell'' are unique and need to be determined.  Dashed lines in the figure denote the edges of the unit cell.
+\begin{figure} \begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim/Book/images/IAM1.pdf}
+\caption{Two-dimensional electromagnetic screen (left) and a top view of the structure showing the field components at the edges of the unit cell. [Used with permission of Artech House]}
+\label{fig:CAMMF1}
+\end{center}\end{figure}
+
+Now, consider discretizing the solution space within the unit cell using a lattice of traditional ``Yee'' cells \cite{Yee66}.  Field components that can be updated using the fields in the unit call are denoted by solid black symbols, while those that cannot be updated are denoted by white symbols.  The field components that cannot be updated can instead be determined using periodic boundary conditions (PBCs) that relate the fields on one side of the unit cell to those on the other side.  Of course, this relationship depends on the angle at which the incident field impinges on the structure.  For the geometry shown. the relationship is expressed in the frequency domain by
+\begin{align}
+\begin{split}
+H_x(x,y_p+\Delta y/2, \omega) = & H_x(x,y_p+\Delta y/2,\omega) \exp(-j K_y y_p), \\
+E_z(x,0,\omega) = & E_x(x,y_p,\omega) \exp(+j K_y y_p),
+\label{eqn:CMAAE1}
+\end{split}
+\end{align}
+
+\noindent where $k_y = k_o \sin(\phi_i)$ and $k_o=\omega/c$ is the free-space wavenumber and $c$ is the free-space speed of light.  FDTD requires the boundary conditions to be expressed in the time domain.  In the time domain, (\ref{eqn:CMAAE1}) becomes
+\begin{align}
+\begin{split}
+H_x(x,y_p+\Delta y/2,t) = & H_x(x,y_p+\Delta y/2,t-y_p\sin\phi_t), \\
+E_z(x,0,t) = & E_x(x,y_p,t+y_p\sin\phi_t).
+\label{eqn:CMAAE2}
+\end{split}
+\end{align}
+
+\noindent Equation \ref{eqn:CMAAE2} shows that the periodic boundary condition involves using both previous and well as future field components.  Specifically, the $H_x$ values at $y=y_p+\Delta y/2$ are equal to previous values of $H_x$ at $y=\Delta y/2$, while the $E_z$ values at $y=0$ are equal to future values of $E_z$ at $y=y_p$.  Previous values can simply be saved using additional computational storage.  However, there is no simple solution for this need for future values of $E_z$.
+
+
+
+\begin{figure} \begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim/Book/images/IAM2.pdf}
+\caption{A summary of techniques used to perform FDTD with periodic boundary conditions where the techniques are divided into two classes.  A complete discussion of all the techniques can be found in \cite{maloneyKeslerPBC} [Used with permission of Artech House]}
+\label{fig:CAMMF2}
+\end{center}\end{figure}
+
+\section{Review of Scattering from Periodic Structure}
+
+
+
+\begin{thebibliography}{99}
+
+\bibitem{Yee66} K. S. Yee, ``Numerical Solution of Initial Boundary Value Problems Involving Maxwell's Equations in Isotropic Media,'' IEEE Trans. Antennas Propagat., Vol. AP-14, pp. 302-307, May 1966.
+
+\bibitem{MaloneyKeslerPBC} J. G. Maloney and M. P. Kesler, ``Analysis of Periodic Structures,'' Chapter 6 in A. Taflove, Editor, Advances in Computational Electrodynamics, The Finite-Difference Time-Domain Method, pp. 345-407, Artech House, Boston, 1998. Also, J. G. Maloney and M. P. Kesler, ``Analysis of Periodic Structures,''  Chapter XX in A. Taflove, and S. Hagness, Editors, Computational Electrodynamics: The Finite-Difference Time-Domain Method, 3rd Edition, pp. YYY-ZZZ, Artech House, Boston, 2005.
+
+
+
+\bibitem{Taf2005} A. Taflove and S. C. Hagness, Editors, Computational Electrodynamics: The Finite-Difference Time-Domain Method, Artech House, Boston, 2005.
+
+\bibitem{Elsherbeni2009}  A Elsherbeni and V. Demir, The Finite-Difference Time-Domain Method for Electromagnetics with MATLAB Simulations, Scitech, Rayleigh, NC, 2009.
+
+\bibitem{Gedney2011} S. D. Gedney, Introduction to the Finite-Difference Time-Domain Method for Electromagnetics, Morgan and Claypool, www.morganclaypool.com, 2011.
+
+\bibitem{MaloneySmithAntChapters} J. G. Maloney and G. S. Smith, ``Modeling of Antennas,'' Chapter 7 in A. Taflove, Editor, Advances in Computational Electrodynamics, The Finite-Difference Time-Domain Method, pp. 409-460, Artech House, Boston, 1998. Also, J. G. Maloney, G. S. Smith, E. Thiele, O. Ghandi, N. Chavannes, and S. Hagness, Chapter 14 in A. Taflove, and S. Hagness, Editors, Computational Electrodynamics: The Finite-Difference Time-Domain Method, 3rd Edition, pp. 607-676, Artech House, Boston, 2005.
+
+\bibitem{BalanisHB} G. S. Smith and J. G. Maloney, "Finite-Difference Time-Domain Method Applied to Antennas," Chapter 30 
+
+
+
+\end{thebibliography}
+
+
