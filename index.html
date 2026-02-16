@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragmented Aperture Antennas — Dr. James G. Maloney</title>
+    <style>
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+            background: #fafafa;
+        }
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 0.2em;
+            color: #1a1a1a;
+        }
+        h2 {
+            font-size: 1.3em;
+            color: #444;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        .subtitle {
+            font-size: 1.1em;
+            color: #555;
+            font-style: italic;
+            margin-bottom: 1.5em;
+        }
+        .header {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+            margin-bottom: 2em;
+            flex-wrap: wrap;
+        }
+        .header img {
+            width: 150px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .header-text {
+            flex: 1;
+            min-width: 250px;
+        }
+        .antenna-img {
+            display: block;
+            max-width: 350px;
+            margin: 1.5em auto;
+            border: 1px solid #ccc;
+        }
+        .download {
+            display: inline-block;
+            background: #2c5f2d;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1.05em;
+            margin: 1em 0;
+        }
+        .download:hover {
+            background: #1e4620;
+        }
+        .toc {
+            background: #f0f0f0;
+            padding: 15px 25px;
+            border-radius: 5px;
+        }
+        .toc ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .toc li {
+            margin: 6px 0;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+        footer {
+            margin-top: 3em;
+            padding-top: 1em;
+            border-top: 1px solid #ccc;
+            font-size: 0.85em;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="bio.png" alt="Dr. James G. Maloney">
+    <div class="header-text">
+        <h1>Fragmented Aperture Antennas</h1>
+        <div class="subtitle">Computational Design of Antenna Structure</div>
+        <p><strong>Dr. James G. Maloney</strong></p>
+    </div>
+</div>
+
+<a class="download" href="Chapters/topLevel.pdf">Download the Book (PDF)</a>
+<p class="note">Work in progress &mdash; updated regularly.</p>
+
+<h2>About the Book</h2>
+
+<p>Fragmented Aperture Antennas are a class of antennas whose physical structure is designed computationally rather than analytically. A planar conducting surface is divided into many sub-wavelength pixels, each either conducting or non-conducting. A genetic algorithm, working with a full-wave electromagnetic simulation (FDTD), determines the optimal pixel configuration to meet a given set of antenna performance requirements.</p>
+
+<p>The resulting antenna structures are complex, non-intuitive metallic patterns that routinely approach the theoretical limits of antenna performance for a given aperture size.</p>
+
+<img class="antenna-img" src="images/origPatentFig3.png" alt="A fragmented aperture antenna optimized for 800 MHz to 2.5 GHz">
+<p style="text-align:center; font-size:0.85em; color:#666;">A fragmented aperture antenna optimized for 800 MHz to 2.5 GHz (U.S. Patent 6,323,809).</p>
+
+<p>The fragmented aperture concept, invented by the author in the late 1990s, has been extended to reconfigurable antennas, ultra-wideband phased arrays with bandwidths exceeding 33:1, and metamaterial-enhanced designs. This book provides a comprehensive treatment of the concept, from fundamentals through advanced applications.</p>
+
+<h2>Table of Contents</h2>
+
+<div class="toc">
+<ol>
+    <li>Introduction to Fragmented Aperture Antennas</li>
+    <li>Original Approach to Design Fragmented Apertures</li>
+    <li>Improved Approach to Design Fragmented Apertures</li>
+    <li>Sample Antenna Designs</li>
+    <li>Reconfigurable Fragmented Aperture Antennas</li>
+    <li>Fragmented Array Elements</li>
+    <li>Wideband Antenna Arrays</li>
+    <li>Metamaterials and Antennas</li>
+    <li>Reconfigurable Arrays</li>
+</ol>
+<p style="margin-bottom:0"><strong>Appendix A:</strong> Computational Modeling of Antennas (FDTD Method)</p>
+</div>
+
+<h2>About the Author</h2>
+
+<p>Dr. James G. Maloney is the inventor of the Fragmented Aperture Antenna. Over a career spanning more than three decades, he has pioneered computational antenna design techniques combining genetic algorithms with finite-difference time-domain (FDTD) electromagnetic simulation. His work has produced antennas for applications ranging from communications to radar, with designs that have been fabricated, measured, and fielded across frequencies from UHF through millimeter wave.</p>
+
+<h2>Source</h2>
+
+<p>The complete LaTeX source for this book is available in this repository. Contributions, corrections, and feedback are welcome.</p>
+
+<footer>
+    &copy; James G. Maloney. This work is made freely available for educational and research purposes.
+</footer>
+
+</body>
+</html>
