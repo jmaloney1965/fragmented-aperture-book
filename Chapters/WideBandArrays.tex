@@ -1,0 +1,255 @@
+\chapter{Wideband, Antenna Arrays}
+
+\section{Introduction}
+
+Students of antenna design are taught that one can estimate the gain of an array antenna by multiplying the pattern of a single element by the array factor.  This simplistic formula ignores mutual coupling between elements, which has traditionally bedeviled designers of phased arrays by introducing areas of scan blindness (combinations of frequency and scan angle for which the array is poorly matched).   As the sophistication of numerical modeling codes has increased in concert with the availability of inexpensive parallel computing power, antenna designers have developed the ability to include the effects of mutual coupling in performance predictions.  This in turn suggests the possibility of exploiting mutual coupling rather than avoiding it.
+
+\begin{itemize}
+\item{connected array discovery}
+\item{show connected was key}
+\item{show progression with size}
+\item{mention need for ground planet or radiate both ways}
+\item{show two sided patterns again}
+\item{10:1 bandwidth}
+\item{addition of rcards to prevent unwanted resonances}
+\item{mention exceeding the bandwidth of current sheet antennas}
+\item{33:1 bandwidth}
+\item{front back advantage of additional parasitic layers}
+\item{more complex backplane required for be > ~ 12:1}
+\item{100:1 design}
+\item{mostly backplane design}
+\end{itemize}
+
+\section{Fragmented Array Antennas}
+
+The fragmented aperture design approach extended naturally into efforts to extend the instantaneous bandwidth of practical array antenna elements.  The insight that led to a breakthrough in achievable bandwidths was the recognition that DC electrical connection between elements was actually useful and should be exploited.  Subsequent multiple-octave array designs consistently featured these connections, which support continuous current paths that span multiple elements.  For example, in an array with an 8:1 bandwidth, the radiated wavelength changes from approximately the width of two elements at the highest frequency to 16 elements at the lowest.  With the connected array, continuous conducting paths of sufficient length to support the necessary currents are present on the aperture. 
+
+As an experiment to demonstrate the importance of connected arrays, the 6-cm elements of Figure 3 were designed to operate from 0.25 - 2.5 GHz in an array with no ground plane. The aperture limited gain was thus approximately $2\pi A/\lambda^2$, since the apertures radiate equally in both hemispheres. The first element design was optimized with electrical connections between elements permitted, i.e., a connected array.  The second element was optimized with a boundary enforced around each element to prevent conducting pathways between elements. The realized gain achieved by an 8 x 8 finite array of each element design is shown in the Figure 3(c).  Because of the continuous current paths across element boundaries, the connected design is able to maintain a good impedance match over the full 8:1 bandwidth and thus achieves superior performance.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-44.png}
+\caption{This design experiment compared performance of two 8x8 arrays.  (a) Connected array element, (b) Unconnected array element, (c) Embedded element gain comparison for a central element in an 8x8 array.  Notice that the connected array element far out performs the unconnected element. [Used with permission of Wiley]}
+\label{fig:WBA3}
+\end{center}
+\end{figure}
+
+Another key feature of the connected geometry is that the overall size of the array becomes a limiting factor on the lowest operating frequency.  When the previous connected design was modeled in arrays of various sizes (again without a ground plane), the resulting low end performance was proportional to array size, as shown in Figure 4.  Arrays of 2 x 2, 4 x 4, 8 x 8, and 16 x 16 elements were simulated.  For all cases, the upper frequency limit remained relatively constant, being limited by the element lattice spacing and resulting grating lobe formation.  The low frequency limit, on the other hand, was approximately proportional to the overall array dimension.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-45.png}
+\caption{The connected element from Figure \ref{fig:WBA3} was simulated in arrays of various sizes. The results show that the low-frequency performance limit is essentially proportional to overall array size. [Used with permission of Wiley]}
+\label{fig:WBA4}
+\end{center}
+\end{figure}
+
+To confirm the validity of these simulations, a fragmented array with 3 cm elements was designed and measured in 1999.  The quantity modeled and measured was the embedded element realized gain (EERG), where one central element was active and others were terminated in matched resistive loads. This quantity measures the performance of an element in the array environment.  An angle pattern cut of the EERG can be used to predict the scan performance of an array of these elements. This highlights the performance of the radiator without the need for expensive beam forming networks.  As can be seen from Figure 5, the array achieves near aperture-limited gain at broadside over a 10:1 bandwidth, with excellent model-measurement agreement. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-46.png}
+\caption{Embedded element realized gain for a central element of a 10 x 17 array with 3-cm square unit cells. [Used with permission of Wiley]}
+\label{fig:WBA5}
+\end{center}
+\end{figure}
+
+\section{Wideband Backplanes:  Planar 10:1 Arrays}
+
+Early explorations of the fragmented arrays (2000 and earlier) focused on basic questions of element connections, bandwidth limits, and natural impedance values [3].  These investigations typically either used no ground plane behind the radiating surface or accepted the limitations of simple ground planes.  Ideally, a ground plane should be located $\lambda/4$ behind the broadside radiating surface of a planar antenna. Notionally, the backward-radiated energy travels a path length with a phase progression of 180 degrees that, together with the180 degree phase inversion at the perfect electrical conductor (PEC) surface of the ground plane, causes the reflected energy to arrive in phase with the forward going radiation.  Wideband antennas pose a difficulty, however, since $\lambda$ varies widely over the operating bandwidth.  In fact, when the ground plane is $\lambda/2$ behind the radiating surface (or an integer multiple of $\lambda/2$) the backward going radiation is reflected and arrives exactly out of phase with the forward radiation. This situation is illustrated in Figure 6, which shows the results of a simulation of a fragmented aperture radiator placed 2.5 cm in front of a PEC ground plane. The broadside gain is normalized to the area gain for this antenna.  Without the ground plane, the radiator is well matched across the band, but because it is radiating in both directions the forward radiation only approaches -3dB, represented by the dashed line in the plot. With the ground plane, the gain approaches the maximum around 3 GHz, where the 2.5 cm represents a quarter of the free space wavelength and the ground plane provides almost a 3 dB increase in broadside gain. At 6 GHz, however, the ground plane is a half wavelength behind the radiating surface and the gain suffers a deep null.  The null will be repeated every multiple of ?/2 (12 GHz, 18 GHz, etc.)  Practical experience indicates that fragmented aperture designs can be extended to approximately 8:1 bandwidths before the half-wave null impact must be addressed.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,scale=0.4]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-47.png}
+\caption{When a broadband radiating sheet is placed in front of a simple PEC ground plane, the resulting gain pattern will suffer nulls at frequencies where the separation distance is an integer multiple of a half wavelength (in this case, 6 GHz for a 2.5 cm separation). [Used with permission of Wiley]}
+\label{fig:WBA6}
+\end{center}
+\end{figure}
+
+The problem is made more complicated if the array is intended to scan over any significant volume, because the null frequency is dependent on the scan angle, as illustrated in Figure 7.  As the scan angle moves away from broadside the null frequency increases.  The contour plot in the figure shows this trend. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-48.png}
+\caption{For normal incidence (or when a phased array is scanned to broadside) pattern nulls will occur when the ground plane is at a half wavelength separation.  At scan angles off normal, the null will occur at higher frequencies.  This geometry is illustrated in the diagram on the left above.  The contour plot on the right shows the relationship between field intensity at the radiating surface and frequency and angle for a 2.5 cm separation. [Used with permission of Wiley]}
+\label{fig:WBA7}
+\end{center}
+\end{figure}
+
+Since the problem can be attributed to backward radiated energy, one is tempted to address it with absorbing solutions.  Interestingly, the Salisbury screen absorbing structure has the desirable characteristic that its tuned absorption frequency increases with incidence angle, exactly analogous to the scan angle-frequency dependence of the half wave null.  This was the inspiration for the ``broadband screen'' backplane which was developed to extend the frequency performance of fragmented apertures over a ground plane.  As an example,  Figure \ref{fig:WBA8} shows the performance of a typical planar half way between the aperture layer and and the ground plane. The backplane is most absorptive at exactly the frequency/angle combinations where the half-wave null occurs (and in fact at every odd multiple of half-wavelengths).  
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-49.png}
+\caption{Here the radiating surface is located 2.5 cm in front of the PEC ground plane, but a 377-ohms/square r-card layer is placed halfway between radiator and ground plane, eliminating the deep null at $\lambda/2$. [Used with permission of Wiley]}
+\label{fig:WBA8}
+\end{center}
+\end{figure}
+
+Figure \ref{fig:WBA9} shows the normalized realized gain at broadside with the first generation broadband screen backplane.  Now the aperture has recovered enough gain at the problem frequency to achieve near 50\% efficiency.  However, one can do better.  For overall antenna performance, the impedance value, position, and even the number of r-card layers may be considered as free variables in the design. For example, if the 377-ohm r-card is replaced with a 225-ohm card, the realized gain is maintained within 2 dB of the aperture limit across the operating band of the antenna.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,scale=0.4]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-50.png}
+\caption{This plot of the normalized realized gain at broadside for the configuration of Figure 8 shows that the deep null at 6 GHz has been improved to only 3 dB insertion loss. [Used with permission of Wiley]}
+\label{fig:WBA9}
+\end{center}
+\end{figure}
+
+
+Figure 10 pictures a 10:1 design that was developed as a proof of concept using a single r-card broadband screen.  The array demonstrated better than 50\% efficiency over the operating band of 1-10 GHz.  The plot in the right half of the figure shows normalized predictions of realized gain, or equivalently, insertion loss.  The top curve (normalized gain) shows the effects of resistive loss.  The bottom curve (normalized realized gain) shows the combined effects of resistive and mismatch loss.  Thus, the distance between the two curves is a measure of the impedance match for this design.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-51.png}
+\caption{The first array built using the broadband screen backplane was this 10:1 design.  Efficiency was better than 50\% ($< 3$ dB insertion loss) from 1 to 10 GHz.  [Used with permission of Wiley]}
+\label{fig:WBA10}
+\end{center}
+\end{figure}
+
+With a simple conducting ground plane behind a planar radiating surface, a standing wave occurs when the separation distance is one half wavelength (or an integer number of half wavelengths), which places a field null at the radiating surface. The resulting impedance mismatch is the cause of the deep dropout in the gain curve.  In addition to the energy they dissipate, r-cards inserted in the backplane stack introduce additional reflection boundaries that ?break up? or redistribute the standing wave to avoid field cancellation at the radiating surface. As the operating bandwidth of the array spans more octaves, a simple ground plane introduces more half-wave nulls and the problem of defeating the standing wave becomes more complicated.  Figure 11 shows an example of a radiating surface located three inches in front of a simple conducting ground plane.  The resulting standing wave produces interference nulls approximately every 2 GHz. When the empty cavity is replaced by an optimized broadband screen with six r-card layers in the backplane stack, the standing wave nulls are eliminated.  Figure 12 compares the performance of the empty cavity with the broadband screen over frequency and scan angle. The nulls are effectively controlled to scan angles of 60 degrees or more.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-52.png}
+\caption{Aperture fields 3 inches in front of a PEC surface, with and without a broadband screen backplane in place. [Used with permission of Wiley]}
+\label{fig:WBA11}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-53.png}
+\caption{Contour plots comparing the configurations of Figure \ref{fig:WBA11} over a range of scan angles. [Used with permission of Wiley]}
+\label{fig:WBA12}
+\end{center}
+\end{figure}
+
+\section{Multi-layer Radiators:  33:1 Bandwidth Arrays}
+
+A broadband screen backplane can control half-wave nulls, but it uses a loss mechanism to do so.  While it is not necessary to attenuate all of the backward radiated energy, some loss is inevitable with this approach. It would be better to radiate energy only into the forward hemisphere, and eliminate the possibility of backward-radiated energy reflecting off of a ground plane to add out of phase with the forward directed radiation.  As a thought experiment, consider the ideal planar radiator with no thickness in Figure 13. Notionally, radiation must occur equally into both hemispheres since nothing distinguishes one side from the other. However, if the radiating layer has some thickness, then asymmetries may be introduced that cause the surface to radiate preferentially in one direction, as in the second antenna of Figure 13.  For example, if 90\% of the energy is made to radiate into the forward hemisphere, then even if the backward radiated energy is reflected and returns 180 degrees out of phase, it will only reduce the transmitted power to 80\% of the maximum value.    
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-54.png}
+\caption{Thought experiment demonstrating the benefit of preferentially radiating in one direction to mitigate ground plane nulls.  This is possible with asymmetric radiation, which can be achieved with a radiator thickness>0. [Used with permission of Wiley] }
+\label{fig:WBA13}
+\end{center}
+\end{figure}
+
+This principle may be exploited by using multiple radiating layers in front of the ground plane.  The radiating layers may be actively driven, or they may be parasitic, analogous to the directors in a Yagi-Uda antenna.  In Figure 14, two radiating layers approximately 8 mm apart with no ground plane were optimized using the fragmented aperture design process.  The design goal was to maximize gain in the forward hemisphere.  The plot shows the normalized forward-going and backward-going radiation, demonstrating good preferential radiation, or front-to-back ratio (F/B), over the upper octave of the design region (1-10 GHz).  As the wavelength gets longer, the electrical separation between radiating layers becomes insufficient to direct the radiation.  The region of effectiveness for this approach is enough to produce the 10:1 design of Figure 15, where the realized gain remains within 3 dB of the maximum across the band.  This design is for illustrative purposes only, as it has no realistic feed structures or loss.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-55.png}
+\caption{Idealized design with simultaneously optimized radiating layers.  The design goal was to maximize front-to-back ratio.  [Used with permission of Wiley] }
+\label{fig:WBA14}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,scale=0.4]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-56.png}
+\caption{The use of parasitic layers to direct radiation forward may also be accomplished in the presence of a PEC backplane, as in this example, where insertion loss is kept below 2 dB over most of a 10:1 bandwidth.  [Used with permission of Wiley] }
+\label{fig:WBA15}
+\end{center}
+\end{figure}
+
+The extent to which using multiple radiating face sheet layers may improve the bandwidth of the antenna depends on the number and spacing of the face sheets.  In Figure 16, the antenna designs use two and three face sheets, respectively.  These simulations include realistic feed structures, but the ground planes have been replaced by perfectly matched absorbing layers in the simulation.  With two face sheets, the antenna exhibits enhanced gain over most of the upper octave.  With three, antenna gain is enhanced over the upper two octaves. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-57.png}
+\caption{Design experiments with two and three radiating face sheets.  The ground plane has been replaced in each simulation with a perfectly absorbing layer as the back boundary condition. Thus, normalized gain levels above -3 dB may be attributed to the F/B ratio.  [Used with permission of Wiley] }
+\label{fig:WBA16}
+\end{center}
+\end{figure}
+
+Design of fragmented elements for phased arrays with operating bandwidths beyond 10:1 are best executed through a judicious combination of a multi-layer radiator with a broadband screen backplane. In partnership with Northrop Grumman Electronics Systems, GTRI has built and measured two laboratory proof-of-concept radiators with 33:1 bandwidths, each incorporating both design strategies. Each design consisted of a three-layer radiator stack over a six r-card backplane stack.  In the first design, two face sheets were driven by the feeds and the third was parasitic. In order to simplify the manufacturing process, the second design had only the innermost face sheet driven, with two parasitic outer layers. Figure 17 shows the performance of the second design in a periodic simulation, which eliminates finite array edge effects.  The simulation includes realistic feed structures and material properties.  Gain is normalized to the element area gain, so the 0 dB line represents ideal performance. Note that the design achieves nearly 1 dB or better insertion loss over the upper octave, with better than 3 dB insertion loss over the entire 0.3 ? 10 GHz design bandwidth.  Representative measurements of the second design are presented below.  
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-58.png}
+\caption{Predicted performance of the 33:1 antenna design. In this periodic simulation, antenna efficiency is shown to be better than 50\% over the entire bandwidth of 0.3-10 GHz for an actual antenna designed with realistic feed structures. [Used with permission of Wiley] }
+\label{fig:WBA17}
+\end{center}
+\end{figure}
+
+The simulations were supported with measurements of a test piece on three different antenna ranges covering the entire operating bandwidth.  These measurements were not only consistent across all three ranges, but they validated the simulation results.  The test antenna was a 23 x 23 element, dual linear polarized array with the center element actively driven and all surrounding elements terminated in matched 188-ohm impedances at the feed points. Figure 18 illustrates the composition of one element of the array in cross section, with cartoons of the etched unit cell pattern on each face sheet and a photo of the test antenna.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-59.png}
+\caption{Construction details of one 33:1 antenna design, including a photo of the test piece used to measure embedded element realized gain (EERG).  [Used with permission of Wiley] }
+\label{fig:WBA18}
+\end{center}
+\end{figure}
+
+Broadside frequency scans of the embedded element realized gain (EERG) are plotted in Figure 19.  The EERG is obtained by driving one element and terminating the rest with matched loads.  This greatly reduces the cost of the measurement setup and test piece, as beamformer electronics are not required.  Achievable scan volume may be inferred from the beamwidth of the EERG angle pattern cuts.  
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,scale=0.4]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-60.png}
+\caption{The plot shows a compilation of measured data at broadside for the 33:1 test antenna (3 antenna ranges, two polarizations).  The measured data is plotted against numerical predictions of performance, along with the element area gain representing ideal performance. [Used with permission of Wiley] }
+\label{fig:WBA19}
+\end{center}
+\end{figure}
+
+The figure compares the measurement results at broadside to predictions. The element area gain, which represents the physical limit for antenna performance, is denoted by the dashed line.  The predicted EERG at broadside is denoted by the solid line. Compared to these are four measured data sets from the three different antenna ranges, including three different calibration horns spanning the 33:1 bandwidth.  Data was also measured on both V-pol and H-pol feeds (both sets should be equivalent at broadside for this symmetric design). The measured data show excellent consistency across ranges and at both sets of feed points, and excellent agreement with the predictions.  The measurements showed approximately one dB more insertion loss at the high end than predicted.  The difference is more than can be attributed to resistive loss in the feed cables and on the metal radiating surfaces. It is likely due to slight imperfections in the assembly of the radiator.  Performance at the high end is particularly sensitive to the position of the three layers at the end of the feed cables, and their planarity in the assembled test piece was affected by warping in the etched sheets. 
+This slight drop-off is removed in Figure 20 to facilitate angle pattern comparisons. These patterns allow detailed comparison of measured and modeled EERG over angle cuts at several discrete frequencies.   Again, model-measurement agreement is excellent, with the models predicting features such as the ripple at 2 GHz due to finite array edge effects and the narrowing of the scan volume above 8 GHz.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/BalanisHandbookFig12-61.png}
+\caption{Comparison of modeled (solid lines) and measured (data markers) EERG pattern cuts at several discrete frequencies.  Again, note the excellent agreement between prediction and measurement. [Used with permission of Wiley] }
+\label{fig:WBA20}
+\end{center}
+\end{figure}
+
+Figure 21 presents the measured EERG data from three different overlapping data sets for H-plane scans and two for E-plane scans.  The contour plots show angle cuts plotted horizontally at each frequency.  Each angle cut (horizontal line across the contour plot) has been normalized so that the maximum value at each frequency is zero (i.e., frequency slope has been removed from the data sets.)  The resulting image shows the achievable scan volume as a function of frequency for a fully driven array antenna with this design. That scan volume, as defined by the 3 dB points, is approximately +/- 60 degrees over most of the band, with some narrowing above 9 GHz in the H-plane and above 7 GHz in the E-plane. Note also that the featured scan volume shows no evidence of any suck-outs or scan blindness over the operating bandwidth.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/5996889-fig-2-hires.png}
+\caption{Compilation of measured angle cuts normalized to the maximum value at each frequency.  Resulting contours indicate achievable scan volume. Note the lack of scan blindness in the operating regions. [Used with permission of IEEE] }
+\label{fig:WBA21}
+\end{center}
+\end{figure}
+
+Our experience with several wideband phased array designs has produced empirical evidence for a rule of thumb regarding the thickness of these wideband radiators. Figure 22 compiles results for five fragmented array designs with bandwidths greater than an octave.  Designs with bandwidths less than 10:1 used simple ground planes; antennas with bandwidths of 10:1 or greater incorporated broadband screen backplanes. In each case, the overall thickness is dictated not by the bandwidth, but by the lowest operating frequency.  For cavities filled with air or low-dielectric foams, the antenna thickness will be approximately ?/12 at the lowest frequency.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/5996889-fig-11-hires.png}
+\caption{Results of several design exercises for fragmented arrays. For air-filled cavities, the antenna thickness is approximately l/12 at the lowest operating frequency.  [Used with permission of IEEE] }
+\label{fig:WBA22}
+\end{center}
+\end{figure}
+
+Conclusions
+The successful design of ultra wideband phased arrays has been enabled by several factors. These designs require high-fidelity time domain EM solvers. The necessity to optimize over many frequencies would be time prohibitive if the designs were done with frequency domain codes. Designs referenced in this chapter were all developed using a finite-difference time-domain code, the results of which can then be Fourier transformed to produce the requisite range of frequency predictions. The code is highly validated, but it was developed in house so we understand how to enhance the speed of simulations by sacrificing some accuracy when necessary.  In early design stages, it is important to move through iterations rapidly to converge on a ?pretty good? design.  Then in the design?s final stages, accurate predictions are required to account for realistic details such as feed structures and material characteristics.  These highly accurate modeling codes require computing hardware with sufficient processing power and memory to handle fine details, and this is accomplished using relatively inexpensive Beowulf clusters of Linux-based PCs.
+
+With the appropriate modeling tools and computing infrastructure, GTRI was able to develop the essential features for ultra wideband planar phased arrays: (1) Connected arrays to span several octaves;  (2) Broadband backplane stacks to mitigate half-wave nulls introduced by a ground plane;  (3) Multi-layer radiators to enhance high frequency performance with front-to-back ratio, thus leveraging the backplane improvements at low frequencies;  and (4) Fragmented aperture radiators to accomplish impedance matching in the presence of  feed structures, material substrates, multiple layers, etc.  Measured results confirm the success of these designs for bandwidths up to 33:1. Preliminary work suggests that phased array operation over bandwidths of 100:1 or more is possible.
+
+\section{Acknowledgement}
+Personally, the author would like to thank Mr. Paul Friederich, for his efforts in converting the ``How to make a 33:1 bandwidth array antenna'' presentation into the original chapter that is the source material for this chapter \cite{BalanisHB12}.
+
+\FloatBarrier
+\addcontentsline{toc}{section}{References}
+\begin{thebibliography}{99}
+
+\bibitem{BalanisHB12} W. Croswell, T. Durham, M. Jones, D. Schaubert, P. G. 
+Friederich and J. G. Maloney, "Wideband Arrays," Chapter 12, Modern Antenna Handbook, Balanis, 2011. 
+
+\bibitem{Yee66} K. S. Yee, ``Numerical Solution of Initial Boundary Value Problems Involving Maxwell's Equations in Isotropic Media,'' IEEE Trans. Antennas Propagat., Vol. AP-14, pp. 302-307, May 1966.
+
+\bibitem{Maloney1} J. G. Maloney, G. S. Smith, and W. R. Scott, Jr., ``Accurate Computation of the Radiation from Simple Antennas Using the Finite-Difference Time-Domain Method,'' IEEE Trans. Antennas Propagat., Vol. AP-38, pp. 1059-1068, July 1990.
+
+\bibitem{BoonPist} J. J. Boonzaaier and C. W. Pistorius, ``Thin Wire Dipoles ? A Finite-Difference Time-Domain Approach,'' Electronics Lett., Vol. 26, pp. 1891-1892, 25 October, 1990.
+
+\bibitem{KatzHorn} D. S. Katz, M. J. Picket-May, A. Taflove, and K. R. Umashankar, ``FDTD Analysis of Electromagnetic Wave Radiation from Systems Containing Horn Antennas,'' IEEE Trans. Antennas Propagat., Vol. AP-39, pp. 1203-1212, August 1991.
+
+
+\end{thebibliography}
+
+
