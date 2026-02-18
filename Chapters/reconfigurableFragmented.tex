@@ -4,13 +4,13 @@
 
 In the preceding chapters, we have shown how the fragmented aperture concept can be used to design antennas that meet particular performance specifications.  A planar sheet of conductor is divided into many sub-wavelength pixels, and a genetic algorithm working with an FDTD simulation determines which pixels should be conducting and which should not.  Different designs can be obtained to meet different specifications: for example, one design might produce an antenna with a broadside beam optimized for a particular bandwidth, while a second design might produce an antenna with the beam steered to $45^o$ from broadside.
 
-Of course, once a fragmented aperture antenna is fabricated, it can only meet one set of specifications---either the broadside design or the steered design, but not both.  It would be enormously useful if a single fragmented aperture could be electronically switched between different configurations to meet different requirements on demand.  This would require a mechanism for dynamically changing individual pixels from conducting to non-conducting and vice versa.
+Of course, once a fragmented aperture antenna is fabricated, it can only meet one set of specifications---either the broadside design or the steered design, but not both.  It would be enormously useful if a single fragmented aperture could be electronically switched between different configurations to meet different requirements on demand.  This would require a mechanism for dynamically changing individual pixels from conducting to non-conducting and vice versa.  Recent work has demonstrated various reconfigurable pixelated antenna implementations using MEMS switches \cite{Wright2018Mems,Ali2014Mems}, phase transition materials \cite{Lou2025Frequency}, and magnetically actuated mechanisms \cite{Pal2018Magnetically}.
 
 One can imagine, for example, making the cladding on a circuit board from a photoconductive material and using a laser to selectively illuminate the pixels that need to be conducting for a particular design.  Changing the illumination pattern would reconfigure the antenna.  While this particular approach remains impractical with current technology, the underlying idea---a reconfigurable fragmented aperture---motivated the development of the Agile Aperture Antenna described in this chapter.
 
 \section{The Agile Aperture Antenna Concept}
 
-The concept of a reconfigurable fragmented aperture antenna was first published in 2000 under the name ``switched fragmented aperture antenna'' \cite{MaloneyRECAP}.  Subsequently, DARPA funded a solicitation for ``reconfigurable aperture'' antennas and coined the acronym RECAP.  To distinguish the fragmented aperture approach from other reconfigurable antenna concepts, we later adopted the term ``Agile Aperture Antenna'' (A3), emphasizing that the purpose of reconfiguration is to make the antenna \emph{agile}---able to dynamically change its frequency of operation, beam direction, polarization, or other characteristics.
+The concept of a reconfigurable fragmented aperture antenna was first published in 2000 under the name ``switched fragmented aperture antenna'' \cite{MaloneyRECAP}.  Subsequently, DARPA funded a solicitation for ``reconfigurable aperture'' antennas and coined the acronym RECAP.  To distinguish the fragmented aperture approach from other reconfigurable antenna concepts, we later adopted the term ``Agile Aperture Antenna'' (A3), emphasizing that the purpose of reconfiguration is to make the antenna \emph{agile}---able to dynamically change its frequency of operation, beam direction, polarization, or other characteristics.  The seminal IEEE paper on this work \cite{Pringle2004Reconfigurable} and a comprehensive book chapter \cite{Balanis2007ReconfigChapter} provide detailed treatments of reconfigurable aperture antenna technology.
 
 The Agile Aperture Antenna implementation that was successfully demonstrated is shown schematically in Figure~\ref{fig:RECAP1} \cite{RECAP}.  A thin dielectric substrate supports an array of square metallic pads.  The pads are electrically small, with side length $l$ satisfying $l/\lambda_o \ll 1$, where $\lambda_o$ is the free-space wavelength at the operating frequency.  Each pad is connected to its neighboring pads by switched links, indicated by the arrows in the figure.  Each switch may be independently set to open or closed depending on the desired antenna configuration.  A single feed point (pair of terminals) is located near the center of the antenna.
 
@@ -48,7 +48,7 @@ Figure~\ref{fig:RECAP2} shows the experimental setup used for all of the measure
 
 \subsection{Design Procedure}
 
-The procedure for designing a switch configuration for the Agile Aperture Antenna is conceptually the same as for a conventional fragmented aperture: a rigorous FDTD simulation of the antenna is run in conjunction with a genetic algorithm optimizer (see Appendix~A for an introduction to the FDTD method).  In all of the FDTD simulations reported here, cubical Yee cells with a side length of 2.5~mm were used.
+The procedure for designing a switch configuration for the Agile Aperture Antenna is conceptually the same as for a conventional fragmented aperture: a rigorous FDTD simulation of the antenna is run in conjunction with a genetic algorithm optimizer (see Appendix~A for an introduction to the FDTD method).  In all of the FDTD simulations reported here, cubical Yee cells with a side length of 2.5~mm were used.  More recent optimization approaches for reconfigurable pixelated antennas include beam steering techniques \cite{Towfiq2018Reconfigurable} and quantum genetic algorithms \cite{Bichara2021Miniaturized}.
 
 A performance goal is first established---for example, maximum broadside realized gain over a specified bandwidth.  The GA then searches for the switch configuration (which switches should be open and which should be closed) that best meets this goal.  Taking into account the mirror symmetry of the antenna, there are $2^{104} \approx 2 \times 10^{31}$ possible switch configurations---far too many to evaluate exhaustively.  The GA provides an efficient, though approximate, method for searching this enormous design space.
 
@@ -114,29 +114,22 @@ This lack of an obvious physical interpretation is consistent with the experienc
 
 The broadside and end-fire examples presented above, along with several other designs not shown, demonstrate that the Agile Aperture Antenna concept is viable: a single physical antenna can be reconfigured via its switch states to meet fundamentally different performance specifications.  The excellent agreement between FDTD simulations and measurements further validates the design procedure.
 
-However, for the Agile Aperture Antenna to transition from a laboratory concept to a practical technology, several challenges must be addressed.  Most critically, a switch technology must be developed that can be electronically controlled without interfering with the electromagnetic performance of the antenna.  The switches must introduce minimal insertion loss when closed, provide high isolation when open, and the control circuitry (bias lines, drivers) must not distort the antenna's radiation characteristics.  \textcolor{red}{(Add any discussion of PIN diodes, MEMS switches, or other switch technologies that were investigated.)}
+However, for the Agile Aperture Antenna to transition from a laboratory concept to a practical technology, several challenges must be addressed.  Most critically, a switch technology must be developed that can be electronically controlled without interfering with the electromagnetic performance of the antenna.  The switches must introduce minimal insertion loss when closed, provide high isolation when open, and the control circuitry (bias lines, drivers) must not distort the antenna's radiation characteristics.
+
+Subsequent research has explored several promising switch technologies for reconfigurable pixelated antennas.  MEMS-based switches have been successfully demonstrated for reconfigurable patch antennas \cite{Wright2016Effect,Ali2014Mems,Wright2018Mems}, offering excellent RF performance with low insertion loss and high isolation.  Phase transition materials such as vanadium dioxide (VO2) provide another approach, enabling frequency reconfiguration through voltage-controlled phase changes \cite{Lou2025Frequency}.  Other techniques include magnetically actuated pixels \cite{Pal2018Magnetically} and tunable designs using varactors \cite{Ouedraogo2014Tunable}.  More recent work has focused on dual-port mmWave reconfigurable designs with optimized pixel configurations \cite{Tang2023Dual-port} and novel frequency reconfigurable implementations \cite{Qiao2023Novel,Bichara2021Miniaturized}.
 
 \section{Acknowledgement}
 The author would like to thank Professor Glenn Smith for his dedication in writing the original IEEE paper \cite{RECAP} on which much of this chapter is based.  The author also acknowledges the contributions of the full research team as described in \cite{MaloneySmithAntChapters}.
 
 \addcontentsline{toc}{section}{References}
 \FloatBarrier
-\begin{thebibliography}{99}
 
-\bibitem{MaloneyFragPatent} J.G. Maloney, M.P. Kesler, P.H. Harms, and G.S. Smith, Fragmented Aperture Antennas and Broadband Ground Planes, U.S. Patent, No. 6,323,809 B1, November 27, 2001.
-
-\bibitem{MaloneyRECAP} J. G. Maloney, M. P. Kesler, L. M. Lust, L. N. Pringle, T. L. Fountain, and P. H. Harms, ``Switched Fragmented Aperture Antennas'', in Proc. 2000 IEEE Antennas and Propagations Symposium, Salt Lake City, 2000, pp. 310-313.
-
-\bibitem{RECAP} L. N. Pringle, P. H. Harms, S. P. Blalock, G. N. Kiesel, E. J. Kuster, P. G. Friederich, R. J. Prado, J. M. Morris, and G. S. Smith, ``A Reconfigurable Aperture Antenna Based on Switched Links Between Electrically Small Metallic Patches,''  IEEE Trans. Antennas Propagat., Vol. AP-52, pp. 1434-1445, June 2004.
-
-\bibitem{MaloneySmithAntChapters} \textcolor{red}{(Add full reference for Maloney/Smith antenna chapters)}
-
-\bibitem{LeeSmith2004} R. T. Lee and G. S. Smith, ``A Design Study for the Basic TEM Horn Antenna,'' IEEE Antennas and Propagation Magazine, Vol. 46, pp. 86-92, February 2004.
-
-\bibitem{IEEEstand} Antenna Standards Committee of the IEEE Antennas and Propagation Society, IEEE Standard Test Procedures for Antennas, Institute of Electrical and Electronic Engineers, Inc., 1979.
-
-\bibitem{Caroll} D.L. Carroll, ``FORTRAN Genetic Algorithm Front-End Driver,'' available on the web at cuaerospace.com/carroll/ga.html.
-
-\end{thebibliography}
+% Bibliography for Chapter 5
+% Uses chapter-specific .bib files organized by topic
+\bibliography{../Literature/master_bibliography,%
+              ../Literature/fragmented_aperture_core,%
+              ../Literature/reconfigurable_ch5,%
+              ../Literature/ml_ai_optimization_methods}
+\bibliographystyle{IEEEtran}
 
 
