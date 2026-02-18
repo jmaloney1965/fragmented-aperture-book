@@ -1,0 +1,68 @@
+Subject: Permission Request for Academic Book - Your 2005 Fragmented Aperture GA Work
+
+Dear Dr. Thors, Dr. Steyskal, and Dr. Holter,
+
+I hope this message finds you well. I am writing to request your permission to use figures from your excellent 2005 IEEE Transactions on Antennas and Propagation paper, "Broad-Band Fragmented Aperture Phased Array Element Design Using Genetic Algorithms."
+
+**About Me and My Project:**
+
+I am Dr. James G. Maloney, the original inventor of Fragmented Aperture Antennas (U.S. Patent 6,323,809, 2001). I am currently writing a comprehensive book on this technology, titled *Fragmented Aperture Antennas*, which will serve as the definitive reference on computationally designed pixelated antennas.
+
+**Why Your Work Is Important to My Book:**
+
+Your 2005 paper represents landmark independent validation of the fragmented aperture concept using genetic algorithm optimization. The collaboration between the Swedish Defence Research Agency (FOI) and the U.S. Air Force Research Laboratory (AFRL) demonstrated that this technology had international research significance and military relevance. Your work achieved impressive bandwidth results (2.32:1 in the final design) and is cited in **three chapters** of my book (Introduction, Original Approach, and Improved Approach).
+
+**Specific Figures Requested:**
+
+I would like to include the following **three figures** from your paper:
+
+1. **Figure 1**: Unit cell geometry showing (a) side view and (b) top view
+   - **Purpose**: Chapters 2 and 3 - illustrates the basic fragmented aperture unit cell structure
+   - **Context**: Shows the fundamental geometry used in GA optimization
+   - **Critical importance**: Establishes the design space for genetic algorithm exploration
+
+2. **Figure 4**: Design without groundplane showing (a) reflection coefficients and (b) unit cell geometry
+   - **Purpose**: Chapters 2 and 3 - demonstrates design flexibility and intermediate results
+   - **Context**: Shows GA optimization can work without traditional groundplane
+   - **Critical importance**: Illustrates algorithmic design freedom
+
+3. **Figure 9**: Final optimized design with element contact restriction showing (a) reflection coefficients and (b) unit cell geometry
+   - **Purpose**: Chapters 2 and 3 - shows your best achieved bandwidth result (2.32:1)
+   - **Context**: Demonstrates the power of GA optimization for fragmented apertures
+   - **Critical importance**: Represents the culminating achievement of the paper with BW=2.32:1 over 1.5-5.0 GHz
+
+**Why I'm Contacting You Directly:**
+
+I initially approached IEEE for permission, but they quoted $129 USD for three figures. As this is an academic book project documenting the scientific development of fragmented aperture technology, I wanted to reach out directly to see if you would be willing to grant permission for academic use. Given the strong international collaboration represented by your research, I hope you might be supportive of this scholarly work.
+
+**How Your Work Will Be Credited:**
+
+- Full citation in the bibliography (IEEE format)
+- Figure captions explicitly crediting all authors and IEEE Transactions on Antennas and Propagation
+- Text discussion highlighting the FOI-AFRL collaboration
+- Recognition of your genetic algorithm optimization achievements
+- Proper IEEE copyright attribution as required
+
+**What I Need from You:**
+
+1. **Written permission** to use Figures 1, 4, and 9 (this email exchange can serve as documentation)
+2. **High-resolution versions** of the three figures (original publication quality or vector graphics if available)
+3. **Your preferred attribution text** - I want to ensure proper credit
+4. **Coordination among co-authors** - please feel free to forward this to each other as needed
+
+If you are unable to grant permission directly due to IEEE copyright or institutional policies (FOI or AFRL), I understand and will pursue official channels. However, direct author permission greatly facilitates academic collaboration and would be deeply appreciated.
+
+**Timeline:**
+
+I am hoping to finalize permissions over the next 4-8 weeks, though there is flexibility in the schedule.
+
+Thank you very much for considering this request. Your 2005 paper demonstrated the effectiveness of genetic algorithms for fragmented aperture optimization and provided crucial international validation of the technology. I am pleased to feature it prominently in the book.
+
+Best regards,
+
+Dr. James G. Maloney
+Inventor, Fragmented Aperture Antennas
+Email: [ADD YOUR EMAIL HERE]
+Phone: [ADD YOUR PHONE - OPTIONAL]
+
+**P.S.** - Your Figure 9 result (2.32:1 bandwidth with element contact restriction) represents an impressive achievement. If you have additional insights about the GA optimization process or unpublished results that enhanced the final design, I would be very interested in learning about them!
