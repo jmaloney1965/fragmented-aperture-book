@@ -1,3 +1,6 @@
+% Fix Adobe Acrobat compatibility - force PDF 1.7
+\pdfminorversion=7
+
 \documentclass{book}
 \renewcommand\bibname{References}
 \usepackage{etoolbox}
@@ -63,6 +66,10 @@
 \fancyhead[LO]{\ko} 							% Odd page, Left side
 \newcommand{\rf}{\footnotesize{}FRAGMENTED APERTURE ANTENNAS}
 \fancyhead[RE]{\footnotesize\rf} 				% Even Page, Right side
+
+% Fair use statement and permissions acknowledgments
+\include{copyrightNotice}
+\include{permissionsAcknowledgments}
 
 \tableofcontents{}
 \listoffigures{}
