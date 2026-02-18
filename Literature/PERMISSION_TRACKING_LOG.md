@@ -21,44 +21,87 @@
 
 ---
 
+### ✅ Thors, Steyskal, Holter (FOI Sweden + AFRL)
+- **Date Sent**: February 18, 2026 (Tuesday)
+- **Email**: bertil.thors@foi.se, hakan.holter@foi.se (steyskal@ieee.org bounced)
+- **Paper**: Thors2005Broad-band - "Broad-Band Fragmented Aperture Phased Array Element Design Using Genetic Algorithms"
+- **Figures Requested**: Figure 1(a)(b), Figure 4(a)(b), Figure 9(a)(b) (3 figures)
+- **Chapters**: 1, 2, 3
+- **IEEE Cost Avoided**: $129
+- **Status**: ⏳ AWAITING RESPONSE (from Thors/Holter at FOI)
+- **Follow-up Date**: March 3-5, 2026 (adjusted for M/W/F schedule)
+- **Notes**:
+  - Requested high-res figures
+  - Figure 9 is final/best result (BW=2.32:1)
+  - FOI-AFRL collaboration
+  - ⚠️ steyskal@ieee.org bounced (2005 paper - email outdated)
+  - Thors can forward to Steyskal if needed
+  - Same M/W/F email schedule as Ellgardt (FOI policy)
+
+---
+
+### ✅ Ellgardt & Persson (FOI Sweden)
+- **Date Sent**: February 18, 2026 (Tuesday)
+- **Email**: anders.ellgardt@foi.se, per.persson@foi.se
+- **Paper**: Ellgardt2006Characteristics - "Characteristics of a Broadband, Wide-Scan Fragmented Aperture Antenna"
+- **Figures Requested**: Figure 1, Figure 5, Figure 7(a)(b) (3 figures)
+- **Chapters**: 2, 3
+- **IEEE Cost Avoided**: $129
+- **Status**: ✅ AUTO-RESPONSE RECEIVED ⏳ AWAITING SUBSTANTIVE RESPONSE
+- **Follow-up Date**: March 3-5, 2026 (adjusted for M/W/F schedule)
+- **Notes**:
+  - Requested high-res figures
+  - Figure 5 resolves Chapter 3 red note (diagonal touching issue)
+  - Critical for book completeness
+  - ✅ Auto-response: FOI reads emails M/W/F only (normal for Swedish gov)
+  - ✅ Public records notice: Standard Swedish transparency law (Offentlighetsprincipen)
+  - Email content is fine for public disclosure (academic request)
+
+---
+
 ## 📅 Timeline
 
 | Date | Action | Status |
 |------|--------|--------|
-| Feb 18, 2026 | Sent email to Sarabandi | ✅ SENT |
-| Feb 25, 2026 | Follow up if no response | ⏳ PENDING |
-| TBD | Send FOI Sweden emails | 📋 PLANNED |
-| TBD | Send GTRI emails | 📋 PLANNED |
+| Feb 18, 2026 | Sent email to Sarabandi (UMich) | ✅ SENT |
+| Feb 18, 2026 | Sent email to Thors et al. (FOI/AFRL) | ✅ SENT |
+| Feb 18, 2026 | Sent email to Ellgardt/Persson (FOI) | ✅ SENT |
+| Feb 25-28, 2026 | Follow up if no responses | ⏳ PENDING |
+| TBD | Consider GTRI emails (Landgren, Howard, Dykes) | 📋 PLANNED |
+| TBD | Consider Wright2018 (MEMS) | 📋 PLANNED |
 
 ---
 
 ## 🎯 Success Metrics
 
-**Emails Sent**: 1
+**Emails Sent**: 3
 **Responses Received**: 0
 **Permissions Granted**: 0
 **Permissions Denied**: 0
-**Total Savings**: $0 (potential: $129)
+**Total Savings**: $0 (potential: $387)
 
 ---
 
 ## 📝 Next Papers to Contact
 
-### Priority 1 (Ready to Send):
-- [ ] **Ellgardt & Persson** (FOI Sweden) - Ellgardt2006Characteristics
-  - ✅ Email draft: EMAIL_TO_ELLGARDT_PERSSON.txt
-  - Figures: 1, 5, 7(a)(b) - 3 figures
-  - IEEE cost avoided: $129
-- [ ] **Thors et al.** (FOI Sweden) - Thors2005Broad-band
-  - ✅ Email draft: EMAIL_TO_THORS.txt
-  - Figures: 1(a)(b), 4(a)(b), 9(a)(b) - 3 figures
-  - IEEE cost avoided: $129
+### ✅ PHASE 1 COMPLETE - All Critical External Papers Sent
 
-### Priority 2 (Send Next Week):
-- [ ] **Wright et al.** - Wright2018Mems
-- [ ] **Landgren** (GTRI) - Landgren2017 & 2019 papers
-- [ ] **Howard** (GTRI) - Howard2024Topology
-- [ ] **Dykes** (GTRI) - Dykes2017Wideband
+- [X] **Sarabandi** (UMich) - Barani2018Fragmented - SENT Feb 18
+- [X] **Thors et al.** (FOI/AFRL) - Thors2005Broad-band - SENT Feb 18
+- [X] **Ellgardt & Persson** (FOI) - Ellgardt2006Characteristics - SENT Feb 18
+
+**Total Potential Savings**: $387 (if all approve)
+
+### Priority 2 (Wait for Response Rate, Then Consider):
+
+**Strategy**: Wait to see response rate from Phase 1 before sending more
+
+- [ ] **Wright et al.** - Wright2018Mems (MEMS reconfigurable for Ch 5)
+- [ ] **Landgren** (GTRI) - Landgren2017 & 2019 papers (33:1 bandwidth)
+- [ ] **Howard** (GTRI) - Howard2024Topology (topology optimization)
+- [ ] **Dykes** (GTRI) - Dykes2017Wideband (mmWave)
+
+**Recommended**: Wait 5-7 days to see Phase 1 response rate before contacting GTRI colleagues
 
 ---
 
@@ -116,5 +159,5 @@
 
 ---
 
-**Last Action**: Sent email to Sarabandi on Feb 18, 2026
-**Next Action**: Monitor email for response; prepare FOI emails
+**Last Action**: Sent all 3 Phase 1 emails on Feb 18, 2026 (Sarabandi, Thors, Ellgardt)
+**Next Action**: Monitor email for responses; follow up Feb 25-28 if no responses; wait to see response rate before sending Phase 2 (GTRI) emails

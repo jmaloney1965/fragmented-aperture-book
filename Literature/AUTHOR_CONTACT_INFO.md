@@ -213,14 +213,17 @@
 
 ### 9. H. Steyskal
 **Paper**: Thors2005Broad-band (co-author)
-**Affiliation**: Likely Air Force Research Laboratory (AFRL)
-**Status**: 2005 paper - may have retired
+**Affiliation**: Air Force Research Laboratory (AFRL)
+**Status**: ❌ EMAIL BOUNCED
+
+**Email**: steyskal@ieee.org ❌ BOUNCED (Feb 18, 2026)
+**Alternative**: firstname.lastname@us.af.mil (unknown if still at AFRL)
 
 **Strategy**:
-1. May be Hans Steyskal or similar
-2. AFRL email format (if still active): firstname.lastname@us.af.mil
-3. Likely best to contact Thors as first author
-4. This is secondary co-author - not critical to find
+1. ❌ steyskal@ieee.org bounced (2005 paper - likely outdated)
+2. ✅ Contacted through Thors email (sent Feb 18, 2026)
+3. Thors can forward to Steyskal if contact is needed
+4. Not critical - Thors (first author) and Holter received email
 
 ---
 
