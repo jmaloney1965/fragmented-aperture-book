@@ -1,0 +1,68 @@
+Subject: Permission Request for Academic Book - Your 2006 Fragmented Aperture Work
+
+Dear Dr. Ellgardt and Dr. Persson,
+
+I hope this message finds you well. I am writing to request your permission to use figures from your excellent 2006 EuCAP paper, "Characteristics of a Broadband, Wide-Scan Fragmented Aperture Antenna."
+
+**About Me and My Project:**
+
+I am Dr. James G. Maloney, the original inventor of Fragmented Aperture Antennas (U.S. Patent 6,323,809, 2001). I am currently writing a comprehensive book on this technology, titled *Fragmented Aperture Antennas*, which will serve as the definitive reference on computationally designed pixelated antennas.
+
+**Why Your Work Is Important to My Book:**
+
+Your 2006 paper represents critical independent validation of the fragmented aperture concept by the Swedish Defence Research Agency (FOI). Your research team successfully demonstrated wide-scan capabilities and addressed important fabrication challenges - particularly the diagonal touching issue that arises in certain fragmented antenna designs. Your work is cited in **three chapters** of my book (Introduction, Original Approach, and Improved Approach).
+
+**Specific Figures Requested:**
+
+I would like to include the following **three figures** from your paper:
+
+1. **Figure 1**: The array antenna unit cell (20×20 pixel grid with diagonal feed lines)
+   - **Purpose**: Chapters 2 and 3 - shows physical implementation of fragmented aperture concept
+   - **Context**: Demonstrates independent validation by FOI Sweden
+   - **Critical importance**: Shows the basic geometry that leads to diagonal touching
+
+2. **Figure 5**: The diagonal touching problem and two proposed solutions
+   - **Purpose**: Chapter 3 - illustrates a critical fabrication challenge
+   - **Context**: This figure directly addresses a known issue in fragmented aperture design
+   - **Critical importance**: Best published illustration of diagonal touching issue and solutions
+
+3. **Figure 7**: Performance results showing (a) reflection coefficient and (b) radiation pattern
+   - **Purpose**: Chapters 2 and 3 - quantitative validation of wide-scan performance
+   - **Context**: Demonstrates successful wide-scan capability of fragmented apertures
+   - **Critical importance**: Independent validation from respected European research institution
+
+**Why I'm Contacting You Directly:**
+
+I initially approached IEEE for permission, but they quoted $129 USD for three figures. As this is an academic book project documenting the scientific development of fragmented aperture technology, I wanted to reach out directly to see if you would be willing to grant permission for academic use. Given FOI's strong tradition in antenna research and international collaboration, I hope you might be supportive of this scholarly work.
+
+**How Your Work Will Be Credited:**
+
+- Full citation in the bibliography (IEEE format)
+- Figure captions explicitly crediting all authors and the 2006 EuCAP conference
+- Text discussion highlighting FOI's contributions to fragmented aperture research
+- Recognition of your solution to the diagonal touching problem (Figure 5)
+- Proper IEEE copyright attribution as required
+
+**What I Need from You:**
+
+1. **Written permission** to use Figures 1, 5, and 7 (this email exchange can serve as documentation)
+2. **High-resolution versions** of the three figures (original publication quality or vector graphics if available)
+3. **Your preferred attribution text** - I want to ensure proper credit
+4. **Contact information** for your co-authors if they need to be consulted
+
+If you are unable to grant permission directly due to IEEE copyright or FOI institutional policies, I understand and will pursue official channels. However, direct author permission greatly facilitates academic collaboration and would be deeply appreciated.
+
+**Timeline:**
+
+I am hoping to finalize permissions over the next 4-8 weeks, though there is flexibility in the schedule.
+
+Thank you very much for considering this request. Your 2006 paper provides crucial validation of the fragmented aperture concept from an independent research institution, and I am pleased to feature it prominently in the book.
+
+Best regards,
+
+Dr. James G. Maloney
+Inventor, Fragmented Aperture Antennas
+Email: [ADD YOUR EMAIL HERE]
+Phone: [ADD YOUR PHONE - OPTIONAL]
+
+**P.S.** - I am particularly grateful for your Figure 5 analysis of the diagonal touching problem, as it represents the clearest published treatment of this important fabrication issue. If you have additional insights or unpublished data on this topic, I would be very interested in learning about them!

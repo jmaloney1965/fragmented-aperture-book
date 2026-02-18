@@ -1,0 +1,71 @@
+Subject: Permission Request for Academic Book - Your 2018 Fragmented Antenna Work
+
+Dear Prof. Sarabandi,
+
+I hope this message finds you well. I am writing to request your permission to use figures from your excellent 2018 IEEE Transactions on Antennas and Propagation paper, "Fragmented Antenna Realization Using Coupled Small Radiating Elements."
+
+**About Me and My Project:**
+
+I am Dr. James G. Maloney, the original inventor of Fragmented Aperture Antennas (U.S. Patent 6,323,809, 2001). I am currently writing a comprehensive book on this technology, titled *Fragmented Aperture Antennas*, which will serve as the definitive reference on computationally designed pixelated antennas.
+
+**Why Your Work Is Important to My Book:**
+
+Your 2018 paper represents important recent innovation in the fragmented aperture field. By developing a fragmented antenna using coupled small radiating elements, you and your team extended the original concept in a creative new direction. Your work demonstrates that:
+
+1. The fragmented aperture philosophy remains relevant and actively researched
+2. Modern variations can address different design objectives
+3. The University of Michigan research group has successfully adopted and advanced the approach
+
+Your paper is cited in **three chapters** of my book (Introduction, Original Approach, and Improved Approach), providing critical evidence that fragmented aperture technology continues to evolve nearly two decades after the original concept.
+
+**Specific Figures Requested:**
+
+I would like to include the following **three figures** from your paper:
+
+1. **Figure 1**: Proposed fragmented antenna concept showing coupled elements on robotic flyers
+   - **Purpose**: Chapter 1 (Introduction) - illustrates modern application and coupled-element concept
+   - **Context**: Shows evolution from pixel-based to coupled-element fragmented antennas
+
+2. **Figure 2**: Configuration of inductively end-loaded folded dipole antenna element
+   - **Purpose**: Chapters 2 and 3 - shows physical antenna element design
+   - **Context**: Demonstrates miniaturized implementation (12×10×10 cm, 18g)
+
+3. **Figure 7**: Performance analysis showing (a) bandwidth and (b) radiation efficiency
+   - **Purpose**: Chapters 2 and 3 - quantitative validation of coupled-element approach
+   - **Context**: Critical figure showing bandwidth enhancement through coupling
+
+**Why I'm Contacting You Directly:**
+
+I initially approached IEEE for permission, but they quoted $129 USD for three figures. As this is an academic book project documenting the scientific development of fragmented aperture technology, I wanted to reach out directly to see if you would be willing to grant permission for academic use. Given the University of Michigan's strong tradition in antenna research, I hope you might be supportive of this scholarly work.
+
+**How Your Work Will Be Credited:**
+
+- Full citation in the bibliography (IEEE format)
+- Figure captions explicitly crediting all authors and IEEE Transactions on Antennas and Propagation
+- Text discussion highlighting your innovative coupled-element approach
+- Recognition of University of Michigan's contributions to fragmented aperture research
+- Proper IEEE copyright attribution as required
+
+**What I Need from You:**
+
+1. **Written permission** to use Figures 1, 2, and 7 (this email exchange can serve as documentation)
+2. **High-resolution versions** of the three figures (original publication quality or vector graphics if available)
+3. **Your preferred attribution text** - I want to ensure proper credit
+4. **Contact info for Navid Barani** (if you're willing to forward this request to him, or provide his current contact - I understand he's now at Meta)
+
+If you are unable to grant permission directly due to IEEE copyright or university policies, I understand and will pursue official channels. However, direct author permission greatly facilitates academic collaboration and would be deeply appreciated.
+
+**Timeline:**
+
+I am hoping to finalize permissions over the next 4-8 weeks, though there is flexibility in the schedule.
+
+Thank you very much for considering this request. Your 2018 paper demonstrates the continuing vitality of fragmented aperture research, and I am pleased to feature it prominently in the book.
+
+Best regards,
+
+Dr. James G. Maloney
+Inventor, Fragmented Aperture Antennas
+Email: [ADD YOUR EMAIL HERE]
+Phone: [ADD YOUR PHONE - OPTIONAL]
+
+**P.S.** - If Dr. Barani has additional results or insights from his dissertation work that you think would enhance the book, I would be interested in learning about them!
