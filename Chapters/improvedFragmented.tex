@@ -4,256 +4,250 @@
 
 \section{Overview}
 
-In the late 1990's, Maloney et al.\ began investigating the design of highly pixelated apertures whose physical shape and size are optimized using genetic algorithms (GA) and full-wave computational electromagnetic simulation tools (i.e. FDTD) to best meet the required antenna performance specification; i.e. gain, bandwidth, polarization, pattern, etc.\ \cite{MaloneyKeslerHarms}-\cite{BalanisHB12}.  Visual inspection of the optimal designs showed that the metallic pixels formed many connected and disconnected fragments.  Hence, I coined the term Fragmented Aperture Antennas for this new class of antennas.  A detailed description of the original design approach is disclosed in \cite{MaloneyFragPatent}.  Since then, other research groups have been successfully designing fragmented aperture antennas for other applications, see \cite{Herscovici}-\cite{EllgardtPersson} for three examples.
+In the late 1990s, Maloney et al.\ began investigating the design of highly pixelated apertures whose physical shape and structure are optimized using genetic algorithms (GA) and full-wave computational electromagnetic simulation (FDTD) to best meet a required antenna performance specification---gain, bandwidth, polarization, pattern, and so on \cite{MaloneyKeslerHarms}--\cite{BalanisHB12}.  Visual inspection of the optimized designs revealed that the metallic pixels formed many connected and disconnected fragments across the aperture, which led to the name \emph{Fragmented Aperture Antennas} for this new class of antennas.  A detailed description of the original design approach is disclosed in the original patent \cite{MaloneyFragPatent}.  Since the original publications, other research groups have successfully applied the fragmented aperture design approach to their own applications \cite{Herscovici}--\cite{EllgardtPersson}, including the use of genetic algorithms for broadband fragmented aperture phased array design \cite{Thors2005Broad-band} and the development of fragmented antennas based on coupled small radiating elements \cite{Barani2018Fragmented}.
 
-However, the original fragmented design approach suffers from two major deficiencies.  First, the placement of pixels on a generalized, rectilinear grid leads to the problem of diagonal touching. That is, pixels that touch diagonally lead to poor measurement/model agreement.  Other research groups are also grappling with this diagonal touching issue \cite{EllgardtThesis}. Second, the convergence in the GA stage of the design process is poor for high pixel count apertures ($>>100$).           
+However, the original fragmented design approach suffers from two significant deficiencies.  First, the placement of pixels on a generalized rectilinear grid leads to the problem of \emph{diagonal touching}---pixels that share only a corner vertex are electrically connected in the numerical model but may be disconnected when fabricated.  Other research groups have also encountered this diagonal touching problem \cite{EllgardtThesis}.  Second, the convergence of the GA becomes increasingly poor as the pixel count grows large ($\gg 100$).  Recent work has explored various optimization strategies to address convergence challenges, including the use of integrated baluns to simplify the design space \cite{Zang2019Optimum} and automated optimization techniques \cite{Li2019Automated}.
 
-This chapter will present solutions to both of these shortcomings.  First, alternate approaches to the discretization of the aperture area that inherently avoid diagonal touching will be presented.  Second, an improvement to the usual GA mutation step that improves convergence for large pixel count fragmented aperture designs will be presented.
+This chapter presents solutions to both of these shortcomings.  First, alternate approaches to the discretization of the aperture area that inherently avoid diagonal touching are presented.  Second, an improved mutation operator tailored for fragmented aperture design that significantly improves convergence for large pixel counts is introduced.
 
-\section{Limitations with Fragmented Apertures}
+\section{The Diagonal Touching Problem}
+\label{sec:diagtouch}
 
-Originally, fragmented aperture antennas were envisioned as a planar surface with a grid of rectangular regions or pixels that were either conducting or non-conducting, as shown in Figure \ref{fig:IFAF1} . A genetic algorithm and a computational electromagnetic model were used to determine which pixels should be conducting and which should be non-conducting to form an antenna surface suitable for a given use.  This concept was generalized to conducting or non-conducting parallelogram pixels as shown in Figure \ref{fig:IFAF2}  in the original fragmented aperture patent  \cite{MaloneyFragPatent}.
+Originally, fragmented aperture antennas were envisioned as a planar surface partitioned into a grid of rectangular pixels, each either conducting or non-conducting, as shown in Figure~\ref{fig:IFAF1}.  A genetic algorithm and a computational electromagnetic model determined which pixels should be conducting and which should be non-conducting to form an antenna surface suitable for a given application.  This concept was generalized to parallelogram-shaped pixels, as shown in Figure~\ref{fig:IFAF2}, in the original fragmented aperture patent \cite{MaloneyFragPatent}.
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig1.png}
-\caption{Original Fragmented Aperture approach based on lattice of rectangular areas.  An example of diagonal touching is shown in the top right of the figure.}
-\label{fig:IFAF1}		% figure references have to be below the \caption line
+\caption{Original fragmented aperture approach based on a lattice of rectangular pixels.  An example of diagonal touching is shown in the top right of the figure.}
+\label{fig:IFAF1}
 \end{figure}
 
-As discussed elsewhere, the approach shown in Figure \ref{fig:IFAF1} was very successfully used to design novel antennas \cite{MaloneyKeslerHarms}-\cite{BalanisHB12}.  However, many of these designs were troublesome to build and measure.  The primary problem is called ``diagonal touching'' of pixels as illustrated in the top right in Figures \ref{fig:IFAF1} and ref{fig:IFAF2} .
+As discussed in Chapter~2, the rectangular pixel approach was very successfully used to design novel antennas \cite{MaloneyKeslerHarms}--\cite{BalanisHB12}.  However, many of these designs proved troublesome to fabricate and measure.  The primary problem is \emph{diagonal touching} of pixels, as illustrated in the top right of Figures~\ref{fig:IFAF1} and~\ref{fig:IFAF2}.
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig2.png}
-\caption{Generalized Fragmented Aperture Approach based on parallelograms.  Again, an example of diagonal touching is shown in the top right of the figure}
-\label{fig:IFAF2}		% figure references have to be below the \caption line
+\caption{Generalized fragmented aperture approach based on parallelogram-shaped pixels.  Again, an example of diagonal touching is shown in the top right of the figure.}
+\label{fig:IFAF2}
 \end{figure}
 
-Diagonal touching is not a problem during design because in the numerical models the diagonally touching pixels in the antenna are always touching.  However, when fabricated using approaches such as printed circuit board etching, the pixels are often disconnected because of over-etching, as illustrated in Figure~\ref{fig:IFAF3}(a).  Disconnecting metal that should be connected is one of the worst things that can happen within an antenna causing problems with the antenna impedance and gain characteristics.  
- 
+Diagonal touching is not a problem during the design phase because in the FDTD numerical model, diagonally adjacent conducting pixels are always electrically connected.  However, when fabricated using processes such as printed circuit board etching, the diagonal contact is often broken due to over-etching, as illustrated in Figure~\ref{fig:IFAF3}(a).  Disconnecting metal that should be connected can seriously degrade the antenna's impedance match and gain characteristics.
+
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig3.png}
-\caption{(a) Over-etching causing diagonal elements not to touch as shown in top center, (b) close photograph of a etched copper fragmented antenna showing over etch disconnecting diagonal fragments.}
-\label{fig:IFAF3}		% This figure will have photograph added
+\caption{(a) Over-etching causing diagonal elements not to touch, as shown in the top center. (b) Close-up photograph of an etched copper fragmented antenna showing over-etch disconnecting diagonal fragments.}
+\label{fig:IFAF3}
 \end{figure}
 
-Other researchers have also observed the trouble with diagonal touching and a nice photograph is shown in Figure~\ref{fig:IFAF3}(b) of a etch copper fragmented surface cite{someone}
+Other researchers have also observed the difficulties caused by diagonal touching.  A close-up photograph of an etched copper fragmented surface is shown in Figure~\ref{fig:IFAF3}(b), where the disconnection of diagonally adjacent pixels is clearly visible \cite{Ellgardt2006Characteristics}.
 
-In fact, nearly every antenna design included in the original fragmented aperture patent suffers from this issue of diagonal touching, see Figure~\ref{fig:IFAF4} for a few examples from US Patent 6323809 \cite{MaloneyFragPatent}. It turns out that the fundamental approach of partitioning the area using the approaches in Figures \ref{fig:IFAF1} or \ref{fig:IFAF2} was the problem.  Specifically, if the fundamental pixels have edges parallel to the lattice forming vectors then the issue of ``diagonal touching'' will persist.
+In fact, nearly every antenna design included in the original fragmented aperture patent suffers from the diagonal touching problem.  Figure~\ref{fig:IFAF4} shows a few examples from U.S.\ Patent 6,323,809 \cite{MaloneyFragPatent}, with the most troublesome diagonal-touching locations near the antenna feed circled.
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig4.png}
-\caption{Two sample designs from original fragmented patent exhibiting diagonal touching \cite{MaloneyFragPatent}.  The most troublesome examples of diagonal-touching near the antenna feed are circled}
-\label{fig:IFAF4}		% figure references have to be below the \caption line
+\caption{Two sample designs from the original fragmented aperture patent exhibiting diagonal touching \cite{MaloneyFragPatent}.  The most troublesome examples of diagonal touching near the antenna feed are circled.}
+\label{fig:IFAF4}
 \end{figure}
 
-In the next section, we will discuss four approaches that have been successfully used over the years to mitigate these diagonal touching issues.  But, the best approach is to change the area partitioning strategy as presented in Section~\ref{sec:IFAS4}.
+The root cause of the problem lies in the fundamental approach to area partitioning.  When the pixel edges are parallel to the lattice forming vectors, as in Figures~\ref{fig:IFAF1} and~\ref{fig:IFAF2}, the issue of diagonal touching is unavoidable.  The next two sections present solutions: Section~\ref{sec:mitigation} describes several practical mitigation strategies, while Section~\ref{sec:IFAS4} presents three improved pixel geometries that inherently eliminate diagonal touching.
 
-\section{Initial Approaches to mitigate diagonal touching}
+\section{Mitigation Strategies for Diagonal Touching}
+\label{sec:mitigation}
 
-One approach successfully exploited was to consider a super-cell approach as illustrated in Figure~\ref{fig:IFAF5}(a).  A super-cell is a collection of smaller areas; e.g. the super-cell shown in Figure~\ref{fig:IFAF5} is a 3 by 3 lattice of the smaller pixels.   To avoid diagonal touching, we simply define the conducting area as the 5 sub-elements that defined a plus sign.  Hence, the absence of conducting material in the corners of the super-cell prevented any potential for diagonal touching.  This did successfully allow antennas to be designed and fabricated with a high probability of good correlation between measurement and model.  
-
-However, this approach forces electrical currents to flow only in grid conforming directions.  This over-constraint could lead to suboptimal antenna designs.
+Before presenting the improved pixel geometries, it is instructive to review several practical strategies that have been used over the years to mitigate diagonal touching in designs based on the original rectangular pixel approach.  Four such strategies are illustrated in Figure~\ref{fig:IFAF5}.
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig5.png}
-\caption{(a) Super-cell approach; e.g.  3x3 plus signs, (b) Ten Percent Larger Fabrication, (c) Small metal square to ensure contact, (d) Random coin flipping approach }
-\label{fig:IFAF5}		% any comment
+\caption{Four approaches to mitigating diagonal touching: (a) super-cell approach using $3\times 3$ plus signs, (b) fabricating each pixel approximately 10\% larger than designed, (c) placing a small metal square at diagonal contact points to ensure connection, and (d) random coin-flip approach to resolve diagonal ambiguity.}
+\label{fig:IFAF5}
 \end{figure}
 
-Another successful approach was to intentionally fabricate every pixel roughly 10\% larger than designed, as illustrated in Figure~\ref{fig:IFAF5}(b).  This approach was found to lead to a high percentage of good fabricated antennas.  However, this approach leads to the antennas having roughly 10-20\% more conductor than originally designed which could lead to less than desired antenna characteristics in the fabricated antennas.  
+\subsection{Super-Cell Approach}
 
-It is worth noting that fabricating the conducting pixels 10\% smaller, would guarantee the pixels never diagonally touch, but this would lead to antennas that never have conducting areas larger than one pixel which would almost never be any good.  Also, this would be contrary to the numerical models used in design where the elements always touch when diagonally adjacent.
+One approach that was successfully exploited is the super-cell strategy shown in Figure~\ref{fig:IFAF5}(a).  A super-cell is a collection of smaller sub-elements---for example, a $3 \times 3$ grid of sub-pixels.  To avoid diagonal touching, the conducting area is defined as the five sub-elements that form a plus sign, leaving the four corner sub-elements always non-conducting.  This guarantees that no diagonal touching can occur.
 
-Other research groups are aware of this issue of diagonal touching and have come up with other ways to address it.  In \cite{EllgardtPersson}, the slightly larger pixel strategy shown in Figure~\ref{fig:IFAF5}(b) and a variant of placing a small square of metal at the diagonal touching location shown in Figure~\ref{fig:IFAF5}(c) were consider. Prof Rahmat-Samii of UCLA in presentations has discussed how they have used a random coin flipping process to decide which of the two non-conducting pixels to make conducting to fix the diagonal touch as illustrated in Figure~\ref{fig:IFAF5}(d).
+The super-cell approach successfully produced antennas with good correlation between measurement and model.  However, restricting the conducting area to plus-sign shapes forces electrical currents to flow only in directions aligned with the grid, which over-constrains the design and can lead to suboptimal antenna performance.
 
-\section{Three Improved Fragmented Aperture Antenna Embodiments}
+\subsection{Oversized Fabrication}
+
+Another successful approach was to intentionally fabricate every pixel approximately 10\% larger than designed, as illustrated in Figure~\ref{fig:IFAF5}(b).  This enlargement ensures that diagonally adjacent pixels overlap slightly, guaranteeing electrical contact.  This strategy was found to yield a high percentage of successfully fabricated antennas.
+
+However, oversized fabrication results in the antenna having roughly 10--20\% more conductor than originally designed, which can alter the antenna characteristics from the design predictions.  It is worth noting that fabricating pixels 10\% \emph{smaller} would guarantee that diagonal pixels never touch, but this would mean that conducting regions could never extend beyond a single pixel---a condition that would render the antenna virtually useless.  Moreover, smaller fabrication would be inconsistent with the FDTD model used during design, in which diagonally adjacent conducting pixels are always connected.
+
+\subsection{Metal Bridge and Coin-Flip Approaches}
+
+Other research groups have developed additional strategies.  Ellgardt and Persson \cite{EllgardtPersson} considered both the oversized pixel strategy of Figure~\ref{fig:IFAF5}(b) and a variant in which a small square of metal is placed at each diagonal contact point to ensure connection, as shown in Figure~\ref{fig:IFAF5}(c).  Rahmat-Samii and colleagues at UCLA have used a random coin-flip process to resolve diagonal ambiguity: when two non-conducting pixels are diagonally adjacent to two conducting pixels, a random selection determines which non-conducting pixel is made conducting to complete the connection, as illustrated in Figure~\ref{fig:IFAF5}(d).
+
+While each of these mitigation strategies can be effective, they all represent workarounds for a fundamental problem.  The proper solution is to change the pixel geometry itself so that diagonal touching cannot occur, as described in the next section.
+
+\section{Three Improved Pixel Geometries}
 \label{sec:IFAS4}
 
-The proper approach to avoiding diagonal touching is to break the dependence of element edges and lattice directions implicit in Figures~\ref{fig:IFAF1} and~\ref{fig:IFAF2}.   The next three subsections discuss three new approaches for breaking this dependence which lead to improved fragmented aperture antennas.
+The proper approach to eliminating diagonal touching is to break the dependence between pixel edges and lattice directions that is implicit in the rectangular and parallelogram geometries of Figures~\ref{fig:IFAF1} and~\ref{fig:IFAF2}.  The following three subsections present three different pixel geometries that accomplish this, each leading to improved fragmented aperture antennas.  Recent studies have examined important design considerations such as pixel size, symmetry constraints, and their effects on antenna performance \cite{Mair2024Design}.
 
-\subsection{First Approach}
-In the first approach to improve fragmented apertures, one should define the individual conducting/non-conducting elements using a second set of directions that are not both parallel to the lattice constants as illustrated shown in Figure~\ref{fig:IFAF6}. The example shown in Figure~\ref{fig:IFAF6} consists of square elements on a $X\approx 63.4356^o$ skewed lattice. 
+\subsection{First Approach: Skewed Lattice}
+
+In the first approach, the individual conducting/non-conducting elements are defined using lattice vectors that are not both parallel to the element edges, as illustrated in Figure~\ref{fig:IFAF6}.  The example shown uses square elements arranged on a skewed lattice with a skew angle of $\psi \approx 63.4^\circ$.
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig6.png}
-\caption{First Approach to Improved Fragmented Aperture Antennas.}
-\label{fig:IFAF6}		% figure references have to be below the \caption line
+\caption{First approach to improved fragmented aperture antennas: square elements on a skewed lattice.  Skewing the lattice vector $\vec{V}_2$ eliminates the possibility of diagonal touching.}
+\label{fig:IFAF6}
 \end{figure}
 
-Notice that skewing the lattice vector, $\vec{V2}$, has removed the diagonal touching possibility.
+Notice that skewing the lattice vector $\vec{V}_2$ completely eliminates the possibility of diagonal touching.  Every adjacent pixel pair shares a full edge, so the electrical connection between adjacent conducting pixels is always robust and unambiguous.
 
-\subsection{Second Approach}
-In the second approach to improved fragmented apertures, one should alternate the shape of fundamental conducting / non-conducting pixels such that the elements diagonally touch in a definite manner as illustrated in Figure~\ref{fig:IFAF7}.  
+\subsection{Second Approach: Alternating Pixel Shapes}
+
+In the second approach, two complementary pixel shapes are used that alternate across the aperture, as illustrated in Figure~\ref{fig:IFAF7}.  The shapes are chosen so that adjacent pixels always share a definite edge rather than merely a corner point.
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig7.png}
-\caption{Second Approach to Improved Fragmented Aperture Antennas.}
-\label{fig:IFAF7}		% figure references have to be below the \caption line
+\caption{Second approach to improved fragmented aperture antennas: alternating pixel shapes that tessellate the plane while ensuring definite edge contact between adjacent pixels.}
+\label{fig:IFAF7}
 \end{figure}
 
-Essentially, the two shapes need to be chosen such that together the pair tessallate the plane.
+The key requirement is that the two shapes together tessellate the plane---that is, they tile the aperture surface without gaps or overlaps.  When this condition is met and the shapes are designed so that adjacency always involves a shared edge, diagonal touching is inherently impossible.
 
-\subsection{Third Approach}
-In the third approach to improved fragmented aperture, one should chose the shape of the fundamental conducting / non-conducting pixels such that the single shape tessellates the plane and does not touch diagonally.  Figure~\ref{fig:IFAF8} shows one example of such an element but many others shapes will also work.
+\subsection{Third Approach: Single Self-Tessellating Shape}
+
+In the third approach, a single pixel shape is chosen that tessellates the plane by itself while ensuring that adjacent pixels share edges rather than corner points.  Figure~\ref{fig:IFAF8} shows one example of such a shape, although many other shapes satisfying these requirements exist.
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig8.png}
-\caption{Third Approach to Improved Fragmented Aperture Antennas.}
-\label{fig:IFAF8}		% figure references have to be below the \caption line
+\caption{Third approach to improved fragmented aperture antennas: a single self-tessellating pixel shape that tiles the aperture surface while ensuring definite edge contact between all adjacent pixels.}
+\label{fig:IFAF8}
 \end{figure}
 
-\section{Improved Mutation Algorithm to Improve Convergence Rate of Fragmented Apertures }
-Traditionally, fragmented aperture antennas are designed using evolutionary algorithms like the genetic algorithm \cite{MaloneyFragPatent}.  One important step in the genetic algorithm is called mutation.  In a standard genetic algorithm, mutation is a random process where a small number of genes are changed each generation to help avoid convergence to a suboptimal solution.  For a fragmented antenna, mutation makes a few pixels randomly conducting or not in the next population of antennas. Many of these mutations will create only an isolated metal pixel or small hole in metal that will have a very negligible effect on the antenna performance.
+The advantage of a single-shape tessellation is simplicity of implementation: only one pixel geometry needs to be defined and manufactured.  However, depending on the chosen shape, this approach may not naturally support the left-right and top-bottom symmetry constraints that are commonly imposed for broadside, linearly polarized antenna designs.  This makes the third approach particularly well suited for designs where symmetry is not required, such as beam-steered or circularly polarized antennas.
 
-As will be shown below, we have found that introducing a modified mutation algorithm tailored for fragmented aperture antennas helps speed up the convergence of the design process when the number of elements/pixels is high.
+\section{Improved Mutation Algorithm for Better Convergence}
+\label{sec:mutation}
 
-The goal of the new mutation process is to bias mutation to either increase the size of conducting fragments in empty regions or increase the size of holes in large metal regions.  This new mutation process uses an adjacency matrix that describes which elements/pixels are touching each other.
+In addition to the diagonal touching problem, the original fragmented aperture design approach suffered from poor convergence of the genetic algorithm when the number of pixels became large.  This section describes an improved mutation operator that addresses this limitation.  More recent work has explored alternative optimization approaches including topology optimization with level set methods \cite{Howard2024Topology}, machine learning and neural network techniques \cite{Li2025Inverse,Wang2024Machine,Jacobs2022Accurate}, and reinforcement learning \cite{Wang2024Bandwidth}; however, genetic algorithms remain popular due to their simplicity and effectiveness for pixelated antenna design \cite{Mair2022Evolutionary,Zeghdoud2025Accelerated}.
 
-To demonstrate the efficacy of this adjacency-based mutation strategy, three consecutive design trials were conducted with the traditional mutation algorithm and with the new mutation algorithm.  Figure~\ref{fig:IFAF9} shows the convergence of the fitness as a function of generation count.  The fitness of any generation is the fitness of the best individual.  The y-axis shows the average best individual across three trials.  The new mutation algorithm (green line) converges to a better score in less generations.   
+In a standard genetic algorithm, mutation is a random process in which a small number of genes are changed each generation to help the algorithm avoid convergence to suboptimal solutions.  For a fragmented aperture antenna, mutation randomly toggles a few pixels between conducting and non-conducting states.  However, many of these random mutations produce only an isolated metal pixel in a non-conducting region or a small hole in an otherwise solid metal area.  Such changes have negligible effect on the antenna performance, and the mutation step is effectively wasted.
+
+The improved mutation algorithm is biased so that mutations preferentially extend the boundaries of existing conducting fragments into empty regions, or enlarge holes within large metal regions.  This is accomplished using an adjacency matrix that describes which pixels are in contact with each other.  By analyzing the local neighborhood of each pixel, the algorithm identifies pixels at the boundaries between conducting and non-conducting regions and preferentially selects these boundary pixels for mutation.
+
+To demonstrate the effectiveness of this adjacency-based mutation strategy, three independent design trials were conducted with the traditional mutation algorithm and three with the improved mutation algorithm.  Figure~\ref{fig:IFAF9} shows the convergence of the fitness score as a function of generation count, averaged over the three trials for each algorithm.  The improved mutation algorithm (green line) converges to a better fitness score in fewer generations than the traditional approach (blue line).
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig9.png}
-\caption{Third Approach to Improved Fragmented Aperture Antennas.}
-\label{fig:IFAF9}		% figure references have to be below the \caption line
+\caption{Convergence comparison between the traditional mutation algorithm (blue) and the improved adjacency-based mutation algorithm (green), averaged over three independent design trials.  The improved algorithm converges to a better fitness score in fewer generations.}
+\label{fig:IFAF9}
 \end{figure}
 
-In fact, as shown in the Table~\ref{tab:IFAT1}, the three trials with the new mutation algorithm were each better than the corresponding trial with the traditional mutation algorithm
+As shown in Table~\ref{tab:IFAT1}, the improved mutation algorithm produced a better result than the traditional algorithm in every one of the three trials.  The best trial with the improved algorithm achieved a fitness score of $-1.684$, compared to $-2.238$ for the best trial with the traditional algorithm---an improvement of more than 0.5~dB.
 
 \begin{table}
-\caption{Comparison across the three convergence trials (Higher number is better)}
+\caption{Fitness score comparison across three convergence trials for the traditional and improved mutation algorithms (higher score is better).}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig16.png}
-\label{tab:IFAT1}		% figure references have to be below the \caption line
+\label{tab:IFAT1}
 \end{table}
 
-The values in the table in Table~\ref{tab:IFAT1} also illustrate that when one is using an evolutionary algorithm; such as, the genetic algorithm, to design an antenna or any electromagnetic device, more than one design trial should always be executed because as we have experienced and is illustrated in this table, the subsequent designs can be more than a dB better than the first.
+The results in Table~\ref{tab:IFAT1} also illustrate an important practical point: when using an evolutionary algorithm to design an antenna, more than one design trial should always be executed.  As these results show, the variation between trials can exceed 1~dB, so running multiple trials and selecting the best result is essential for obtaining high-quality designs.
 
-\section{Sample Planar Improved Fragmented Aperture Designs}
+\section{Sample Improved Fragmented Aperture Designs}
 
-\subsection{First Approach}
-The approach illustrated in Figure~\ref{fig:IFAF6} was used to design a series of fragmented aperture antennas that spanned from 500 MHz to 2.0 GHz.  The lattice skew angle, X, was chosen to be $\tan^{-1}(2)\approx 63.435^o$ to give the desired left/right physical symmetry.  The square pixels were 10.8 mm on a side and the total aperture area was 25.4~cm x 25.4~cm.  Four representative aperture designs are shown in Figure~\ref{fig:IFAF10}.  Each of the four sample antenna designs are excited at the terminal pair in the center with a 100 ohm transmission line. 
+This section presents sample antenna designs produced using the improved pixel geometries described in Section~\ref{sec:IFAS4}.  All designs use the improved mutation algorithm of Section~\ref{sec:mutation}.
 
-The physical shapes of the designed antennas are shown in Figure~\ref{fig:IFAF10}. As the drawings show, none of the antennas suffer from diagonal touching issues.
+\subsection{First Approach Designs}
+
+The skewed-lattice approach of Figure~\ref{fig:IFAF6} was used to design a series of fragmented aperture antennas spanning from 500~MHz to 2.0~GHz.  The lattice skew angle was chosen to be $\psi = \tan^{-1}(2) \approx 63.4^\circ$, which provides the left-right physical symmetry needed for linearly polarized broadside designs.  The square pixels were 10.8~mm on a side, and the total aperture area was 25.4~cm $\times$ 25.4~cm.  Each antenna was excited at a terminal pair at the center of the aperture with a $100~\Omega$ transmission line.
+
+The aperture designs were performed using a genetic algorithm with FDTD evaluation of each candidate antenna (see Appendix~A for details on FDTD modeling of antennas).  For these designs, the 25.4~cm $\times$ 25.4~cm aperture contained 663 individual pixels.  Enforcing left-right and top-bottom symmetry reduced the number of independent degrees of freedom to 169.  With a single bit representing the state of each pixel (1 = conducting, 0 = non-conducting), this yields a 169-bit genetic code.  Using a population size of 32 antennas, approximately 100 GA generations were required to produce each design.  The fitness function rewarded good impedance match (return loss better than 15~dB) and maximum broadside realized gain.
+
+Four representative aperture designs are shown in Figure~\ref{fig:IFAF10}.  The physical shapes clearly demonstrate that none of the designs suffer from diagonal touching---every connection between adjacent conducting pixels involves a full shared edge.
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig10.png}
-\caption{Fragmented Aperture shapes of the Improved Fragmented aperture sample designs.}
-\label{fig:IFAF10}		% figure references have to be below the \caption line
+\caption{Four sample fragmented aperture designs produced using the skewed-lattice (First Approach) pixel geometry.  None of the designs exhibit diagonal touching.}
+\label{fig:IFAF10}
 \end{figure}
 
-The aperture designs (i.e. placement of conductor and non-conductor) were performed using a genetic algorithm.  For these designs, the 25.4~cm x 25.4~cm area consisted of 663 individual pixels.  Enforcing left/right and top/down symmetry, the degrees of freedom drops to 169.  Hence assigning a single bit to represent the state of each area (1=conducting, 0=non-conducting) yields a 169 bit genetic code. Using a genetic population size of 32 antennas, 100 Genetic Algorithm generations was typically required to realize one of these sample designs.  The genetic algorithm used a finite-difference time-domain (FDTD) numerical model of each antenna to compute return loss and radiation properties for the evolving population of antennas (see Appendix A for more information on modeling antennas with FDTD).
-
-The genetic algorithm fitness function rewarded good match (return loss better than 15dB), and as large as possible, broadside realized gain. 
-
-Figure~\ref{fig:IFAF11} shows the broadside realized gain of each antenna, while Figure~\ref{fig:IFAF12} shows the return loss of each antenna.  The gains are compared with an aperture gain limit (black line).  Since these apertures have no ground plane, the aperture gain limit for high frequencies is $2\pi\text{Area}/\lambda^2$.
-
+Figure~\ref{fig:IFAF11} shows the broadside realized gain of each design as a function of frequency.  The gains are compared with the aperture gain limit (black line), which for these ground-plane-free apertures is $2\pi A/\lambda^2$.  All four designs approach the aperture gain limit within their respective design bands.
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig11.png}
-\caption{Gain summary of First Approach Sample Designs shown in Figure~\ref{fig:IFAF10}.}
-\label{fig:IFAF11}		% figure references have to be below the \caption line
+\caption{Broadside realized gain for the four skewed-lattice designs shown in Figure~\ref{fig:IFAF10}.  The black line indicates the aperture gain limit $2\pi A/\lambda^2$.}
+\label{fig:IFAF11}
 \end{figure}
 
-The VSWR of the four sample designs are below 1.5 across the respective design bands which is consistent with the design intent of return loss better than 15 dB.
+Figure~\ref{fig:IFAF12} shows the VSWR of each design.  The VSWR remains below 1.5 across the respective design bands, consistent with the fitness function requirement of return loss better than 15~dB.
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig12.png}
-\caption{VSWR summary of First Approach Sample Designs shown in Figure~\ref{fig:IFAF10}.}
-\label{fig:IFAF12}		% figure references have to be below the \caption line
+\caption{VSWR for the four skewed-lattice designs shown in Figure~\ref{fig:IFAF10}.}
+\label{fig:IFAF12}
 \end{figure}
 
-\subsection{Second Approach}  
+\subsection{Second Approach Designs}
 
-The second approach illustrated in Figure~\ref{fig:IFAF7} is also useful for designing antennas.  The second approach also supports left/right and top/down symmetry when appropriate.  
+The alternating-shape approach of Figure~\ref{fig:IFAF7} was also used to design fragmented aperture antennas.  This pixel geometry naturally supports both left-right and top-bottom symmetry when required.  The aperture area was again 25.4~cm $\times$ 25.4~cm, excited at the center with a $100~\Omega$ feed.  The aperture contained 841 shaped pixels, and with both symmetries enforced, the number of independent degrees of freedom was 221.
 
-\textcolor{red}{Now have four 4 designs, redo these 3 Figures and update text}
+\textcolor{red}{\textbf{[Note: The Second Approach currently has two sample designs.  Four designs are planned to match the First Approach presentation.  Figures and text to be updated.]}}
 
-The aperture area was again 25.4~cm x 25.4~cm and was excited in the center with a 100 ohm feed.  
-
-The aperture consisted of 841 shaped pixels.  When left/right and top/down symmetry was enforced, the number of degrees of freedom dropped to 221. 
-
-Figure~\ref{fig:IFAF13} shows two sample designed apertures for the 0.5-0.8~GHz and the 0.8-1.2~GHz bands.  
+Figure~\ref{fig:IFAF13} shows two sample designs for the 0.5--0.8~GHz and 0.8--1.2~GHz bands.  As with the first approach designs, no diagonal touching is present in the physical structures.
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig13.png}
-\caption{Two sample designs from the second approach}
-\label{fig:IFAF13}		% figure references have to be below the \caption line
+\caption{Two sample fragmented aperture designs produced using the alternating-shape (Second Approach) pixel geometry for the 0.5--0.8~GHz and 0.8--1.2~GHz bands.}
+\label{fig:IFAF13}
 \end{figure}
 
-Notice that no diagonal touching is evident in the physical structures shown in Figure~\ref{fig:IFAF13} as desired.  
-
-Figures~\ref{fig:IFAF14} and~\ref{fig:IFAF15} summarize the broadside gain and VSWR versus frequency of the two sample designs.  In general, the performance is quite good.
+Figures~\ref{fig:IFAF14} and~\ref{fig:IFAF15} summarize the broadside gain and VSWR for these two designs.  The performance is consistent with the design objectives, with gain approaching the aperture limit within each design band and VSWR remaining below 1.5.
 
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,scale=0.2]{/Users/jim.maloney/Book/images/improvedPatentFig14.png}
-\caption{Gain summary of second approach sample designs shown in Figure~\ref{fig:IFAF13}}
-\label{fig:IFAF14}		% figure references have to be below the \caption line
+\caption{Broadside realized gain for the two alternating-shape designs shown in Figure~\ref{fig:IFAF13}.}
+\label{fig:IFAF14}
 \end{center}
 \end{figure}
 
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,scale=0.2]{/Users/jim.maloney/Book/images/improvedPatentFig15.png}
-\caption{VSWR summary of second approach sample designs shown in Figure~\ref{fig:IFAF13}}
-\label{fig:IFAF15}		% figure references have to be below the \caption line
+\caption{VSWR for the two alternating-shape designs shown in Figure~\ref{fig:IFAF13}.}
+\label{fig:IFAF15}
 \end{center}
 \end{figure}
 
+\subsection{Third Approach Designs}
 
-\subsection{Third Approach}
-The third approach illustrated in Figure~\ref{fig:IFAF8} is also useful for designing antennas.  However, for the design of vertically or Horizontal polarized elements with a broadside beam, the lack of left/right and top/down symmetry in the third approach is a drawback.  For cases where the desired beam direction is not broadside or the desired polarization is different, then the pixelated aperture should not have symmetry and the third approach is comparable to the second or first. 
+The self-tessellating shape approach of Figure~\ref{fig:IFAF8} can also be used to design fragmented aperture antennas.  As noted earlier, for vertically or horizontally polarized elements with a broadside beam, the lack of inherent left-right and top-bottom symmetry in many self-tessellating shapes is a drawback.  However, for applications where the desired beam direction is not broadside or the desired polarization is circular or slant-linear, symmetry constraints are not needed and the third approach is fully competitive with the first and second.
 
-\textcolor{red}{Example Designs needed:}
-\textcolor{red}{-Vpol, Hpol, 45 deg}
-\textcolor{red}{-Vpol beamstear 45 degress in Az}
+\textcolor{red}{\textbf{[Missing content: Third Approach sample designs are needed.  Planned designs include: (a) broadside vertically polarized, (b) broadside horizontally polarized, (c) broadside slant-linear polarized, and (d) vertically polarized beam steered $45^\circ$ from broadside.  Corresponding gain, VSWR, and azimuth pattern figures are also needed.]}}
 
-\begin{figure}
-%\includegraphics[angle=0,width=\linewidth]{/Users/jim/Book/images/improvedFragFig16.png}
-\caption{Four sample designs from the third approach:  (a) Broadside Vpol, (b) Broadside Hpol, (c) Broadside slant linear polarization, (d) Vpol Beam Steered $45^o$ from broadside}
-\label{fig:IFAF16}		% figure references have to be below the \caption line
-\end{figure}
+%\begin{figure}
+%\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedFragFig16.png}
+%\caption{Four sample designs from the self-tessellating shape (Third Approach): (a) broadside vertically polarized, (b) broadside horizontally polarized, (c) broadside slant-linear polarized, (d) vertically polarized beam steered $45^\circ$ from broadside.}
+%\label{fig:IFAF16}
+%\end{figure}
 
-\begin{figure}
-%\includegraphics[angle=0,width=\linewidth]{/Users/jim/Book/images/improvedFragFig17.png}
-\caption{Gain summary of third approach sample designs shown in Figure~\ref{fig:IFAF13}}
-\label{fig:IFAF17}		% figure references have to be below the \caption line
-\end{figure}
+%\begin{figure}
+%\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedFragFig17.png}
+%\caption{Broadside realized gain for the four self-tessellating shape designs.}
+%\label{fig:IFAF17}
+%\end{figure}
 
-\begin{figure}
-%\includegraphics[angle=0,width=\linewidth]{/Users/jim/Book/images/improvedFragFig18.png}
-\caption{VSWR summary of third approach sample designs shown in Figure~\ref{fig:IFAF13}}
-\label{fig:IFAF18}		% figure references have to be below the \caption line
-\end{figure}
+%\begin{figure}
+%\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedFragFig18.png}
+%\caption{VSWR for the four self-tessellating shape designs.}
+%\label{fig:IFAF18}
+%\end{figure}
 
-\begin{figure}
-%\includegraphics[angle=0,width=\linewidth]{/Users/jim/Book/images/improvedFragFig19.png}
-\caption{Azimuth Gain Pattern summary at midband of third approach sample designs shown in Figure~\ref{fig:IFAF13}}
-\label{fig:IFAF19}		% figure references have to be below the \caption line
-\end{figure}
+%\begin{figure}
+%\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedFragFig19.png}
+%\caption{Azimuth gain pattern at midband for the four self-tessellating shape designs.}
+%\label{fig:IFAF19}
+%\end{figure}
 
 
 \FloatBarrier
-\begin{thebibliography}{99}
 
-\bibitem{MaloneyKeslerHarms}  J. G. Maloney, M. P. Kesler, P. H. Harms, T. L. Fountain and G. S. Smith, ``The fragmented aperture antenna: FDTD analysis and measurement'', Proc. ICAP/JINA Conf. Antennas and Propagation, 2000, pg. 93.
-
-\bibitem{MaloneyKeslerLust} J. G. Maloney, M. P. Kesler, L. M. Lust, L. N. Pringle, T. L. Fountain, and P. H. Harms, ``Switched Fragmented Aperture Antennas'', in Proc. 2000 IEEE Antennas and Propagations Symposium, Salt Lake City, 2000, pp. 310-313.
-
-\bibitem{FriederichPringle} P. Friederich, L. Pringle, L. Fountain, P. Harms, D. Denison, E. Kuster, S. Blalock, G. Smith, J. Maloney and M. Kesler, ``A new class of broadband planar apertures,'' Proc. 2001 Antenna Applications Symp, Sep 19, 2001, pp. 561-587.
-
-\bibitem{BalanisHB12} W. Croswell, T. Durham, M. Jones, D. Schaubert, P. G. 
-Friederich and J. G. Maloney, "Wideband Arrays," Chapter 12, Modern Antenna Handbook, Balanis, 2011. 
-
-\bibitem{MaloneyFragPatent} J.G. Maloney, M.P. Kesler, P.H. Harms, and G.S. Smith, Fragmented Aperture Antennas and Broadband Ground Planes, U.S. Patent, No. 6,323,809 B1, November 27, 2001.
-
-\bibitem{Herscovici} N. Herscovici, J. Ginn, T. Donisi, B. Tomasic, ``A fragmented aperture-coupled microstrip antenna,'' Proc. 2008 Antennas and Propagation Symp, July 2008, pp. 1-4.
-
-\bibitem{Thors} B. Thors, H. Steyskal, H. Holter, ``Broad-band fragmented aperture phased array element design using genetic algorithms,'' IEEE Trans. Antennas Propagation, Vol. 53.10, 2005, pp. 3280-3287.
-
-\bibitem{EllgardtPersson} A. Ellgardt, P. Persson, ``Characteristics of a broad-band wide-scan fragmented aperture phased array antenna'', EuCAP 2006, Nov 2006, pp. 1-5.
-
-\bibitem{EllgardtThesis} A. Ellgardt, ``Wide-angle scanning wide-band phased array antennas'', Ph.D. Thesis, KTH School of Electrical Engineering, 2009, pp. 21.
-
-\end{thebibliography}
-
-
+% Bibliography for Chapter 3
+% Uses chapter-specific .bib files organized by topic
+\bibliography{../Literature/master_bibliography,%
+              ../Literature/fragmented_aperture_core,%
+              ../Literature/ml_ai_optimization_methods}
+\bibliographystyle{IEEEtran}

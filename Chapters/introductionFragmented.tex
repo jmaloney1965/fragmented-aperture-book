@@ -6,7 +6,7 @@
 
 This book describes a class of antennas called Fragmented Aperture Antennas.  Unlike traditional antennas whose physical shapes are guided by analytical insight and engineering intuition, fragmented aperture antennas are designed computationally.  A planar conducting surface is divided into many sub-wavelength regions, or pixels, each of which may be either conducting or non-conducting.  A genetic algorithm, working in concert with a full-wave electromagnetic simulation, determines which pixels should be conducting and which should not, so as to best satisfy a given set of antenna performance requirements.  The resulting antenna structures are complex, non-intuitive metallic patterns that often approach the theoretical limits of antenna performance for a given aperture size.
 
-The fragmented aperture concept was invented in the late 1990s \cite{MaloneyKeslerHarms}, and the term ``Fragmented Aperture Antenna'' was coined by the author upon visual inspection of the optimized designs, which consistently showed metallic pixels forming many connected and disconnected fragments across the aperture surface.  Since then, the concept has been extended to reconfigurable antennas, ultra-wideband phased arrays with bandwidths exceeding 33:1, and metamaterial-enhanced designs.  Fragmented aperture antennas have been successfully designed, fabricated, and measured for a wide variety of applications spanning frequencies from UHF through millimeter wave.
+The fragmented aperture concept was invented in the late 1990s \cite{MaloneyKeslerHarms}, and the term ``Fragmented Aperture Antenna'' was coined by the author upon visual inspection of the optimized designs, which consistently showed metallic pixels forming many connected and disconnected fragments across the aperture surface.  The original concept was disclosed in U.S.\ Patent 6,323,809 \cite{MaloneyFragPatent}.  Since then, the concept has been extended to reconfigurable antennas \cite{Pringle2004Reconfigurable}, ultra-wideband phased arrays with bandwidths exceeding 33:1 \cite{Landgren2019Broadband}, and wide-scanning array designs \cite{Maloney2011Wide}.  Other research groups have successfully adopted the approach for broadband phased array element design using genetic algorithms \cite{Thors2005Broad-band} and fragmented antennas based on coupled small radiating elements \cite{Barani2018Fragmented}.  Fragmented aperture antennas have been successfully designed, fabricated, and measured for a wide variety of applications spanning frequencies from UHF through millimeter wave.
 
 This introductory chapter provides background on fundamental antenna concepts, motivates the need for a computational approach to antenna design, introduces the fragmented aperture concept, and concludes with a roadmap for the remainder of the book.
 
@@ -141,27 +141,17 @@ The remainder of this book is organized as follows:
 
 \textbf{Chapter~7: Wideband Antenna Arrays.}  This chapter describes the development of ultra-wideband phased arrays using fragmented aperture design principles.  Key innovations include connected arrays, broadband screen backplanes using resistive card layers to mitigate ground-plane nulls, and multi-layer radiators for improved front-to-back ratio.  Measured results for arrays with bandwidths up to 33:1 are presented.
 
-\textbf{Chapter~8: Metamaterials and Antennas.}  This chapter, co-authored with Dr.\ John Schultz, explores the intersection of metamaterial design and fragmented aperture antennas.  Techniques for designing metamaterial structures using slicing and dicing approaches are presented.
+\textbf{Chapter~8: Designing Wide Scan Fragmented Array Antennas.}  This chapter describes techniques for designing fragmented aperture array elements with wide scan volumes ($\pm 60^{\circ}$ and beyond) using spectral-domain FDTD simulation within the genetic algorithm design process.  A laminated printed circuit board fabrication approach is presented, and results for a whole X-band (8--12~GHz) array element are shown.
 
 \textbf{Chapter~9: Reconfigurable Arrays.}  This chapter describes reconfigurable phased array antennas that combine the fragmented aperture design approach with electronic reconfiguration, enabling improved scan performance and dynamic polarization control.
 
 \textbf{Appendix~A: Computational Modeling of Antennas.}  This appendix provides a self-contained introduction to the finite-difference time-domain (FDTD) method as applied to antenna analysis.  The basic algorithm is described, the formulation for both transmitting and receiving antennas is presented, and several examples are provided to illustrate the accuracy and utility of the method.
 
 
-\begin{thebibliography}{99}
-
-\bibitem{MaloneyKeslerHarms}  J. G. Maloney, M. P. Kesler, P. H. Harms, T. L. Fountain and G. S. Smith, ``The fragmented aperture antenna: FDTD analysis and measurement'', Proc. ICAP/JINA Conf. Antennas and Propagation, 2000, pg. 93.
-
-\bibitem{IEEEstd} IEEE Standard for Definitions of Terms for Antennas, IEEE Std 145-2013.
-
-\bibitem{MaloneyFragPatent} J.G. Maloney, M.P. Kesler, P.H. Harms, and G.S. Smith, Fragmented Aperture Antennas and Broadband Ground Planes, U.S. Patent, No. 6,323,809 B1, November 27, 2001.
-
-\bibitem{MaloneyAMTA2012} J. Maloney, J. Fraley, M. Habib, J. Schultz, K. C. Maloney, ``Focused Beam Measurement of Antenna Gain Patterns'', AMTA, 2012.
-
-\bibitem{SchultzBook} John W. Schultz, Focused Beam Methods, 2012.
-
-\bibitem{ReidThesis} David Reid, A full electromagnetic analysis of fresnel zone plate antennas and the application to a free-space focused-beam measurement system, PhD. Thesis, Georgia Tech, Nov. 2009.
-
-\end{thebibliography}
+% Bibliography for Chapter 1
+% Uses chapter-specific .bib files organized by topic
+\bibliography{../Literature/master_bibliography,%
+              ../Literature/fragmented_aperture_core}
+\bibliographystyle{IEEEtran}
 
 
