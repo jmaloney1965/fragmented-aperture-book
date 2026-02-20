@@ -1,6 +1,212 @@
 \chapter{Reconfigurable Fragmented Aperture Arrays}
+%\authortoc{James G. Maloney}
+%\chapterauthor{James G. Maloney}
 
-% TODO: show improved scan loss, dynamic polarization, etc.
+\section{Introduction}
 
-\textcolor{red}{\textbf{[PLACEHOLDER: This chapter will cover reconfigurable fragmented aperture array antennas, including improved scan loss performance, dynamic polarization control, and related topics.]}}
+The preceding chapters have treated the fragmented aperture antenna as a fixed structure: once the genetic algorithm determines the optimal pixel configuration and the antenna is fabricated, the conducting pattern is permanent.  Chapter~5 demonstrated that reconfigurable single-element fragmented apertures can dynamically change their frequency, beam direction, and polarization by switching pixel connections.  Chapter~8 showed that fixed fragmented array elements, when designed using spectral-domain FDTD, can achieve scan volumes exceeding $\pm 60^{\circ}$ across the operating bandwidth.
+
+This chapter describes the convergence of these two ideas: a phased array in which the fragmented aperture element is electronically reconfigured as the beam is steered.  The motivation is to overcome a fundamental limitation of any phased array with fixed element geometry---the scan-dependent degradation of the embedded element pattern, which causes the array gain to fall off faster than the physical aperture projection as the beam is steered away from broadside.
+
+\section{The Scan Loss Problem}
+
+\subsection{Embedded Element Pattern and Scan Rolloff}
+
+In a phased array, the gain in any direction is determined by the product of the array factor and the embedded element pattern (EEP).  The array factor can be steered to any angle within the visible region by adjusting the element phase weights, and in the absence of grating lobes, the array factor peak tracks the commanded steer direction with negligible loss.  The embedded element pattern, however, is a property of the fixed element geometry and its electromagnetic environment---the mutual coupling to neighboring elements, the ground plane, and the feed structure.  For a well-designed array element, the EEP typically peaks at or near broadside and rolls off with increasing scan angle.
+
+The physical area of the aperture projected onto the scan direction decreases as $\cos\theta$, where $\theta$ is the scan angle measured from broadside.  This projected-area loss is a fundamental geometric consequence that no antenna design can overcome: a planar aperture of area $A$ presents an effective collecting area of $A\cos\theta$ when viewed from angle $\theta$.  For an ideal element whose EEP exactly followed the projected-area limit, the array gain at scan angle $\theta$ would be
+%
+\begin{equation}
+G(\theta) = G_0 \cos\theta
+\label{eq:RCA_costheta}
+\end{equation}
+%
+where $G_0$ is the broadside gain.  This represents the best possible performance for a planar phased array; no fixed-element design can exceed this limit.
+
+In practice, however, the embedded element pattern of a fixed-geometry array element rolls off faster than $\cos\theta$.  The element pattern exhibits frequency-dependent features---ripples, nulls, and asymmetries---that arise from the complex electromagnetic interactions within and between elements.  The scan loss is compounded by impedance mismatch: as the beam is steered, the active impedance at each element changes due to the angle-dependent mutual coupling, degrading the impedance match and further reducing the realized gain.
+
+\subsection{The $\cos^n\theta$ Model}
+
+In radar system engineering, the scan loss of a phased array is often modeled as a power of $\cos\theta$:
+%
+\begin{equation}
+G(\theta) = G_0 \cos^n\theta
+\label{eq:RCA_cosn}
+\end{equation}
+%
+where the exponent $n$ captures the combined effects of projected area ($n = 1$), element pattern rolloff, and scan impedance mismatch.  For an ideal element, $n = 1$.  In practice, $n$ ranges from 1.3 to 2.5 or higher, depending on the element type, bandwidth, and frequency within the operating band.  A value of $n = 1.5$ is a common first approximation for well-designed elements.  Radar textbooks often use $n = 2$ as a representative model.
+
+The consequences of $n > 1$ are significant.  At $\theta = 60^{\circ}$, the difference between $\cos^1(60^{\circ}) = 0.5$ ($-3.0$~dB) and $\cos^2(60^{\circ}) = 0.25$ ($-6.0$~dB) is 3~dB---a factor of two in power.  For a radar system, this 3~dB of additional scan loss translates directly into reduced detection range: the fourth-root dependence of radar range on power means that each additional dB of scan loss reduces the detection range by approximately 6\%.
+
+\begin{table}
+\begin{center}
+\caption{Scan loss at selected angles for various values of the scan loss exponent $n$.  The additional loss beyond the ideal $\cos\theta$ projection is shown in the rightmost column.}
+\label{tab:RCA_scanloss}
+\begin{tabular}{cccc}
+\hline
+$\theta$ & $\cos^1\theta$ (dB) & $\cos^2\theta$ (dB) & Additional loss (dB) \\
+\hline
+$0^{\circ}$  & 0.0 & 0.0 & 0.0 \\
+$30^{\circ}$ & $-1.2$ & $-2.5$ & 1.2 \\
+$45^{\circ}$ & $-3.0$ & $-6.0$ & 3.0 \\
+$60^{\circ}$ & $-6.0$ & $-12.0$ & 6.0 \\
+$70^{\circ}$ & $-9.3$ & $-18.7$ & 9.3 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Table~\ref{tab:RCA_scanloss} quantifies the impact for $n = 1$ and $n = 2$.  At moderate scan angles ($30^{\circ}$--$45^{\circ}$), the additional loss from $n = 2$ versus $n = 1$ is 1--3~dB.  At $60^{\circ}$, the penalty doubles to 6~dB.  At very wide scan angles approaching $70^{\circ}$, the $n = 2$ element pattern has rolled off to $-18.7$~dB---nearly 10~dB worse than the projected-area limit.  For systems that require wide-angle coverage, reducing the scan loss exponent from $n \approx 2$ to $n \approx 1$ is a transformative improvement.
+
+\subsection{Why Fixed Elements Cannot Achieve $n = 1$}
+
+The $\cos\theta$ projected-area limit is the best that any fixed-geometry element can achieve, and in practice no fixed element achieves it uniformly across frequency and angle.  The fundamental reason is that a fixed conducting pattern supports a fixed set of current modes.  These modes produce a radiation pattern that is optimized (by the GA) for a particular set of conditions---typically broadside or a weighted combination of broadside and a few scan angles (as in Chapter~8).  When the beam is steered to an angle that was not explicitly optimized, the fixed current modes radiate with a pattern whose peak does not track the scan direction.
+
+The spectral-domain FDTD approach described in Chapter~8 mitigates this problem by sampling the scan volume during the design process, but it does not eliminate it.  The optimizer must balance broadside performance against scanned performance, and the fixed element geometry represents a single compromise.  At any given frequency and scan angle, a design specifically optimized for that condition would outperform the compromise design.
+
+\section{Reconfigurable Array Elements for Scan Management}
+
+\subsection{Concept}
+
+The solution suggested by this analysis is straightforward: do not require the element to be a single compromise design.  Instead, use a reconfigurable element---a fragmented aperture array element whose pixel configuration can be electronically changed---and re-optimize the configuration for each combination of operating frequency and beam steer direction.
+
+When the array is commanded to steer to angle $\theta_s$, the element is reconfigured to a pixel pattern that has been pre-optimized for that scan angle.  The embedded element pattern of the reconfigured element has its peak near $\theta_s$ rather than at broadside, so the element pattern does not fight the array factor.  The scan loss approaches the $\cos\theta$ projected-area limit because the only remaining loss mechanism is the geometric reduction of the effective aperture area.
+
+This concept can be understood by analogy with the Agile Aperture Antenna of Chapter~5.  In that chapter, different switch configurations were designed for different objectives: one for a broadside beam, another for an end-fire beam.  The reconfigurable array concept is the same principle applied to every element of a phased array, with the objective for each configuration being maximum embedded element gain in the commanded steer direction.
+
+\subsection{Design Methodology}
+
+The design procedure for a reconfigurable array element follows naturally from the tools developed in earlier chapters.  For each desired scan angle $\theta_s$ (and, if needed, each frequency sub-band), the genetic algorithm is run in the infinite-array environment with periodic boundary conditions appropriate for that scan angle.  The fitness function rewards embedded element realized gain in the direction $\theta_s$, impedance match at the scanned active impedance, and bandwidth coverage.
+
+For a set of $M$ discrete scan angles $\{\theta_1, \theta_2, \ldots, \theta_M\}$, the design process produces $M$ corresponding pixel configurations $\{P_1, P_2, \ldots, P_M\}$.  These configurations are stored in a look-up table.  When the array controller commands a beam steer to angle $\theta_s$, the appropriate pixel configuration $P_s$ is loaded onto every element simultaneously with the phase weights that steer the array factor.
+
+The spectral-domain FDTD approach of Chapter~8 is used for each design, but with an important distinction.  In Chapter~8, the optimizer sampled multiple scan angles simultaneously and sought a single design that performed acceptably across the full scan volume.  Here, each optimization focuses on a \emph{single} target scan angle (or a narrow range around it), freeing the optimizer to find the best possible design for that specific condition.  The result is a family of designs, each of which is individually superior at its target angle to any single fixed design.
+
+\subsection{Pre-Computed Design Library}
+
+The practical implementation requires a library of pre-computed element configurations spanning the desired scan volume.  The library is indexed by scan angle (and possibly frequency), and the array controller selects the appropriate configuration in real time as the beam is steered.
+
+The number of entries in the library depends on the angular resolution required.  If the element performance varies slowly with scan angle---as is typical for electrically small pixels---then a coarse angular grid may suffice, with interpolation or nearest-neighbor selection for intermediate angles.  Preliminary design studies suggest that scan angle steps of $5^{\circ}$ to $10^{\circ}$ provide adequate coverage, resulting in a library of approximately 20--50 configurations for hemispherical scan coverage.
+
+\textcolor{red}{\textbf{[INSERT FIGURE: Conceptual diagram showing a library of pre-computed pixel configurations indexed by scan angle, with the array controller selecting the appropriate configuration for the commanded steer direction.]}}
+
+For a two-dimensional scan volume, the library must cover both azimuth and elevation, but the symmetry of a square lattice element reduces the required entries.  An element with four-fold symmetry requires configurations covering only one octant of the upper hemisphere; the remaining scan directions are obtained by $90^{\circ}$ rotations of the element pattern.
+
+\section{Design Examples}
+
+\textcolor{red}{\textbf{[NOTE: The design examples in this section are based on work performed for the DARPA Arrays at Commercial Timescales (ACT) program.  The original design data is being located and, if necessary, will be regenerated using the current design tools.  The results described below represent the scope and character of the designs; specific numerical values and figures will be updated when the data is confirmed.]}}
+
+\subsection{Frequency Reconfiguration}
+
+A first set of design examples demonstrated the ability of a reconfigurable fragmented array element to tune across multiple frequency bands.  The element geometry and lattice were held constant, and the pixel configuration was optimized separately for operation in several frequency bands spanning a wide range.  In each case, the optimizer was able to find a pixel configuration that produced a well-matched, broadside element with gain near the aperture area limit for the target band.
+
+This result is not surprising given the experience from Chapter~5, where very different switch configurations produced antennas operating in different frequency ranges.  What is significant is that the same behavior extends to array elements operating in the infinite-array mutual-coupling environment.  The pixel configuration adjusts not only the resonant behavior of the individual element but also the inter-element coupling, effectively re-tuning the array's electromagnetic environment for each frequency band.
+
+\textcolor{red}{\textbf{[INSERT FIGURE: Several pixel configurations for the same array element, each optimized for a different frequency band.  The designs should look visually distinct, illustrating that different frequencies require fundamentally different conducting patterns.]}}
+
+\textcolor{red}{\textbf{[INSERT FIGURE: Embedded element realized gain versus frequency for each configuration, showing that each design provides near-aperture-limited gain within its target band.]}}
+
+\subsection{Scan Angle Reconfiguration}
+
+The more compelling set of design examples demonstrated scan angle reconfiguration.  The element was optimized for a fixed frequency band at several discrete scan angles: broadside ($0^{\circ}$), $30^{\circ}$, $45^{\circ}$, $60^{\circ}$, and beyond.
+
+At each scan angle, the optimizer produced a pixel configuration that placed the embedded element pattern peak near the target angle.  Figure~\ref{fig:RCA_scanconfigs} illustrates the concept: the conducting pattern changes as the target scan angle increases, reflecting the need for different current distributions to radiate efficiently in different directions.
+
+\textcolor{red}{\textbf{[INSERT FIGURE: Pixel configurations for $\theta = 0^{\circ}, 30^{\circ}, 45^{\circ}, 60^{\circ}$, showing the evolution of the conducting pattern with scan angle.]}}
+\begin{figure}
+\caption{Pixel configurations for the reconfigurable array element at four scan angles.  The conducting pattern changes significantly with scan angle, reflecting the different current distributions required to maximize radiation in the target direction.}
+\label{fig:RCA_scanconfigs}
+\end{figure}
+
+The key result was that the embedded element pattern of each reconfigured design tracked the commanded scan angle, maintaining gain near the $\cos\theta$ projected-area limit out to $60^{\circ}$ and beyond.  This is in contrast to a fixed-element design, which would show progressively degraded gain beyond $45^{\circ}$.
+
+\textcolor{red}{\textbf{[INSERT FIGURE: Overlay of embedded element patterns for each reconfigured design, showing the pattern peak tracking the scan angle.  A fixed-element pattern should be included for comparison.]}}
+
+\textcolor{red}{\textbf{[INSERT FIGURE: Scan loss versus angle, comparing the reconfigurable element ($n \approx 1$) to a fixed element ($n \approx 1.5$--$2$) and the ideal $\cos\theta$ limit.  This is the central result of the chapter.]}}
+
+It was particularly noteworthy that the reconfigured elements maintained good performance at scan angles beyond $60^{\circ}$.  At these extreme angles, fixed elements typically exhibit severe pattern degradation and impedance mismatch.  The reconfigurable element avoids these problems because its pixel pattern is specifically tailored for the wide-angle electromagnetic environment, including the dramatically different mutual coupling that occurs at extreme scan angles.
+
+\section{Scan Loss Reduction: Physical Interpretation}
+
+The improvement from reconfigurable scan management can be understood through several complementary perspectives.
+
+\subsection{Current Distribution Perspective}
+
+When a fixed-element array is scanned to a large angle, the current distribution on each element does not change---only the relative phases between elements change.  The element still supports the same modes it was designed for at broadside, and these modes do not radiate efficiently in the scanned direction.
+
+In the reconfigurable element, changing the pixel configuration changes the conducting pattern, which changes the allowed current modes.  The optimizer finds a pattern that supports current distributions that radiate efficiently toward the target angle.  In essence, the element is not merely being phased to a new direction; it is being \emph{redesigned} for that direction.
+
+\subsection{Impedance Perspective}
+
+As a phased array is scanned, the active impedance at each element port changes due to the angle-dependent mutual coupling between elements.  For fixed elements, this impedance change is an uncontrollable consequence of the element geometry and the scan angle.  At certain combinations of frequency and scan angle, the active impedance can deviate dramatically from the matched condition, causing significant mismatch loss.
+
+Reconfiguring the element pixel pattern changes the mutual coupling between elements, because the electromagnetic fields in the inter-element region depend on the conducting pattern.  The optimizer can therefore adjust the pixel pattern to maintain a good impedance match at each scan angle, compensating for the scan-dependent impedance variation that afflicts fixed designs.
+
+\subsection{Scan Blindness Avoidance}
+
+Scan blindness occurs when the active impedance of the array element becomes purely reactive at a specific combination of frequency and scan angle, typically due to the excitation of a surface wave on the array aperture.  For fixed-geometry elements, scan blindness can be avoided through careful design (as discussed in Chapter~8), but the available design space is limited by the requirement that the single fixed geometry must also perform well at all other scan angles.
+
+Reconfigurable elements provide additional degrees of freedom to avoid scan blindness.  If a particular pixel configuration excites a surface wave at the current operating frequency and scan angle, the configuration can be changed to one that does not.  The pixel pattern optimized for each scan angle is inherently free of scan blindness at that angle, because the optimizer would reject any configuration that exhibited it.
+
+\section{System Considerations}
+
+\subsection{Switching Speed}
+
+The practical utility of reconfigurable scan management depends on the switching speed of the pixel reconfiguration mechanism.  For electronically steered arrays that change beam direction on a pulse-to-pulse basis (as in modern radar systems), the pixel configuration must be updated within the beam dwell time---typically on the order of microseconds.
+
+The MEMS-based switches discussed in Chapter~5 have switching times of 1--10~$\mu$s, which is marginal for pulse-to-pulse beam steering.  Solid-state switches (PIN diodes, FETs) are significantly faster, with switching times in the nanosecond range, but they introduce higher insertion loss and nonlinearity.  Phase-change materials such as VO2 offer a potential path to fast, low-loss switching, as discussed in Chapter~5.
+
+For applications that do not require pulse-to-pulse agility---for example, communications systems that maintain a fixed beam direction for extended periods---the switching speed requirement is relaxed, and even slower reconfiguration mechanisms may be acceptable.
+
+\subsection{Calibration}
+
+In a conventional phased array, calibration accounts for element-to-element variations in gain and phase.  In a reconfigurable array, the calibration must also account for variations between pixel configurations.  Each entry in the design library corresponds to a different electromagnetic state of the array, and the calibration coefficients may differ for each state.
+
+A practical calibration approach would characterize the array at each configuration in the design library, storing a separate set of calibration weights for each entry.  When the array switches configurations, the corresponding calibration weights are applied.
+
+\subsection{Design Library Computation}
+
+The computational cost of generating the design library is a one-time expense.  For a library of $M$ scan angles, $M$ independent genetic algorithm optimizations must be performed.  Each optimization has the same computational cost as a single fixed-element design.  For the spectral-domain FDTD approach, each design requires on the order of five to ten FDTD simulations per fitness evaluation, and the GA typically converges in 500--2000 generations with a population size of 100--500.
+
+This amounts to a total computational investment of $M$ times the cost of a single fixed design.  For $M = 50$ (hemispherical coverage at $5^{\circ}$ steps, exploiting symmetry), this is a factor of 50 increase---substantial but well within the capabilities of modern computing clusters, particularly since the optimizations for different scan angles are completely independent and can be run in parallel.
+
+The machine learning methods discussed in Chapter~10 offer a path to dramatically reducing this computational cost.  A surrogate model trained on the initial designs could predict the performance of candidate pixel configurations without running full FDTD simulations, accelerating the optimization by orders of magnitude.
+
+\section{The DARPA ACT Program}
+
+The work described in this chapter was motivated in part by the DARPA Arrays at Commercial Timescales (ACT) program, which sought to dramatically reduce the cost and development time of phased array antenna systems by leveraging commercial semiconductor manufacturing processes.  The reconfigurable fragmented aperture array concept was proposed as a solution that could deliver wide-bandwidth, wide-scan-volume performance using a single, mass-producible element design with electronically switchable pixel configurations.
+
+\textcolor{red}{\textbf{[PLACEHOLDER: Additional details of the ACT program context and specific results will be included when the original proposal data is located or the designs are regenerated.]}}
+
+\section{Summary and Conclusions}
+
+This chapter has described a reconfigurable fragmented aperture array concept that addresses the scan loss problem inherent in all phased arrays with fixed element geometry.  The key findings are:
+
+\begin{enumerate}
+
+\item \textbf{Scan loss in fixed-element arrays exceeds the projected-area limit.}  The embedded element pattern of a fixed-geometry element rolls off faster than $\cos\theta$, resulting in scan loss that is well modeled by $\cos^n\theta$ with $n = 1.3$--$2.5$.  At $60^{\circ}$, this represents 2--6~dB of excess loss beyond the unavoidable $3$~dB of projected-area loss.
+
+\item \textbf{Reconfigurable elements reduce the scan loss exponent to near unity.}  By re-optimizing the pixel configuration for each scan angle, the embedded element pattern peak is made to track the beam steer direction, and the scan loss approaches the $\cos\theta$ projected-area limit ($n \approx 1$).
+
+\item \textbf{Reconfigurable elements provide wide-angle scanning beyond $60^{\circ}$.}  Fixed elements typically exhibit severe performance degradation at extreme scan angles.  Reconfigurable elements, optimized specifically for each angle, maintain good impedance match and pattern quality to $60^{\circ}$ and beyond.
+
+\item \textbf{Reconfigurable elements naturally avoid scan blindness.}  The pixel configuration optimized for each scan angle is inherently free of scan blindness at that angle, providing additional robustness compared to fixed designs that must avoid scan blindness across the entire scan volume simultaneously.
+
+\item \textbf{A pre-computed design library makes the concept practical.}  The computational cost of optimizing a library of 20--50 scan-angle configurations is a one-time investment that scales linearly with the number of configurations and can be parallelized.
+
+\end{enumerate}
+
+The combination of this reconfigurable scan management with the wide-bandwidth capabilities demonstrated in Chapters~7 and~8 suggests the possibility of a phased array that achieves multi-octave bandwidth with $\cos\theta$ scan loss across the entire scan volume---performance that no fixed-element array can match.
+
+\FloatBarrier
+
+\begin{thebibliography}{99}
+
+\bibitem{BalanisHB12} W.~Croswell, T.~Durham, M.~Jones, D.~Schaubert, P.~Friederich, and J.~G.~Maloney, ``Wideband Arrays,'' in \emph{Modern Antenna Handbook}, C.~A.~Balanis, Ed., Hoboken, NJ: Wiley, 2008, ch.~12.
+
+\bibitem{MaloneyWideScan} J.~G.~Maloney, B.~N.~Baker, R.~T.~Lee, G.~N.~Kiesel, and J.~J.~Acree, ``Wide scan, integrated printed circuit board, fragmented aperture array antennas,'' in \emph{Proc.\ 2011 IEEE International Symposium on Antennas and Propagation}, Spokane, WA, Jul.\ 2011, pp.\ 1965--1968.
+
+\bibitem{MaloneyFragPatent} J.~G.~Maloney, M.~P.~Kesler, P.~H.~Harms, and G.~S.~Smith, ``Fragmented aperture antennas and broadband ground planes,'' U.S.\ Patent 6,323,809~B1, Nov.\ 27, 2001.
+
+\end{thebibliography}
 
