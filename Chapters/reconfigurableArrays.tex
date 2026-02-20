@@ -174,9 +174,37 @@ The machine learning methods discussed in Chapter~10 offer a path to dramaticall
 
 \section{The DARPA ACT Program}
 
-The work described in this chapter was motivated in part by the DARPA Arrays at Commercial Timescales (ACT) program, which sought to dramatically reduce the cost and development time of phased array antenna systems by leveraging commercial semiconductor manufacturing processes.  The reconfigurable fragmented aperture array concept was proposed as a solution that could deliver wide-bandwidth, wide-scan-volume performance using a single, mass-producible element design with electronically switchable pixel configurations.
+\subsection{Motivation and Program Goals}
 
-\textcolor{red}{\textbf{[PLACEHOLDER: Additional details of the ACT program context and specific results will be included when the original proposal data is located or the designs are regenerated.]}}
+Today's electromagnetic systems rely on antenna arrays for capabilities that are critical to a wide variety of military applications: multiple beam forming and electronic steering for communications, signal intelligence (SIGINT), radar, and electronic warfare.  However, wider adoption of phased arrays has been limited by two persistent problems: lengthy system development times and the inability to upgrade already-fielded capabilities.  These problems are exacerbated by the fact that military electronics have evolved at a far slower cadence than commercial electronics, and the performance gap between the RF capabilities of fielded military systems and the continuously improving digital electronics surrounding them continues to widen.
+
+The traditional approach to phased array development---in which each new system is a monolithic, custom design---has resulted in 10-year development cycles, 20- to 30-year static life cycles, and costly service-life extension programs.  The DARPA Arrays at Commercial Timescales (ACT) program was established to push past these traditional barriers by developing a fundamentally different architecture: a digitally interconnected building block from which larger systems can be formed, scalable and customizable for each application without requiring a full redesign.
+
+The ACT program was organized around two thrusts, each focused on a specific enabling technology for rapidly upgradable and widely deployable array architectures:
+
+\begin{enumerate}
+\item \textbf{Digitally-influenced common module:} A standardized building block comprising 80 to 90 percent of an array's core functionality, designed for insertion into a wide range of applications.  By leveraging commercial off-the-shelf (COTS) components and commercial CMOS semiconductor technology, the common module would dramatically reduce both development time and per-unit manufacturing cost.
+
+\item \textbf{Reconfigurable and tunable RF apertures:} Aperture technology capable of spanning S-band to X-band frequencies (and points between) for a wide variety of antenna characteristics.  This thrust aligns directly with the reconfigurable fragmented aperture concept described in this chapter: a pixel-based aperture that can be electronically reconfigured for different frequency bands, scan angles, and operating modes.
+\end{enumerate}
+
+A central goal of the ACT program was to enable next-generation, multifunctional RF systems capable of simultaneous radar, electronic warfare, and communications functions from a single aperture.  This multifunctional requirement aligns naturally with the reconfigurable fragmented aperture concept: the same pixel array can be reconfigured not only for different scan angles (as described in this chapter) but also for different operating modes and frequency bands, providing the agility needed for multifunctional operation.
+
+\subsection{GTRI's Advanced Phased Array Antenna Technology}
+
+The Georgia Tech Research Institute (GTRI) developed the Advanced Phased Array Antenna Technology (APAT) system under the ACT program.  The APAT system is an all-digital, modular antenna designed to process signals directly on the antenna elements using radio frequency system-on-chip (RFSoC) technology.  This element-level digital architecture enables the full flexibility of digital beamforming---arbitrary beam patterns, simultaneous multiple beams, and adaptive interference cancellation---at each element.
+
+The APAT represented the largest all-digital antenna system developed for tracking applications, enabling simultaneous, multi-stream data capture for hypersonic flight testing.  The all-digital architecture eliminates the analog beamforming network that constrains conventional arrays, allowing the beam patterns and signal processing to be defined entirely in software and updated without hardware modification.  This approach directly addresses the ACT program's goal of breaking the decades-long development and upgrade cycles of traditional array systems.
+
+The system achieved extremely low latency---on the order of milliseconds---in edge processing for phased-array antenna applications, enabling real-time adaptive beamforming and signal classification.  GTRI's work also contributed to the broader effort in 3D heterogeneous integration (3DHI) of microelectronics, partnering with the Texas Institute for Electronics on a large-scale Department of Defense initiative to advance the packaging and integration technologies that are critical for next-generation common-module array architectures.
+
+\subsection{Connection to Reconfigurable Fragmented Apertures}
+
+The reconfigurable fragmented aperture array concept was proposed as the radiating element technology for the ACT architecture.  The combination of a reconfigurable pixel aperture (providing scan-optimized embedded element patterns) with element-level digital processing (providing arbitrary amplitude and phase control) would yield a phased array with performance that cannot be achieved by either technology alone: $\cos\theta$ scan loss across the full scan volume, multi-octave bandwidth, and real-time multifunctional capability.
+
+The ACT program's Thrust~2---reconfigurable and tunable RF apertures spanning S-band to X-band---is precisely the application for which the fragmented aperture approach is designed.  A single fragmented aperture element, with sufficient pixel resolution and switching capability, can be reconfigured to operate across this entire frequency range.  Combined with the common-module digital architecture of Thrust~1, this provides the flexible, upgradable RF system that the DoD seeks: one that can be updated as quickly as commercial electronics evolve.
+
+\textcolor{red}{\textbf{[PLACEHOLDER: Specific design results from the ACT proposal---including element configurations optimized for multiple frequency bands and scan angles, demonstrating scan beyond $60^{\circ}$---will be included when the original data is located or the designs are regenerated.]}}
 
 \section{Summary and Conclusions}
 
