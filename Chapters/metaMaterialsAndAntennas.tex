@@ -1,47 +1,225 @@
-\chapter{MetaMaterials and Antennas}
-\authortoc{John Schultz and James G. Maloney}
-\chapterauthor{John Schultz and James G. Maloney}
+\chapter{Designing Wide Scan Fragmented Array Antennas}
+%\authortoc{James G. Maloney}
+%\chapterauthor{James G. Maloney}
 
-\section{Introduction To MetaMaterials}
+\section{Introduction}
 
-Bla Bla BLA
+The previous chapters have demonstrated that fragmented aperture arrays can achieve remarkable bandwidths---up to 33:1 and beyond---while maintaining broadside gain that closely tracks the uniform aperture limit.  However, one persistent challenge has been maintaining wide scan volume across the full operating bandwidth.  This chapter addresses that challenge, describing design techniques that achieve scan volumes exceeding $\pm 60^{\circ}$ across the entire design band.
 
-\section{Slicing}
-\label{sec:slicing}	% specifying a section label to be used by a \ref
-In the Yee algorithm, both space and time are discretized, with the increments in space for rectangular coordinates being $\Delta x, \Delta y, \Delta z$  and the increment in time being $\Delta t$ \cite{Yee66}-\cite{Maloney1}.
+Chapter~7 presented the development of ultra-wideband fragmented arrays, culminating in a 33:1 bandwidth proof-of-concept array.  Figure~\ref{fig:WSA1} shows the measured and predicted embedded element realized gain for that array, confirming excellent agreement between model and measurement across three independent measurement facilities.  The broadside gain tracks the uniform aperture area limit well across the 0.3 to 10~GHz design band, and the inset photograph shows the array on the outdoor measurement range.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/AntChapOrigFig1.png}
-\caption{Schematic drawing showing the computational volume, FDTD spatial lattice, and unit cell.}
-\label{fig:ACF1}		% figure references have to be below the \caption line
+\begin{center}
+\includegraphics[angle=-90,width=\linewidth]{/Users/jim.maloney/Book/images/5996889-fig-1-hires.pdf}
+\caption{Measured and predicted embedded element realized gain (EERG) for the 33:1 bandwidth array.  The broadside gain (red line) tracks the uniform aperture area limit (blue line) across the 0.3 to 10~GHz design band.  Measurements from three independent facilities (anechoic chamber, compact range, and outdoor range) confirm the model accuracy.  Inset: the array on the outdoor measurement range \cite{MaloneyWideScan}.}
+\label{fig:WSA1}
+\end{center}
 \end{figure}
 
-Figure \ref{fig:ACF1} is a schematic drawing showing a typical volume in which Maxwell's equations are to be solved. The volume is divided into unit cells each of volume. 
-The partial derivatives in Maxwell's equations are approximated by ratios of differences, as shown in \ref{eq:exFirstDiff}.
+Despite the excellent broadside performance, this array exhibited a shortcoming in its scan volume.  As discussed in Chapter~7 (see Figure~\ref{fig:WBA21}), the principal-plane antenna patterns for the 33:1 array show wide scan volume ($> \pm 60^{\circ}$) across most of the operating band.  However, near the top of the band (approximately 8.5 to 10~GHz), a significant narrowing of the scan volume is evident, reducing the usable scan range to roughly $\pm 40^{\circ}$.  In the years since the design of the 33:1 antenna, preventing this upper-band scan volume narrowing has been an active area of research.
 
+A second shortcoming of the 33:1 array is related to aperture efficiency.  As visible in Figure~\ref{fig:WSA1}, the array was within 3~dB of the uniform aperture gain limit (better than 50\% aperture efficiency), but the majority of the loss was attributable to the resistive backplane required to suppress the ground-plane nulls over such a large bandwidth.  This loss limits the array to receive-only or low-power transmit applications.
+
+This chapter describes progress in overcoming these two limitations.  First, an improved design process using spectral-domain FDTD simulation enables the genetic algorithm to optimize scan performance directly, alleviating the upper-band scan volume narrowing without requiring tighter inter-element spacing.  Second, for applications that do not require the extreme bandwidth of the 33:1 design, a simpler antenna structure can be used that avoids the introduction of resistive loss, enabling high-efficiency operation suitable for transmit applications.  Third, a laminated printed circuit board (PCB) fabrication approach replaces the traditional machined aluminum construction, yielding a more integrated, mass-producible antenna.  These advances are illustrated through the design of a wide-scanning ($\pm 60^{\circ}$), whole X-band (8--12~GHz) phased array element.
+
+\section{Fabrication Approaches}
+
+\subsection{Traditional Construction}
+
+Early fragmented aperture array antennas were constructed using the approach depicted in Figure~\ref{fig:WSA2}.  This design consists of an array of elements printed on circuit board material, suspended over a conducting ground plane by machined aluminum feed towers.  The feed towers enclose differential coaxial lines that provide the dual-polarized excitation to each antenna element.  Combining networks and beamforming electronics connect to these coaxial lines in the space behind the ground plane.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,width=0.85\linewidth]{/Users/jim.maloney/Book/images/5996889-fig-3-hires.pdf}
+\caption{Traditional fragmented aperture array construction.  Fragmented layers are printed on circuit board material and separated by foam spacers above a machined aluminum ground plane.  Feed towers enclose differential coaxial lines that connect to the dual-polarized elements \cite{MaloneyWideScan}.}
+\label{fig:WSA2}
+\end{center}
+\end{figure}
+
+This construction method can produce lightweight structures; for example, a 0.6~m $\times$ 0.6~m array built in this manner weighed only 4~kg for the entire antenna assembly.  This basic construction has been used to build many successful wideband fragmented aperture designs over the past two decades, including the 33:1 bandwidth array and the various designs summarized in the thickness-versus-frequency chart in Chapter~7 (Figure~\ref{fig:WBA22}).
+
+\subsection{Laminated Printed Circuit Board Construction}
+
+While the traditional machined construction produces excellent antenna performance, it is not ideal for mass production, particularly at higher frequencies where the mechanical tolerances become demanding.  An alternative approach, shown in Figure~\ref{fig:WSA3}, builds the entire antenna from laminated printed circuit board layers.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,width=0.85\linewidth]{/Users/jim.maloney/Book/images/5996889-fig-4-hires.pdf}
+\caption{Laminated printed circuit board (PCB) fabrication approach.  The entire antenna---fragmented layers, dielectric spacers, and ground plane---is built up as a multi-layer PCB stack.  Element feeds are plated vias near the center of each unit cell, and surface wave suppression vias are placed near the perimeter \cite{MaloneyWideScan}.}
+\label{fig:WSA3}
+\end{center}
+\end{figure}
+
+In this approach, the fragmented conducting layers, the dielectric spacers between them, and the ground plane are all integrated into a single laminated PCB stack-up.  The element feeds, which were previously machined coaxial lines enclosed in aluminum towers, are now implemented as closely spaced plated vias manufactured using standard multi-layer PCB techniques.  Feed networks can also be implemented as additional PCB layers, producing a highly integrated antenna panel.
+
+The PCB approach offers several practical advantages.  It leverages mature, high-volume PCB manufacturing processes, resulting in antennas that are more repeatable, more easily mass-produced, and potentially less expensive than machined alternatives.  These benefits are especially significant at X-band and higher frequencies, where the small feature sizes make machined construction increasingly difficult.
+
+However, the laminated PCB approach also introduces new design challenges:
+
+\begin{itemize}
+
+\item \textbf{Surface wave suppression.}  Thick dielectric substrates can support surface waves that cause scan blindness---a condition where the array becomes poorly matched at specific combinations of frequency and scan angle.  To prevent this, surface wave suppression vias must be incorporated into the laminated stack-up as an integral part of the design.  These vias are visible near the perimeter of the unit cell in Figure~\ref{fig:WSA3}.
+
+\item \textbf{Dielectric loading.}  The presence of dielectric material throughout the cavity between the radiating layers and the ground plane changes the effective wavelength and alters the impedance environment seen by the antenna elements.  The design process must account for the specific dielectric properties of the PCB substrate materials.
+
+\item \textbf{Modified feed structures.}  The feeds are no longer simple 50~$\Omega$ coaxial lines in air; they are closely spaced vias in a dielectric environment.  The characteristic impedance and coupling behavior of these via-based feeds must be accurately modeled during the design process.
+
+\end{itemize}
+
+All of these effects are captured naturally by the FDTD simulation used in the genetic algorithm design process, so no special analytical treatment is required.  The full-wave simulation simply includes the dielectric layers, the vias, and the complete PCB stack-up geometry, and the optimizer works with the true electromagnetic behavior of the structure.
+
+\section{Spectral-Domain FDTD for Wide Scan Optimization}
+
+\subsection{Limitations of Standard Periodic Boundary Conditions}
+
+The design process for fragmented aperture array elements uses a genetic algorithm to optimize a single unit cell of the array, terminated by periodic boundary conditions (PBC) that simulate an infinite array environment.  The FDTD method is ideal for this purpose because a single time-domain simulation produces the full frequency-domain response across the entire design bandwidth.
+
+In the standard FDTD implementation of periodic boundary conditions, the PBC is applied as a wrap-around boundary at the edges of the unit cell.  This approach naturally models the infinite array at broadside (zero scan angle) and provides the complete broadband response in a single simulation.  This is the approach that was used to design the earlier fragmented aperture arrays, including the 33:1 bandwidth design.
+
+However, standard broadside-only PBC does not provide information about the array's scan performance.  The scan volume narrowing observed in the 33:1 array (Figure~\ref{fig:WBA21}) was a consequence of optimizing only for broadside performance: the genetic algorithm had no information about off-broadside behavior, so it had no mechanism to prevent scan volume degradation.
+
+\subsection{The Spectral-Domain FDTD Approach}
+
+To incorporate scan performance into the design process, a spectral-domain FDTD approach to periodic boundary conditions \cite{Aminian} was integrated into the design suite.  In the spectral-domain formulation, the FDTD simulation is performed at a fixed transverse wavenumber $(k_x, k_y)$ rather than at a fixed scan angle $(\theta, \phi)$.  The PBC is still implemented as a wrap-around boundary, but the constant transverse wavenumber assumption means that the effective scan angle is frequency dependent.
+
+Figure~\ref{fig:WSA4} illustrates this relationship.  Each curve shows the elevation angle as a function of frequency for a specific normalized transverse wavenumber $K_z$.  The dashed box indicates the target design space: the 8--12~GHz X-band with a scan volume of $\pm 60^{\circ}$.  Because the contours are not horizontal (i.e., constant angle versus frequency), a single spectral-domain simulation does not map to a single scan angle.  Instead, each simulation sweeps through different scan angles as it sweeps through frequency.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,width=0.85\linewidth]{/Users/jim.maloney/Book/images/5996889-fig-5-hires.pdf}
+\caption{Elevation angle versus frequency contours for several normalized transverse wavenumbers $K_z$ used in the spectral-domain FDTD design process.  The dashed box indicates the target 8--12~GHz, $\pm 60^{\circ}$ scan volume.  Because the contours are not constant versus frequency, the transverse wavenumber values are chosen to provide denser sampling at higher frequencies and larger scan angles, where scan problems are most likely to occur \cite{MaloneyWideScan}.}
+\label{fig:WSA4}
+\end{center}
+\end{figure}
+
+\subsection{Sampling the Scan Volume}
+
+The key to successful wide-scan design is to strike the right balance between sampling the scan volume sufficiently and not performing too many simulations (since each simulation adds to the computational cost of every fitness evaluation in the genetic algorithm).  The exact number of spectral-domain simulations needed is problem specific, but a useful observation guides the selection of wavenumber samples: poor scan performance, when it occurs, typically manifests at higher frequencies and larger scan angles.
+
+As shown in Figure~\ref{fig:WSA4}, the transverse wavenumber values are chosen to concentrate the sampling in the region of the scan volume where problems are most likely---the upper-right portion of the frequency-angle space.  The $K_z = 0$ contour corresponds to broadside at all frequencies, while progressively larger values of $K_z$ sweep through progressively larger scan angles.  By including several such simulations in the fitness evaluation, the genetic algorithm receives information about both broadside and off-broadside performance and can optimize accordingly.
+
+This approach adds computational cost to each fitness evaluation, since multiple spectral-domain FDTD simulations must be run for each candidate element design.  However, the cost is manageable because the number of required wavenumber samples is typically small (on the order of five to ten), and each individual simulation is no more expensive than the single broadside simulation used in the previous design approach.
+
+\section{Example: Whole X-Band Array Element}
+
+\subsection{Design Parameters}
+
+To illustrate the improved design process and the PCB fabrication approach, a whole X-band (8--12~GHz) phased array element was designed with a target scan volume of $\pm 60^{\circ}$ in all azimuth planes.  The X-band was chosen because it represents a practical frequency range for military radar and communications applications, and because typical printed circuit board elements (e.g., microstrip patches) are not broadband enough to cover the full 8--12~GHz band in a low-profile PCB form factor.
+
+The design begins by selecting the array lattice constant to prevent grating lobes at the maximum scan angle and highest operating frequency:
 \begin{equation}
-\label{eq:exFirstDiff}
-\frac{\partial E_x}{\partial z} \approx \frac{\Delta E_x}{\Delta z}, \quad
-\frac{\partial H_y}{\partial t} \approx \frac{\Delta H_y}{\Delta t}
+\label{eq:WSAlattice}
+\frac{s}{\lambda_{\text{high}}} = \frac{1}{1 + \sin\theta_{\max}} = 0.536 \quad \text{for } \theta_{\max} = 60^{\circ}
 \end{equation}
+where $s$ is the element spacing and $\lambda_{\text{high}}$ is the free-space wavelength at the highest operating frequency (12~GHz).
 
-\subsection{examples}
+Next, the number of fragmented pixels across the unit cell is selected using the rules of thumb described in Chapter~3: typically 20--30 pixels across the unique quadrant of the element (as illustrated in Figure~\ref{fig:WSA3}).  The element is then designed using the genetic algorithm approach with the spectral-domain FDTD providing the fitness evaluation at the normalized $K_z$ and $K_y$ values shown in Figure~\ref{fig:WSA4}.
 
-This section contains some example designs based on Figure \ref{fig:ACF1}
+\subsection{Broadside Performance}
 
-\section{Dicing}
+After the genetic algorithm completes the design, the element performance is verified by simulating a large finite array---in this case, 21 $\times$ 21 elements.  The embedded element realized gain is obtained by computing the gain of the central element while all surrounding elements are terminated in matched loads.
 
-In section \ref{sec:slicing}, slicing was introduced.   In this section we will discuss dicing the material in a cubical fashion.
+Figure~\ref{fig:WSA5} shows the broadside embedded element realized gain as a function of frequency.  The gain is within approximately 0.2~dB of the uniform aperture area limit across the entire 8--12~GHz design band.  This near-ideal aperture efficiency demonstrates that the PCB fabrication approach, with its dielectric loading and via-based feeds, does not compromise the ability of the fragmented aperture design to efficiently utilize the available aperture area.
 
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/5996889-fig-6-hires.pdf}
+\caption{Broadside embedded element realized gain for the whole X-band fragmented array element (blue line) compared to the uniform aperture area limit (red dots).  The realized gain is within approximately 0.2~dB of the theoretical limit across the 8--12~GHz design band \cite{MaloneyWideScan}.}
+\label{fig:WSA5}
+\end{center}
+\end{figure}
+
+\subsection{Impedance Match}
+
+Figure~\ref{fig:WSA6} compares the VSWR for the embedded element with the VSWR for the infinite array scanned at broadside.  Both are well below 2:1 across the design band, but they are not identical.  The difference arises because the infinite-array VSWR includes the mutual coupling from all neighboring elements, whereas the embedded element VSWR reflects the impedance seen at the terminals of a single element in the finite array environment.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,width=0.85\linewidth]{/Users/jim.maloney/Book/images/5996889-fig-7-hires.pdf}
+\caption{VSWR comparison for the X-band fragmented array element.  The embedded element VSWR (blue line) and the broadside infinite-array scan VSWR (green line) are both below 2:1 across the design band.  The difference between the two reflects the influence of mutual coupling from neighboring elements \cite{MaloneyWideScan}.}
+\label{fig:WSA6}
+\end{center}
+\end{figure}
+
+An important point for phased array design is that it is the \emph{scanned} VSWR (the infinite-array value) that must be kept small, because this is the impedance that the element presents to the beamforming network during scanning.  The embedded element VSWR may actually be higher than the scanned VSWR when significant mutual coupling is being exploited to improve the scanned impedance match.  This is another example of how the fragmented aperture design approach embraces mutual coupling rather than attempting to minimize it.
+
+\subsection{Scan Performance}
+
+Figures~\ref{fig:WSA7} through \ref{fig:WSA9} show the embedded element realized gain as a function of both azimuth and elevation angle at three frequencies spanning the X-band: 8~GHz (bottom), 10~GHz (middle), and 12~GHz (top).  These plots are obtained by simulating the 21 $\times$ 21 finite array with the central element excited and all others terminated, then computing the realized gain pattern of the central element.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,width=0.85\linewidth]{/Users/jim.maloney/Book/images/5996889-fig-8-hires.pdf}
+\caption{Embedded element realized gain at 8~GHz as a function of azimuth and elevation angle for the V-pol feed.  The wide scan volume is evident, with usable gain extending well beyond $60^{\circ}$ in both planes \cite{MaloneyWideScan}.}
+\label{fig:WSA7}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,width=0.85\linewidth]{/Users/jim.maloney/Book/images/5996889-fig-9-hires.pdf}
+\caption{Embedded element realized gain at 10~GHz.  The wide scan volume ($> \pm 60^{\circ}$) is maintained at the center of the X-band \cite{MaloneyWideScan}.}
+\label{fig:WSA8}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=-90,width=0.85\linewidth]{/Users/jim.maloney/Book/images/5996889-fig-10-hires.pdf}
+\caption{Embedded element realized gain at 12~GHz.  Some slight reduction in the scan volume is visible in the azimuth direction, but the overall scan volume still substantially exceeds $\pm 60^{\circ}$ \cite{MaloneyWideScan}.}
+\label{fig:WSA9}
+\end{center}
+\end{figure}
+
+At 8~GHz (Figure~\ref{fig:WSA7}), the scan volume is excellent, with strong realized gain extending well beyond $60^{\circ}$ in both azimuth and elevation.  At 10~GHz (Figure~\ref{fig:WSA8}), the wide scan volume is maintained.  At 12~GHz (Figure~\ref{fig:WSA9}), there is some slight degradation in the scan volume in the azimuth direction, but the overall scan performance still substantially exceeds $\pm 60^{\circ}$.
+
+This is a dramatic improvement over the scan performance of the 33:1 array element (Figure~\ref{fig:WBA21}), which showed significant scan volume narrowing to only $\pm 40^{\circ}$ in the upper portion of its operating band.  The key difference is that the spectral-domain FDTD design process gives the genetic algorithm direct information about the scan performance, allowing it to optimize for wide scan and wide bandwidth simultaneously.
+
+\section{Discussion}
+
+\subsection{Bandwidth--Efficiency--Scan Trade Space}
+
+The results of this chapter highlight an important trade space in fragmented aperture array design.  The 33:1 bandwidth array described in Chapter~7 achieved extraordinary bandwidth but required a lossy broadband screen backplane to suppress ground-plane nulls, limiting the array to receive-only applications.  The X-band element described in this chapter achieves a more modest bandwidth (approximately 1.5:1) but does so without the need for a lossy backplane, enabling high-efficiency, transmit-capable operation.
+
+This trade-off is a fundamental consequence of the physics.  As discussed in Chapter~7, the broadband screen backplane uses resistive card (r-card) layers to prevent the half-wave nulls that occur when the aperture-to-ground-plane spacing is an integer multiple of $\lambda/2$.  For very large bandwidths, these nulls cannot be avoided without some form of loss.  For moderate bandwidths (on the order of 2:1 to 3:1), the aperture thickness can be chosen so that no half-wave nulls fall within the operating band, eliminating the need for lossy backplane layers entirely.
+
+\subsection{PCB Design Rules}
+
+The design rules and scaling relationships discussed in Chapter~7 (Section~7.6) apply to the PCB approach as well, with one important modification.  The $\lambda/12$ rule of thumb for cavity thickness (Figure~\ref{fig:WBA22}) was derived from air-filled cavity designs.  For the PCB approach, the cavity is dielectrically loaded, so the relevant wavelength is the wavelength in the substrate material.  The modified rule of thumb is:
+\begin{equation}
+\label{eq:WSAthickness}
+T \approx \frac{\lambda_{\text{substrate}}}{12} = \frac{\lambda_0}{12\sqrt{\epsilon_r}}
+\end{equation}
+where $\lambda_0$ is the free-space wavelength at the lowest operating frequency and $\epsilon_r$ is the relative permittivity of the substrate.  This dielectric loading results in a physically thinner antenna, which is one of the practical benefits of the PCB approach.
+
+\textcolor{red}{[TODO: Include a thickness vs.\ frequency chart for PCB designs analogous to the air-filled cavity chart in Chapter~7, once enough PCB designs have been completed to establish the trend.]}
+
+\section{Summary and Conclusions}
+
+This chapter described three advances that address key limitations of earlier fragmented aperture array designs:
+
+\begin{enumerate}
+
+\item \textbf{Spectral-domain FDTD for wide scan optimization.}  By incorporating a spectral-domain FDTD approach to periodic boundary conditions into the genetic algorithm design process, the optimizer gains direct information about the array's scan performance at multiple angles.  This enables the design of elements with scan volumes exceeding $\pm 60^{\circ}$ across the full operating bandwidth, a significant improvement over designs optimized only at broadside.
+
+\item \textbf{Laminated PCB fabrication.}  Replacing the traditional machined aluminum construction with a laminated printed circuit board approach yields a more integrated, more easily mass-produced, and potentially lower-cost antenna, with particular advantages at X-band and higher frequencies where machining tolerances are demanding.
+
+\item \textbf{High-efficiency, transmit-capable designs.}  For applications with moderate bandwidth requirements (on the order of 1.5:1 to 3:1), the antenna can be designed without a lossy broadband screen backplane, resulting in high aperture efficiency suitable for transmit applications.
+
+\end{enumerate}
+
+These advances were demonstrated through the design of a whole X-band (8--12~GHz) phased array element that achieves broadside gain within 0.2~dB of the uniform aperture area limit and a scan volume exceeding $\pm 60^{\circ}$ across the design band, all in a laminated PCB form factor.
+
+\FloatBarrier
 \begin{thebibliography}{99}
 
- \bibitem{Yee66} K. S. Yee, ``Numerical Solution of Initial Boundary Value Problems Involving Maxwell's Equations in Isotropic Media,'' IEEE Trans. Antennas Propagat., Vol. AP-14, pp. 302-307, May 1966.
+\bibitem{MaloneyWideScan} J.~G.~Maloney, B.~N.~Baker, R.~T.~Lee, G.~N.~Kiesel, and J.~J.~Acree, ``Wide Scan, Integrated Printed Circuit Board, Fragmented Aperture Array Antennas,'' in Proc.\ 2011 IEEE International Symposium on Antennas and Propagation, Spokane, WA, July 2011, pp.\ 1965--1968.
 
-\bibitem{Maloney1} J. G. Maloney, G. S. Smith, and W. R. Scott, Jr., ``Accurate Computation of the Radiation from Simple Antennas Using the Finite-Difference Time-Domain Method,'' IEEE Trans. Antennas Propagat., Vol. AP-38, pp. 1059-1068, July 1990.
+\bibitem{MaloneyFragPatent} J.~G.~Maloney, M.~P.~Kesler, P.~H.~Harms, and G.~S.~Smith, Fragmented Aperture Antennas and Broadband Ground Planes, U.S.\ Patent No.\ 6,323,809~B1, November 27, 2001.
 
-\bibitem{BoonPist} J. J. Boonzaaier and C. W. Pistorius, ``Thin Wire Dipoles ? A Finite-Difference Time-Domain Approach,'' Electronics Lett., Vol. 26, pp. 1891-1892, 25 October, 1990.
+\bibitem{Aminian} A.~Aminian and Y.~Rahmat-Samii, ``Spectral FDTD: A novel technique for the analysis of oblique incident plane wave on periodic structures,'' IEEE Trans.\ Antennas Propag., vol.~54, no.~6, pp.~1818--1825, June 2006.
 
-\bibitem{KatzHorn} D. S. Katz, M. J. Picket-May, A. Taflove, and K. R. Umashankar, ``FDTD Analysis of Electromagnetic Wave Radiation from Systems Containing Horn Antennas,'' IEEE Trans. Antennas Propagat., Vol. AP-39, pp. 1203-1212, August 1991.
+\bibitem{BalanisHB} C.~A.~Balanis, Modern Antenna Handbook, Chapter~12, Wiley, 2008.
 
 \end{thebibliography}
 
