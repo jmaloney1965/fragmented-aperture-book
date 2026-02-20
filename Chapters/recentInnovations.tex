@@ -1,0 +1,195 @@
+\chapter{Recent Fragmented Aperture Innovations}
+
+\section{Introduction}
+
+The preceding chapters have presented the fragmented aperture antenna concept from its origins through increasingly sophisticated applications: broadband single elements, improved pixel geometries, reconfigurable apertures, ultra-wideband arrays, and wide-scan phased arrays.  Throughout this development, spanning more than two decades, the core idea has remained the same: partition a conducting surface into sub-wavelength pixels and use computational optimization to determine which pixels should be conducting and which should not.
+
+In recent years, several research groups have extended the fragmented aperture concept in directions that were not anticipated when the original work began.  This chapter surveys three such directions that represent significant advances in the field.
+
+First, researchers at the Georgia Tech Research Institute (GTRI) have developed a fundamentally new way to parameterize the fragmented design space.  Instead of optimizing a binary array of pixel states, they define a smooth, continuous \emph{level set function} whose zero-crossings determine the metal boundaries.  This \emph{Periodic Level Set Function} (P-LSF) approach converts the combinatorial optimization problem into a continuous one, enabling the use of powerful gradient-free optimizers such as the covariance matrix adaptation evolution strategy (CMA-ES) and dramatically improving convergence.
+
+Second, researchers at the University of Michigan have demonstrated a distributed fragmented antenna in which the individual radiating elements are carried by separate unmanned aerial vehicles (UAVs) in a swarm formation.  Near-field electromagnetic coupling between the elements---through their inductive end loads---creates a larger effective aperture with significantly enhanced bandwidth, extending the fragmented aperture concept to mobile, multi-platform scenarios.
+
+Third, emerging work on machine learning and artificial intelligence methods promises to dramatically accelerate the fragmented aperture design process by replacing or augmenting the computationally expensive full-wave simulations that currently dominate the design cycle.
+
+This chapter is intended as a living document that will be updated as these and other innovations mature.
+
+
+\section{Level Set Methods for Fragmented Aperture Design}
+
+\subsection{From Binary Pixels to Continuous Parameterization}
+
+All of the fragmented aperture designs presented in Chapters~2 through~9 use a binary parameterization: each pixel is assigned a state of 1 (conducting) or 0 (non-conducting), and the collection of pixel states forms the design vector that is optimized by a genetic algorithm.  For an aperture with $N$ independent pixels, the design space is the set of vertices of an $N$-dimensional unit hypercube, $\boldsymbol{\alpha} \in \{0, 1\}^N$.  This space is discrete, non-convex, and completely disjoint---no continuous path connects one design to another.
+
+While genetic algorithms have been remarkably successful in navigating this difficult design space (see Chapters~2, 3, and~7), the binary parameterization imposes fundamental limitations.  The mutation and crossover operators of a GA can only flip individual bits, and the resulting design changes are necessarily discontinuous.  Moreover, the discrete design space precludes the use of many powerful continuous optimization algorithms that rely on interpolation, gradient information, or covariance estimation.
+
+As the number of pixels grows, these limitations become increasingly severe.  The improved mutation algorithm described in Chapter~3 addressed the convergence problem for moderately large pixel counts, but the underlying combinatorial nature of the binary design space remains a fundamental bottleneck.
+
+An alternative approach is to define the material distribution not as a binary array but as a continuous function over the aperture, where the zero-crossings of the function determine the boundaries between conducting and non-conducting regions.  This is the essence of the \emph{level set method}, which has a rich history in structural topology optimization \cite{Guirguis2016DerivativeFree, Guirguis2018HighResolution} and has recently been applied to electromagnetic design problems including antennas and metasurfaces.
+
+\subsection{The Periodic Level Set Function}
+
+Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet} introduced the \emph{Periodic Level Set Function} (P-LSF), a continuous parameterization specifically designed for periodic electromagnetic structures such as metasurfaces and phased array elements.  The P-LSF can serve as a drop-in replacement for the traditional binary fragmented parameterization.
+
+In the P-LSF approach, the material distribution over the unit cell is defined by a level set function $f(\mathbf{x})$ composed of a weighted sum of Gaussian radial basis functions (RBFs):
+%
+\begin{equation}
+f_{\boldsymbol{\alpha}}(\mathbf{x}) = -T + \sum_{i=1}^{N} \alpha_i \, e^{-\gamma_i^2 \| \mathbf{x} - \mathbf{c}_i \|^2}
+\label{eq:LSF}
+\end{equation}
+%
+where $\mathbf{c}_i$ are the RBF centers (uniformly spaced across the unit cell), $\gamma_i$ are scale factors, $T$ is a threshold, and $\boldsymbol{\alpha} = [\alpha_1, \alpha_2, \ldots, \alpha_N]^T$ are the basis coefficients that serve as the design variables.  The material distribution is then determined by rounding: metal is placed wherever $f(\mathbf{x}) > 0$, and air wherever $f(\mathbf{x}) \leq 0$.  The design variables $\alpha_i$ are real-valued and bounded, $-1 \leq \alpha_i \leq 1$, so the design space is the interior of a continuous, convex hypercube $\boldsymbol{\alpha} \in [-1, 1]^N$.
+
+The key innovation of the P-LSF is the use of \emph{distance wrapping} to enforce periodicity.  In a standard level set function, the RBF influence decays to zero at the boundaries of the unit cell, creating material discontinuities when the unit cell is tiled into a periodic array.  The P-LSF replaces the Euclidean distance $\| \mathbf{x} - \mathbf{c} \|$ with a \emph{wrapped distance} that accounts for periodicity:
+%
+\begin{equation}
+\| \mathbf{x} - \mathbf{c} \|_{\text{wrapped}} = \sqrt{\sum_{d=1}^{D} \min_{n \in \mathbb{Z}} (x_d + n \cdot s_d - c_d)^2}
+\label{eq:wrapped}
+\end{equation}
+%
+where $s_d$ is the period in dimension $d$.  This ensures that each RBF's influence wraps continuously around the unit cell boundaries, producing material distributions that are inherently periodic with no discontinuities at the cell edges.
+
+The choice of norm in the distance computation affects the character of the resulting designs.  Using the $\ell_2$ (Euclidean) norm produces designs with rounded, organic-looking features---curves, circles, and smooth boundaries.  Using the $\ell_\infty$ (Chebyshev) norm produces designs with more rectangular, Manhattan-like features that resemble traditional fragmented designs.  The $\ell_1$ norm produces intermediate, diamond-shaped features.  This flexibility allows the designer to select a parameterization suited to the physics of the problem: broadband objectives tend to favor the smooth features of the $\ell_2$ norm, while narrowband resonant structures may benefit from the sharper features of the $\ell_\infty$ norm.
+
+\subsection{Optimization and Results}
+
+The continuous P-LSF design space enables the use of optimization algorithms beyond genetic algorithms.  Saad-Falcon et al.\ demonstrated significant improvements using the covariance matrix adaptation evolution strategy (CMA-ES) \cite{Hansen2003CMA}, a gradient-free optimizer that models the cost function with a multivariate Gaussian distribution and iteratively updates the covariance matrix to guide the search.  CMA-ES has been shown to be highly effective for continuous, nonlinear optimization problems \cite{Gregory2011CMAES}, and the P-LSF parameterization makes it directly applicable to fragmented aperture design.
+
+The P-LSF and binary fragmented parameterizations were compared on two design objectives using FDTD electromagnetic simulation.  The first was a broadband 2:1 bandpass frequency-selective surface (FSS) operating from 15 to 30~GHz (78\% fractional bandwidth).  The unit cell was discretized onto a $120 \times 120$ grid, with the binary parameterization using $4 \times 4$ pixel fragments (915 design variables) and the P-LSF using $32 \times 32$ RBFs (1024 continuous design variables).  Both the non-dominated sorting genetic algorithm II (NSGA-II) \cite{Deb2002NSGAII} and CMA-ES were applied.
+
+For the broadband bandpass objective, the P-LSF with multi-stage GA optimization converged more quickly and to a higher cost function value than the fragmented parameterization.  The P-LSF design achieved better than $-10$~dB reflection across the 15--30~GHz passband.  The optimized metasurface was fabricated on Rogers RO3003 substrate and measured in a free-space focused beam system, with close agreement between simulation and measurement.
+
+The second design objective was a dual-band high-Q notch filter, with notch frequencies in the 8--16~GHz and 24--32~GHz bands.  For this narrowband problem, the $\ell_\infty$ norm P-LSF outperformed the $\ell_2$ norm, and CMA-ES substantially outperformed the genetic algorithm for both P-LSF variants.  The best results were obtained with CMA-ES applied to the $\ell_2$ norm P-LSF.
+
+A multi-stage optimization procedure was also demonstrated, in which a coarse P-LSF basis is first optimized and then \emph{upsampled} to a fine basis using a pseudo-inverse technique.  This allows the optimizer to quickly converge on a coarse approximation and then refine it, reducing the total number of expensive electromagnetic simulations required.
+
+\textcolor{red}{\textbf{[INSERT FIGURE: Side-by-side comparison of fragmented (binary) and P-LSF parameterizations, showing the binary pixel grid vs.\ the continuous level set function and resulting metal pattern.  Adapted from Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet}, Figure~1.]}}
+
+\textcolor{red}{\textbf{[INSERT FIGURE: Convergence comparison for the broadband bandpass objective, showing P-LSF (GA and CMA-ES) vs.\ fragmented (GA) cost function histories.  Adapted from Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet}, Figure~5.]}}
+
+\textcolor{red}{\textbf{[INSERT FIGURE: Fabricated 2:1 bandpass metasurface with measured vs.\ simulated S-parameters.  Adapted from Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet}, Figure~6.]}}
+
+Howard et al.\ \cite{Howard2024Topology} subsequently applied the P-LSF methodology to the design of a wideband planar phased array element, demonstrating that the technique extends beyond metasurfaces to the phased array antenna designs that are the primary focus of this book.  Howard also applied P-LSF-designed metasurfaces to dielectric materials characterization \cite{Howard2022LossTangent}, designing a highly resonant periodic surface whose resonance magnitude depends linearly on the loss tangent of an adjacent dielectric sample.  The open-source Meep FDTD solver \cite{Oskooi2010Meep} has been used to create a publicly available working example of the P-LSF optimization methodology.
+
+\subsection{Level Set Designs for Fragmented Aperture Antennas}
+
+\textcolor{red}{\textbf{[PLACEHOLDER: This section will present the author's own designs applying the P-LSF approach to the same antenna design problems presented in Chapter~3.  Specifically, the skewed-lattice aperture designs operating in the 500~MHz to 2.0~GHz range (see Chapter~3, Section~5.1) will be redesigned using continuous level set parameterization, providing a direct, controlled comparison between the binary GA approach and the P-LSF/CMA-ES approach on identical antenna geometries.  Key comparisons will include:
+\begin{itemize}
+\item Convergence speed (number of function evaluations to reach a given performance level)
+\item Final design quality (realized gain, impedance match)
+\item Character of the optimized designs (smooth P-LSF features vs.\ rectilinear fragmented features)
+\item Effect of norm choice ($\ell_2$ vs.\ $\ell_\infty$) on antenna performance
+\end{itemize}
+This work is in progress.]}}
+
+
+\section{Distributed Fragmented Antennas on Mobile Platforms}
+
+\subsection{Concept}
+
+At VHF and lower frequencies, the physical size of antennas becomes a significant challenge for mobile platforms.  A conventional half-wave dipole at 240~MHz is approximately 62~cm long---too large for small robotic platforms such as unmanned aerial vehicles (UAVs) with maximum dimensions of 15--20~cm.  Electrically small antennas that fit on such platforms suffer from narrow bandwidth and poor radiation efficiency, severely limiting data rate and communication range.
+
+Barani, Harvey, and Sarabandi \cite{Barani2018Fragmented} proposed an elegant solution that applies the fragmented aperture philosophy to this problem: instead of placing a single large antenna on a single platform, distribute the antenna across a \emph{formation} of platforms and exploit near-field electromagnetic coupling between the individual elements to synthesize a larger effective aperture.  The concept is illustrated schematically in Figure~\ref{fig:RI_UAVconcept}.
+
+\textcolor{red}{\textbf{[INSERT FIGURE: Conceptual illustration of three UAVs in linear formation, each carrying an inductively end-loaded folded dipole antenna, with coupling indicated between adjacent elements.  Based on Barani et al.\ \cite{Barani2018Fragmented}, Figure~1.]}}
+\begin{figure}
+\caption{Conceptual illustration of the distributed fragmented antenna on UAV platforms.  Three miniaturized antennas are carried by separate UAVs in formation, with near-field coupling between their inductive end loads creating a larger effective radiating aperture \cite{Barani2018Fragmented}.}
+\label{fig:RI_UAVconcept}
+\end{figure}
+
+The key insight is that a cluster of coupled antennas occupying a given volume has a lower radiation quality factor $Q$ than any single antenna confined to a smaller sub-volume, and can therefore radiate efficiently over a wider bandwidth.  The fragmented antenna is ``assembled'' by flying the platforms into formation, and ``disassembled'' when they disperse.
+
+\subsection{Single Element Design}
+
+Each UAV carries a single miniaturized antenna: an inductively end-loaded folded dipole printed on Rogers RO4003C substrate ($\varepsilon_r = 3.55$, $\tan\delta = 0.0027$).  The inductive end loads---wire loops at each end of the dipole arms---serve two purposes.  First, they reduce the physical length of the antenna by increasing the electrical length per unit of physical length; the end-loaded antenna is confined to a volume of $12 \times 10 \times 10$~cm ($0.096\lambda_0 \times 0.08\lambda_0 \times 0.08\lambda_0$ at 240~MHz) with a total mass of 18~g including the matching network.  Second, the end loads produce strong near-field magnetic and electric fields that extend over distances of 100--150~mm from the antenna, enabling coupling to adjacent elements in the formation.
+
+When operating in isolation, the single miniaturized antenna provides a $-10$~dB return loss bandwidth of only 2.4~MHz ($\sim\!1\%$) with a $25~\Omega$ input impedance---typical of the severe bandwidth limitations of electrically small antennas.
+
+Barani et al.\ also considered folded and threefold versions of the dipole element.  An $n$-fold dipole has an input impedance approximately $n^2$ times that of a single dipole, which can be exploited to achieve better impedance matching in the coupled configuration.  The threefold version also exhibits stronger near-field coupling over longer distances due to the larger end-loop diameters.
+
+\subsection{Coupling Mechanisms and Optimization}
+
+In the proposed three-element configuration, only the center antenna (the ``driver'') is excited; the two adjacent antennas (the ``assistive'' elements) are passively terminated with optimized lumped-element loads.  Three coupling mechanisms operate between adjacent elements:
+
+\begin{enumerate}
+\item \textbf{Magnetic (inductive) coupling} between the end loops of adjacent antennas, via their normal magnetic fields.  This is the dominant coupling mechanism.
+\item \textbf{Electric (capacitive) coupling} between the dipole arms of adjacent antennas.
+\item \textbf{Capacitive coupling between end loops and dipole arms} of adjacent antennas, arising from the strong normal electric field produced by the non-uniform current distribution on the loops.
+\end{enumerate}
+
+The coupled signal from the driver is received by the assistive antennas, re-radiated, and also reflected back to the driver through the terminating loads.  The assistive antennas thus augment the radiation of the driver, increasing both bandwidth and gain.
+
+The terminating loads on the assistive antennas are optimized using a cost function that balances fractional bandwidth and average radiation efficiency:
+%
+\begin{equation}
+C(\text{load}) = \alpha \frac{\Delta f}{f_0} + \beta \, \bar{\eta}
+\end{equation}
+%
+where $\Delta f / f_0$ is the fractional bandwidth, $\bar{\eta}$ is the average radiation efficiency over the $-10$~dB bandwidth, and $\alpha$ and $\beta$ are weighting constants.  The optimization showed that purely reactive loads (capacitive or inductive) provide the best tradeoff: they enhance bandwidth without dissipating power and maintain high radiation efficiency.  The optimal load for a separation distance of $d = 12$~cm was found to be a series capacitor of $C = 4.4$~pF.
+
+The capacitive load introduces a second resonance at a frequency shifted above the driver's natural resonance.  The enhanced bandwidth of the coupled configuration results from the merging of the driver and assistive antenna resonances---the same principle of coupled resonators that underlies the bandwidth enhancement in many filter and antenna designs.
+
+\subsection{Sensitivity and Platform Effects}
+
+A practical concern for a formation-based antenna is the sensitivity of performance to variations in inter-element spacing and alignment.  Barani et al.\ investigated these effects through full-wave simulation.
+
+\textbf{Separation distance:}  As the inter-element distance $d$ increases from 12 to 16~cm (one to 1.33 element lengths), the bandwidth decreases from 18.4 to 13.5~MHz due to weaker coupling, while the input impedance decreases from $126~\Omega$ to $100~\Omega$.  Radiation efficiency remained above 97\% (simulated) for all distances.
+
+\textbf{Lateral misalignment:}  Shifting the assistive antennas by up to 4~cm in the lateral direction produced modest bandwidth degradation.  The relatively wide near-field profiles of the end loads maintain coupling over a broad spatial region, making the configuration tolerant of typical UAV flight formation errors.
+
+\textbf{Platform effects:}  Placing the antenna on a small dielectric UAV body ($\varepsilon_r = 4$, 20~cm $\times$ 20~cm) caused only a small shift in center frequency, because the platform is much smaller than the operating wavelength ($\sim\lambda/6$) and occupies a small fractional volume around the radiating element.  For metallic platforms, however, the platform and antenna would need to be co-designed to account for electromagnetic interactions.
+
+\textbf{Tunable matching circuit:}  To accommodate the impedance variations caused by changing formation geometry, a tunable matching network was designed using a varactor diode.  The L-section matching circuit consists of a fixed inductor ($L = 68$~nH), a fixed capacitor ($C_1 = 1.5$~nF), a varactor ($C_2$, controlled by a DC bias voltage $V_B$), and a 1:1 Balun transformer.  This circuit can dynamically match the antenna impedance as the formation distance varies, enabling the driver antenna to also operate independently when the assistive elements are absent.
+
+\subsection{Fabrication and Measurement Results}
+
+The three-element coupled antenna array was fabricated and measured in the anechoic chamber at the University of Michigan.  Key measured results include:
+
+\begin{itemize}
+\item \textbf{Bandwidth:}  For $d = 12$~cm, the measured $-10$~dB bandwidth was 18.4~MHz (7.7\% fractional bandwidth), compared to 2.4~MHz (1\%) for the isolated single element---a 7.7-fold improvement.
+\item \textbf{Radiation efficiency:}  Measured radiation efficiencies of 86.4\%, 88.2\%, and 80.4\% for $d = 12$, 14, and 16~cm, respectively.  The reduction from the simulated 97\% was attributed to Balun transformer insertion loss ($\sim\!0.7$~dB).
+\item \textbf{Peak gain:}  Approximately 1~dB higher than the isolated single element across the bandwidth.
+\item \textbf{Radiation pattern:}  Patterns characteristic of a dipole antenna with somewhat higher directivity due to the larger effective aperture.
+\end{itemize}
+
+\textcolor{red}{\textbf{[INSERT FIGURE: Measured and simulated return loss for three separation distances ($d = 12$, 14, 16~cm) compared to the isolated single antenna.  Based on Barani et al.\ \cite{Barani2018Fragmented}, Figures~10 and~17.]}}
+
+\textcolor{red}{\textbf{[INSERT FIGURE: Photograph of fabricated antennas in the anechoic chamber.  Based on Barani et al.\ \cite{Barani2018Fragmented}, Figure~16.]}}
+
+The close agreement between simulation and measurement validates the design approach and confirms that the fragmented antenna concept can be successfully extended to multi-platform, formation-based configurations.
+
+
+\section{Machine Learning and AI-Accelerated Design}
+
+\textcolor{red}{\textbf{[PLACEHOLDER: This section will present the author's ongoing work on machine learning and artificial intelligence methods for accelerating the fragmented aperture antenna design process.  The computational bottleneck in fragmented aperture design has always been the full-wave electromagnetic simulation (FDTD or equivalent) required to evaluate each candidate design.  For the designs presented in earlier chapters, each GA generation requires running hundreds to thousands of FDTD simulations, and the total design cycle can consume days to weeks of computation time even on modern parallel computing resources.
+
+Several promising approaches are being explored:
+
+\begin{itemize}
+\item \textbf{Surrogate-based optimization:} Training a machine learning model (neural network, Gaussian process, etc.) to approximate the mapping from pixel configuration to antenna performance, then using this fast surrogate in place of FDTD during the optimization loop.
+\item \textbf{Generative design:} Using generative models (variational autoencoders, generative adversarial networks, diffusion models) to learn the distribution of high-performing designs and directly generate candidate solutions.
+\item \textbf{Transfer learning:} Leveraging knowledge from previously optimized designs at one frequency or geometry to accelerate optimization at a different frequency or geometry.
+\end{itemize}
+
+The broader field of AI-assisted antenna design is surveyed in \cite{Sarker2023MLReview}.  This section will be expanded as results become available.]}}
+
+
+\section{Summary}
+
+The fragmented aperture antenna concept, first introduced more than 25 years ago, continues to inspire innovation in the antenna community.  This chapter has surveyed three active areas of development.
+
+The Periodic Level Set Function (P-LSF) introduced by Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet} provides a mathematically elegant reformulation of the fragmented design space.  By replacing the binary pixel states with a continuous, smooth function whose zero-crossings define the metal boundaries, the P-LSF converts the combinatorial optimization problem into a continuous one.  This enables the use of powerful optimizers such as CMA-ES and accelerates convergence, while also producing designs with richer geometric features---smooth curves and arbitrary boundary shapes---that are not achievable with rectangular pixels.
+
+The distributed fragmented antenna of Barani et al.\ \cite{Barani2018Fragmented} extends the fragmented aperture concept to mobile, multi-platform scenarios.  By distributing miniaturized radiating elements across a formation of UAVs and exploiting near-field electromagnetic coupling, this approach achieves bandwidth and gain improvements that would be impossible with any single antenna small enough to fit on a UAV platform.  The measured 7.7-fold bandwidth improvement demonstrates the practical potential of this approach for VHF communications in swarm robotics applications.
+
+Machine learning and AI methods, currently under active development, promise to address the computational bottleneck that has been the primary limitation of the fragmented aperture design methodology since its inception.
+
+These three innovations are largely complementary.  One can envision, for example, using ML-accelerated optimization with a P-LSF parameterization to design the individual elements of a distributed coupled antenna system.  As these and other advances mature, the fragmented aperture concept will continue to expand in capability and find new applications.
+
+
+\FloatBarrier
+
+\bibliography{../Literature/recent_innovations,%
+              ../Literature/fragmented_aperture_core,%
+              ../Literature/ml_ai_optimization_methods}
+\bibliographystyle{IEEEtran}
