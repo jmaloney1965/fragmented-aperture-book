@@ -1,0 +1,26 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.log
+*.toc
+*.lof
+*.lot
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+texput.log
+
+# macOS
+.DS_Store
+
+# Simulation files
+*.dat
+*.dxf
+*.ans
+*.scad
+*.mov
+
+# Binaries
+openTDA
