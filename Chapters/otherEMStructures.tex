@@ -1,0 +1,128 @@
+\chapter{Fragmented Apertures Applied to Other Electromagnetic Structures}
+
+\section{Introduction}
+
+The preceding chapters have focused exclusively on the application of the fragmented aperture design methodology to antennas---radiating structures that convert guided electromagnetic energy into free-space radiation (or the reverse).  However, the core idea behind the fragmented aperture approach---partitioning a conducting surface into sub-wavelength pixels and using computational optimization to determine the optimal pattern---is not limited to antenna design.  The same methodology can be applied to any electromagnetic structure whose performance depends on the spatial distribution of conducting material.
+
+This chapter surveys several non-antenna applications of the fragmented aperture concept.  These include broadband phase surfaces, RF power combining networks, frequency-selective surfaces, and metamaterials.  In each case, the same design machinery described in the earlier chapters---a pixelated conducting surface, a genetic algorithm (or other optimizer), and a full-wave electromagnetic simulation---is applied to a structure whose function is fundamentally different from that of an antenna.
+
+\section{Fragmented Broadband Phase Surfaces}
+\label{sec:phaseSurface}
+
+An early and important application of the fragmented aperture concept was the design of surfaces with broadband transmission phase properties.  Just as the pixel pattern on a radiating aperture can be optimized to achieve desired antenna characteristics, the pixel pattern on a standalone surface can be optimized to achieve a specific phase response as electromagnetic waves pass through it.
+
+A conventional solid conducting surface reflects all incident energy and imparts a frequency-dependent phase shift upon reflection.  Similarly, transmission through a partially transparent surface depends on the size, shape, and arrangement of the conducting regions.  For a solid conductor, the transmission phase varies rapidly with frequency.  By fragmenting the conducting surface into an optimized pattern of conducting and non-conducting pixels, it is possible to design a surface that provides a more uniform phase response over a wider bandwidth.
+
+Figure~\ref{fig:OES1} shows the transmission phase through a fragmented surface (curve 18) compared with a reference solid conducting surface (curve 19), from the original patent \cite{MaloneyFragPatent}.  The fragmented surface maintains a substantially flatter phase response across the normalized frequency range, demonstrating that the fragmented pixel pattern can be used to engineer broadband phase behavior.
+
+\begin{figure}
+\includegraphics[angle=0.5,trim={0 1100bp 0 0},clip,width=\linewidth]{/Users/jim.maloney/Book/images/ch2/origPatentFig2.png}
+\caption{Transmission phase comparison demonstrating the broadband properties of a fragmented surface.  The fragmented surface (curve 18) maintains a flatter phase response than the reference solid conductor (curve 19) over a wide normalized frequency range \cite{MaloneyFragPatent}.}
+\label{fig:OES1}
+\end{figure}
+
+This result was significant because it demonstrated that the fragmented aperture concept extends beyond antenna design to the engineering of electromagnetic surfaces with tailored transmission and reflection properties.  The broadband phase behavior of fragmented surfaces subsequently informed the development of the broadband screen backplanes described in Chapter~7, which use fragmented conducting layers in combination with resistive card (r-card) layers to achieve ultra-wideband ground plane performance for phased array antennas.
+
+The concept of designing surfaces with optimized phase properties is closely related to the broader field of frequency-selective surfaces (FSS) and metasurfaces.  As described in Chapter~10, Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet} applied the Periodic Level Set Function parameterization to design broadband bandpass and narrowband notch filter metasurfaces, achieving excellent agreement between simulation and measurement.  Howard et al.\ \cite{Howard2022LossTangent} applied similar techniques to design resonant periodic surfaces for dielectric materials characterization, where the resonance magnitude depends linearly on the loss tangent of an adjacent dielectric sample.  These recent developments demonstrate that the fragmented aperture approach to surface design has matured from the original broadband phase concept into a versatile tool for engineering a wide range of electromagnetic surface behaviors.
+
+
+\section{Fragmented RF Power Combiners}
+\label{sec:combiners}
+
+An important practical challenge in phased array antenna systems is the design of the power combining network that combines the signals from multiple array elements into a single output port (for receive) or distributes a single input signal to multiple elements (for transmit).  Conventional power combiners use commercial off-the-shelf (COTS) components---Wilkinson dividers, hybrid couplers, or resistive dividers---connected by microstrip or stripline transmission lines.  These COTS networks can be bulky, expensive, and lossy, particularly when they must operate over wide bandwidths.
+
+Landgren et al.\ at GTRI recognized that the fragmented aperture optimization process could be applied to the design of power combiner networks, not just radiating surfaces.  The key insight is that a power combiner is simply another electromagnetic structure whose performance---insertion loss, reflection, isolation, and bandwidth---depends on the spatial distribution of conducting material on a dielectric substrate.  By treating the combiner as a pixelated conducting pattern and optimizing it with a genetic algorithm and FDTD simulation, the same design machinery used for fragmented aperture antennas can produce optimized combiner networks.
+
+\subsection{Fragmented Combiner Concept}
+
+Landgren et al.\ \cite{Landgren2018Combiner} demonstrated this concept by designing a fragmented combiner network for a 4$\times$4 phased array antenna intended for fire-control radar telemetry applications, covering the $L$-, $S$-, and $C$-bands (1.4--6.7~GHz, a 4.8:1 bandwidth).  The combiner network replaces the conventional Wilkinson divider tree with a single printed circuit board layer containing an optimized fragmented conducting pattern.
+
+The fragmented combiner design required two separate optimized components: an interfacial combiner that interfaces the unbalanced antenna feed structure with a microstrip transmission line, and an internal combiner that provides the actual power division.  A collection of these two logical units was arranged to form a 16:1 combiner for the 4$\times$4 array.  The design process used a genetic algorithm coupled with FDTD simulation, with the fitness function targeting minimum insertion loss, low reflection, and high isolation across the 1.4--6.7~GHz band.
+
+Figure~\ref{fig:OES2} shows the key innovation: the conventional COTS Wilkinson combiner network (left) uses discrete components and transmission line segments, while the fragmented combiner network (right) replaces all of these with a single optimized conducting pattern on a PCB substrate.  Both are designed for a 4$\times$4 array with a 16:1 combining ratio and the same physical footprint.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch11/Landgren2018_Fig1_cropped.png}
+\caption{Comparison of a conventional COTS Wilkinson combiner network (left) and a fragmented combiner network (right), both designed for a 4$\times$4 array with a 16:1 combining ratio.  The fragmented combiner replaces discrete components with a single optimized conducting pattern \cite{Landgren2018Combiner}.}
+\label{fig:OES2}
+\end{center}
+\end{figure}
+
+\subsection{Measured Results}
+
+The fragmented combiner was fabricated on Rogers 4350B substrate and experimentally characterized.  The measured insertion loss of the fragmented combiner was lower than that of a conventional COTS Wilkinson combiner across the entire operating band.  The ideal insertion loss for a 16:1 combiner is $-12$~dB ($-3$~dB per 2:1 stage); the fragmented combiner was within 2.5~dB of this ideal, compared to larger losses for the COTS version.
+
+Figure~\ref{fig:OES3} shows photographs of the fabricated combiner boards and the measured insertion loss comparison.  The COTS combiner (a) has Wilkinson divider chips soldered onto the substrate, while the fragmented combiner (b) is a single etched copper pattern with no discrete components.  The measured insertion loss (c) confirms that the fragmented combiner achieves lower loss than the COTS version across the entire $L$- to $C$-band operating range.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.95\linewidth]{/Users/jim.maloney/Book/images/ch11/Landgren2018_Fig4_cropped.png}
+\caption{Fabricated combiner boards and measured performance: (a) COTS Wilkinson combiner with discrete chips, (b) fragmented combiner with a single etched pattern, and (c) measured insertion loss comparison showing lower loss for the fragmented design across the operating band \cite{Landgren2018Combiner}.}
+\label{fig:OES3}
+\end{center}
+\end{figure}
+
+The fragmented combiner was then integrated with a 4$\times$4 fragmented aperture antenna array.  Landgren et al.\ \cite{Landgren2019Broadband} reported that the complete antenna system---fragmented aperture elements with fragmented combiners and unbalanced feeds---achieved the program performance goals across the 1.4--6.7~GHz bandwidth.  The measured realized gain of the 4$\times$4 array with the fragmented combiner exceeded that of the same array with COTS combiners across the full band.
+
+Figure~\ref{fig:OES4} shows the broadside realized gain of the 4$\times$4 array with the fragmented combiner (blue) compared to the COTS combiner (red).  The fragmented combiner array achieves higher realized gain across the entire $L$- to $C$-band, with the improvement attributable to the lower insertion loss of the fragmented combiner network.  The inset shows the driven layer of the 4$\times$4 antenna array.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch11/Landgren2018_Fig5_cropped.png}
+\caption{Broadside realized gain comparison: fragmented combiner (blue) vs.\ COTS Wilkinson combiner (red) integrated with the same 4$\times$4 fragmented aperture array.  The fragmented combiner achieves higher gain across the operating band due to lower insertion loss.  Inset: driven layer of the antenna array \cite{Landgren2018Combiner}.}
+\label{fig:OES4}
+\end{center}
+\end{figure}
+
+\subsection{Full-Scale Array Validation}
+
+Based on the success of the 4$\times$4 prototype, GTRI fabricated and tested the full 16$\times$16 element array with fragmented combiners.  Landgren et al.\ \cite{Landgren2019Broadband} reported the measured realized gain of the full array, which met the program specifications from $L$-band through $C$-band.
+
+Figure~\ref{fig:OES5} shows the measured realized gain of the full 16$\times$16 array at broadside.  The measured gain (blue) meets or exceeds the program goal (solid black line) across the 1.4--6.7~GHz design bandwidth.  The modeled gain without power combiners (red) represents the theoretical performance of the antenna elements alone; the difference between the red and blue curves is the insertion loss of the combiner network.  The uniform aperture directivity limit (dashed black) provides an upper bound.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch11/Landgren2019_Fig5_cropped.png}
+\caption{Measured realized gain of the 16$\times$16 fragmented aperture array with integrated fragmented combiners (blue), compared to the model without combiners (red), the program performance goal (solid black), and the uniform aperture directivity limit (dashed black).  The system meets the program goal across the full 1.4--6.7~GHz bandwidth \cite{Landgren2019Broadband}.}
+\label{fig:OES5}
+\end{center}
+\end{figure}
+
+The fragmented combiner technology demonstrates that the pixelated optimization approach extends naturally from antennas to passive microwave networks.  The same genetic algorithm and FDTD simulation framework that designs the radiating aperture can also design the feed network behind it, producing an integrated system in which every conducting layer---radiator, ground plane, and combiner---is computationally optimized.
+
+
+\section{Fragmented Metamaterials}
+\label{sec:metamaterials}
+
+The fragmented aperture design methodology has also been applied to the design of metamaterials---artificial electromagnetic structures that exhibit properties not found in natural materials.  The pixelated representation used for fragmented aperture antennas is a natural fit for metamaterial design, since metamaterials are typically periodic structures composed of sub-wavelength conducting elements whose geometry determines the effective material properties.
+
+Sun, Jiang, and Wang \cite{Sun2023PixelatedNZIM} applied an elite-preserving genetic algorithm to the design of pixelated near-zero refractive index metamaterials (NZIM).  Near-zero index metamaterials have been proposed for applications including directive emission, cloaking, and tunneling.  The pixelated approach allows the optimizer to discover complex unit cell geometries that achieve the desired near-zero index behavior across a specified frequency band, without requiring the designer to select a specific metamaterial topology (such as split-ring resonators or complementary structures) in advance.  This is the same philosophy as fragmented aperture antenna design: the optimizer discovers the structure, rather than having it imposed by the designer.
+
+As described in Chapter~10, the Periodic Level Set Function (P-LSF) methodology developed by Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet} has been applied to the design of broadband frequency-selective surfaces and narrowband metasurface filters.  The P-LSF approach is particularly well suited for periodic electromagnetic structures because the distance wrapping technique (Equation~\ref{eq:wrapped} in Chapter~10) ensures that the material distribution is inherently periodic, with no discontinuities at the unit cell boundaries.  The broadband 2:1 bandpass FSS (15--30~GHz) and dual-band high-Q notch filter demonstrated by Saad-Falcon et al.\ represent state-of-the-art examples of computationally optimized metasurface design.
+
+Howard et al.\ \cite{Howard2022LossTangent} applied the P-LSF methodology to a different class of electromagnetic structure: resonant periodic surfaces for dielectric materials characterization.  The optimized surface exhibits a resonance whose magnitude depends linearly on the loss tangent of an adjacent dielectric sample, enabling accurate, non-destructive measurement of dielectric loss.  This is a compelling example of the versatility of the fragmented approach---the same design machinery that produces antennas can also produce precision measurement instruments.
+
+
+\section{Summary}
+
+The examples in this chapter demonstrate that the fragmented aperture concept is not limited to antenna design.  The core methodology---pixelated conducting surfaces optimized by evolutionary algorithms with full-wave electromagnetic evaluation---applies to any electromagnetic structure whose performance depends on the spatial distribution of conducting material:
+
+\begin{itemize}
+\item \textbf{Broadband phase surfaces} with engineered transmission phase properties, as demonstrated in the original patent.
+\item \textbf{RF power combiners} that outperform conventional COTS components in insertion loss and bandwidth, enabling integrated all-fragmented antenna systems.
+\item \textbf{Metamaterials and metasurfaces} including near-zero index materials, broadband frequency-selective surfaces, and resonant structures for materials characterization.
+\end{itemize}
+
+As the fragmented aperture design process continues to be refined---through improved optimization algorithms (Chapter~3), continuous parameterizations (Chapter~10), and machine learning acceleration (Chapter~10)---its application to non-antenna electromagnetic structures will expand further.  Any electromagnetic problem that can be cast as ``what pattern of conducting material on a surface optimizes a given performance metric?'' is a candidate for the fragmented aperture approach.
+
+
+\FloatBarrier
+
+% Bibliography for this chapter
+\bibliography{../Literature/master_bibliography,%
+              ../Literature/fragmented_aperture_core,%
+              ../Literature/ml_ai_optimization_methods,%
+              ../Literature/specialized_applications,%
+              ../Literature/recent_innovations}
+\bibliographystyle{IEEEtran}
