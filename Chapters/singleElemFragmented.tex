@@ -77,7 +77,23 @@ This section surveys the principal feed strategies that have been used with frag
 
 The simplest feed configuration for a planar fragmented antenna is an in-plane microstrip feed, analogous to the way a conventional microstrip patch antenna is excited by a 50~$\Omega$ microstrip transmission line.  In this approach, the fragmented conducting pattern and the feed line exist on the same substrate layer, and the feed connects directly to the edge or interior of the pixelated region.
 
-This feed strategy has been adopted by several research groups working with fragmented or pixelated patch antennas.  Steyskal and Hanna \cite{Steyskal2007Design} at the Air Force Research Laboratory (AFRL) investigated the design of fragmented patch elements for phased arrays, studying how the pixel pattern on a patch element could be optimized while maintaining compatibility with a standard microstrip feed.  O'Donnell et al.\ \cite{ODonnell2009Hybrid} extended this work using a hybrid chromosome representation in the genetic algorithm to jointly optimize the pixel pattern and the feed location.
+This feed strategy has been adopted by several research groups working with fragmented or pixelated patch antennas.  Steyskal and Hanna \cite{Steyskal2007Design} at the Air Force Research Laboratory (AFRL) investigated the design of fragmented patch elements for phased arrays, studying how the pixel pattern on a patch element could be optimized while maintaining compatibility with a standard microstrip feed.  Figure~\ref{fig:SAD28} shows the GA-optimized 20$\times$20 pixel pattern from Steyskal and Hanna, and Figure~\ref{fig:SAD29} shows a 3-D perspective view of the fragmented patch with a custom feed structure consisting of vertical strips connecting the coaxial feed through the ground plane to the radiating surface.  O'Donnell et al.\ \cite{ODonnell2009Hybrid} extended this work using a hybrid chromosome representation in the genetic algorithm to jointly optimize the pixel pattern and the feed location.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.45\linewidth]{/Users/jim.maloney/Book/images/ch4/steyskal/Steyskal2007_Fig2a_PixelPattern.png}
+\caption{GA-optimized 20$\times$20 fragmented patch element for a phased array, designed by Steyskal and Hanna at AFRL.  Red pixels are conducting; white pixels are non-conducting.  The feed point is at the center of the patch \cite{Steyskal2007Design}.}
+\label{fig:SAD28}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.55\linewidth]{/Users/jim.maloney/Book/images/ch4/steyskal/Steyskal2007_Fig5c_3DView.png}
+\caption{3-D perspective of a fragmented patch element with a custom feed structure.  Vertical conducting strips connect the coaxial feed through the ground plane to the pixelated radiating surface \cite{Steyskal2007Design}.}
+\label{fig:SAD29}
+\end{center}
+\end{figure}
 
 Barani, Harvey, and Sarabandi \cite{Barani2018Fragmented} demonstrated a fragmented antenna realized using coupled small radiating elements, each individually fed, showing that the fragmented concept can be implemented with direct microstrip excitation of sub-wavelength metallic patches.  Their approach is particularly interesting because it demonstrates that the fragmented aperture concept is not limited to a single monolithic conducting surface; it can also be realized through the electromagnetic coupling between discrete conducting elements.
 
@@ -331,9 +347,41 @@ The transition from dual linear polarization to circular polarization is concept
 
 \textcolor{red}{\textbf{[TODO: Author to create a circularly polarized fragmented aperture design.  Show the pixel pattern (which should exhibit no mirror symmetry) and the axial ratio versus frequency.  The dual-pol design above provides a starting point---the CP design should look qualitatively different, with the four-fold symmetry broken.]}}
 
-Rodrigo, Jofre, and Cetiner \cite{Rodrigo2014Frequency} demonstrated a reconfigurable antenna using a parasitic pixel layer that could switch between frequency, radiation pattern, and polarization reconfiguration, including linear-to-circular polarization switching.  Their work shows that polarization control is achievable with pixelated antenna structures.
+Rodrigo, Jofre, and Cetiner \cite{Rodrigo2014Frequency} demonstrated a reconfigurable antenna using a parasitic pixel layer that could switch between frequency, radiation pattern, and polarization reconfiguration, including linear-to-circular polarization switching.  Figure~\ref{fig:SAD30} shows the fabricated prototype with its 6$\times$6 pixel grid and PIN diode switches, and Figure~\ref{fig:SAD31} shows the measured and simulated reflection coefficients for thousands of switch configurations, demonstrating the wide frequency tuning range achievable with the parasitic pixel layer.
 
-Zechmeister and Lacik \cite{Zechmeister2022Pixelated} designed a pixelated circularly polarized SIW horn antenna with nearly equal beamwidths in the principal planes, demonstrating that pixelated optimization can produce high-quality CP even in waveguide-fed configurations.
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch4/rodrigo/Rodrigo2014_Fig2_Hardware.png}
+\caption{Fabricated reconfigurable parasitic pixel antenna prototype.  The 6$\times$6 pixel grid with PIN diode switches enables frequency, radiation pattern, and polarization reconfiguration from a single hardware platform \cite{Rodrigo2014Frequency}.}
+\label{fig:SAD30}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch4/rodrigo/Rodrigo2014_Fig3_S11_MeasSim.png}
+\caption{Measured (black) and simulated (grey) reflection coefficients for the parasitic pixel antenna across 20,000 switch configurations: (a) parasitic layer distance $d = 3$~mm, (b) $d = 8$~mm.  The wide tuning range demonstrates the reconfiguration flexibility of the pixel layer approach \cite{Rodrigo2014Frequency}.}
+\label{fig:SAD31}
+\end{center}
+\end{figure}
+
+Zechmeister and Lacik \cite{Zechmeister2022Pixelated} designed a pixelated circularly polarized SIW horn antenna with nearly equal beamwidths in the principal planes, demonstrating that pixelated optimization can produce high-quality CP even in waveguide-fed configurations.  Zechmeister, Lacik, and Kadlec \cite{Zechmeister2021Design} fabricated and measured both linearly polarized and circularly polarized versions of the pixelated SIW horn at 24~GHz.  Figure~\ref{fig:SAD32} shows the fabricated LP prototype, and Figure~\ref{fig:SAD33} shows the measured and simulated radiation patterns, confirming nearly equal beamwidths in the E- and H-planes.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.65\linewidth]{/Users/jim.maloney/Book/images/ch4/zechmeister/Zechmeister2021_Fig8_LP_Hardware.png}
+\caption{Fabricated linearly polarized pixelated SIW horn antenna prototype at 24~GHz.  The 3D-printed substrate with optimized pixelated aperture is visible, with a coin for scale \cite{Zechmeister2021Design}.}
+\label{fig:SAD32}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.95\linewidth]{/Users/jim.maloney/Book/images/ch4/zechmeister/Zechmeister2021_Fig10_LP_Patterns_MeasSim.png}
+\caption{Measured and simulated radiation patterns of the pixelated SIW horn antenna at 24.125~GHz: (a) E-plane and (b) H-plane.  The pixelated optimization achieves nearly equal beamwidths in both planes \cite{Zechmeister2021Design}.}
+\label{fig:SAD33}
+\end{center}
+\end{figure}
 
 \subsection{Non-Broadside Circular Polarization}
 
@@ -356,7 +404,31 @@ A CRPA system uses an array of antenna elements and adaptive signal processing t
 
 Maloney and Baker \cite{MaloneyBakerGPS} further developed this concept, presenting model and measurement results for a miniaturized GPS CRPA element designed using the fragmented aperture approach.  The measured results confirmed that the element met the beamwidth and gain specifications required by the CRPA processor.
 
-\textcolor{red}{\textbf{[TODO: Add figure(s) from the GPS CRPA work: element geometry, measured radiation pattern showing the tailored beamwidth, and/or comparison with a conventional GPS patch element.  These are author's own figures from Maloney2007Fragmented / MaloneyBakerGPS.]}}
+Figure~\ref{fig:SAD34} illustrates the miniaturization advantage: a conventional 7-element CRPA uses approximately 4-inch patch elements in a 16-inch array, while the fragmented aperture approach produces a notional 6-inch array with 1.5-inch dual-frequency elements.  Figure~\ref{fig:SAD35} shows the FDTD model of the 7-element miniaturized CRPA with 2-inch fragmented aperture elements on a finite ground plane.  Figure~\ref{fig:SAD36} shows the fabricated array and the measured versus modeled S11, demonstrating operation at both the L1 and L2 GPS bands.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/maloney_gps/MaloneyBaker_Fig1_ConventionalVsMiniaturized.png}
+\caption{Size comparison: (a) conventional 7-element GPS CRPA with $\sim$4-inch patch elements in a $\sim$16-inch array, and (b) notional miniaturized CRPA with $\sim$1.5-inch dual-frequency fragmented aperture elements in a $\sim$6-inch array \cite{MaloneyBakerGPS}.}
+\label{fig:SAD34}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.65\linewidth]{/Users/jim.maloney/Book/images/ch4/maloney_gps/MaloneyBaker_Fig2a_FDTD_Model.png}
+\caption{FDTD model of the 7-element miniaturized GPS CRPA array.  Each element is a $\sim$2-inch fragmented aperture antenna on a dielectric substrate ($\varepsilon_r = 6.15$), with 4-inch element spacing on a finite ground plane \cite{MaloneyBakerGPS}.}
+\label{fig:SAD35}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/maloney_gps/MaloneyBaker_Fig4_CRPA_Hardware_S11.png}
+\caption{(a) Fabricated 7-element miniaturized GPS CRPA array with 2-inch fragmented aperture elements on 4-inch centers.  (b) Measured (dotted) and modeled (solid) S11, showing dual-band operation at the L1 and L2 GPS frequencies \cite{MaloneyBakerGPS}.}
+\label{fig:SAD36}
+\end{center}
+\end{figure}
 
 Beamwidth tailoring has also been explored by other groups.  Towfiq et al.\ \cite{Towfiq2018Reconfigurable} demonstrated a reconfigurable antenna with independent beam steering and beamwidth variability, using pixelated elements to achieve a range of beamwidths for wireless communication applications.  Figure~\ref{fig:SAD24} shows the fabricated reconfigurable antenna from Towfiq et al., with labeled p-i-n diode switches and the control board used to select among 12 different beam configurations.  Figure~\ref{fig:SAD25} shows the measured and simulated performance for the broadside mode, confirming good agreement in both the reflection coefficient and the realized gain pattern.  Zechmeister, Lacik, and Kadlec \cite{Zechmeister2021Design} optimized the beamwidth of pixelated SIW horn antennas to achieve nearly equal beamwidths in the principal planes.
 
