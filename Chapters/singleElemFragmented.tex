@@ -83,18 +83,82 @@ Barani, Harvey, and Sarabandi \cite{Barani2018Fragmented} demonstrated a fragmen
 
 In the microstrip-fed configuration, the feed line itself becomes part of the electromagnetic environment that the optimizer must account for.  The genetic algorithm naturally handles this: the FDTD simulation includes the feed line geometry, and the optimizer adjusts the pixel pattern to achieve a good impedance match at the feed point.
 
-Wright et al.\ \cite{Wright2018Mems} demonstrated a MEMS reconfigurable broadband patch antenna for conformal applications in which the pixelated conducting surface was fed from a microstrip line.  The MEMS switches allowed dynamic reconfiguration of the pixel pattern, and the in-plane feed remained effective across multiple configurations.  Ali et al.\ \cite{Ali2014Mems} presented a related MEMS reconfigurable pixel microstrip patch for conformal load-bearing antenna structures (CLAS), further demonstrating the compatibility of in-plane feeds with pixelated apertures.
+Wright et al.\ \cite{Wright2018Mems} demonstrated a MEMS reconfigurable broadband patch antenna for conformal applications in which the pixelated conducting surface was fed from a microstrip line.  The MEMS switches allowed dynamic reconfiguration of the pixel pattern, and the in-plane feed remained effective across multiple configurations.  Figure~\ref{fig:SAD17} shows the fabricated Prototype~2 antenna with graphite dc bias lines and 36 installed MEMS switches, and Figure~\ref{fig:SAD18} shows the measured and simulated S11 for the three reconfiguration states (Highband, Midband, Lowband), demonstrating excellent agreement between model and measurement across a 1.1--1.7~GHz tuning range.  Ali et al.\ \cite{Ali2014Mems} presented a related MEMS reconfigurable pixel microstrip patch for conformal load-bearing antenna structures (CLAS), further demonstrating the compatibility of in-plane feeds with pixelated apertures.
 
-\textcolor{red}{\textbf{[TODO: Add figure showing a representative microstrip-fed fragmented patch element.  Could be from Steyskal2007 or Barani2018 (pending IEEE permissions), or author can create an original example.]}}
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch4/wright/Wright2018_Fig13_Prototype2_Photos.png}
+\caption{Fabricated MEMS reconfigurable broadband patch antenna (Prototype~2): (a) graphite dc bias lines, (b) underside coated in epoxy, (c) ground connection, (d) pixel patch with 36 MEMS switches, (e) feedline with MEMS, (f) completed antenna on measurement pedestal \cite{Wright2018Mems}.}
+\label{fig:SAD17}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/wright/Wright2018_Fig14_S11_MeasSim.png}
+\caption{Measured (solid) and simulated (dashed) S11 for the three reconfiguration states of the MEMS pixelated patch antenna.  The MEMS switches allow the antenna to be reconfigured between Highband, Midband, and Lowband operation \cite{Wright2018Mems}.}
+\label{fig:SAD18}
+\end{center}
+\end{figure}
+
+Figure~\ref{fig:SAD14} shows the fabricated coupled fragmented antenna elements from Barani et al.\ \cite{Barani2018Fragmented}, photographed inside an anechoic chamber.  The three inductively end-loaded folded dipole antennas are arranged in a linear formation, with electromagnetic coupling between adjacent elements creating the fragmented aperture effect.  Figures~\ref{fig:SAD15} and \ref{fig:SAD16} show the measured and simulated performance: the return loss (Figure~\ref{fig:SAD15}) and peak gain (Figure~\ref{fig:SAD16}) for three separation distances, confirming that the coupled fragmented concept provides bandwidth enhancement and gain improvement over a single element.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/barani/Barani2018_Fig16a_Hardware.png}
+\caption{Fabricated coupled fragmented antenna elements in the anechoic chamber.  Three inductively end-loaded folded dipole antennas form a fragmented aperture through electromagnetic coupling between adjacent elements \cite{Barani2018Fragmented}.}
+\label{fig:SAD14}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch4/barani/Barani2018_Fig17_S11_MeasSim.png}
+\caption{Measured (solid) and simulated (dashed) return loss for the coupled fragmented antenna at three separation distances ($d = 12$, 14, and 16~cm), showing good agreement between model and measurement \cite{Barani2018Fragmented}.}
+\label{fig:SAD15}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch4/barani/Barani2018_Fig18_Gain_MeasSim.png}
+\caption{Measured and simulated peak gain for the coupled fragmented antenna at three separation distances compared to a single element.  The coupled configuration provides approximately 1~dB gain improvement over the single element \cite{Barani2018Fragmented}.}
+\label{fig:SAD16}
+\end{center}
+\end{figure}
 
 \subsection{In-Plane, Other Strategies}
 \label{sec:ch4feedInplaneOther}
 
 Beyond simple microstrip feeds, several other in-plane excitation strategies have been applied to fragmented and pixelated antennas.
 
-\textbf{Aperture-coupled feeds.}  Herscovici et al.\ \cite{Herscovici2008Fragmented} demonstrated a fragmented aperture-coupled microstrip antenna in which the feed energy is coupled to the radiating surface through a slot in the ground plane, rather than through a direct galvanic connection.  This approach offers several advantages: the feed network is isolated on the opposite side of the ground plane from the radiating aperture, reducing spurious radiation from the feed lines; the coupling slot provides an additional degree of freedom for impedance matching; and the feed and radiating layers can be independently optimized.  In a companion study, Herscovici et al.\ \cite{HerscoviciScanning} extended the aperture-coupled fragmented concept to array configurations, investigating the scanning characteristics of aperture-coupled fed fragmented microstrip arrays.  Their unit cell element, optimized using Ansoft Designer's genetic algorithm and validated with HFSS and CST, achieved greater than 70\% bandwidth (VSWR $< 2$:1) at broadside and maintained scan performance to $30^\circ$ across the full operating band.  This work at the Air Force Research Laboratory demonstrated that the aperture-coupled feed is compatible with phased array scanning, an important practical consideration for array applications.  Bishop et al.\ \cite{Bishop2014Aperture} further extended aperture-coupled feeding to a MEMS reconfigurable pixelated patch antenna for conformal load-bearing antenna structures (CLAS).
+\textbf{Aperture-coupled feeds.}  Herscovici et al.\ \cite{Herscovici2008Fragmented} demonstrated a fragmented aperture-coupled microstrip antenna in which the feed energy is coupled to the radiating surface through a slot in the ground plane, rather than through a direct galvanic connection.  This approach offers several advantages: the feed network is isolated on the opposite side of the ground plane from the radiating aperture, reducing spurious radiation from the feed lines; the coupling slot provides an additional degree of freedom for impedance matching; and the feed and radiating layers can be independently optimized.  In a companion study, Herscovici et al.\ \cite{HerscoviciScanning} extended the aperture-coupled fragmented concept to array configurations, investigating the scanning characteristics of aperture-coupled fed fragmented microstrip arrays.  Their unit cell element, optimized using Ansoft Designer's genetic algorithm and validated with HFSS and CST, achieved greater than 70\% bandwidth (VSWR $< 2$:1) at broadside and maintained scan performance to $30^\circ$ across the full operating band.  This work at the Air Force Research Laboratory demonstrated that the aperture-coupled feed is compatible with phased array scanning, an important practical consideration for array applications.  Figure~\ref{fig:SAD19} shows the unit cell layout from Herscovici et al.\ \cite{HerscoviciScanning}, illustrating the fragmented pixel pattern on the radiating layer, the coupling slot, and the microstrip feed line on the opposite side of the ground plane.  Bishop et al.\ \cite{Bishop2014Aperture} further extended aperture-coupled feeding to a MEMS reconfigurable pixelated patch antenna for conformal load-bearing antenna structures (CLAS).
 
-\textbf{Integrated balun feeds.}  For balanced radiating structures, an integrated balun can convert a single-ended transmission line to a balanced excitation at the antenna terminals without requiring a separate balun component.  Zang, Jin, and Jiao \cite{Zang2019Optimum} demonstrated a 3--10~GHz linearly polarized fragmented aperture array with an integrated balun feed, achieving broadband performance with a compact, manufacturable feed structure.  This approach is related to the integrated balun designs used in tightly coupled dipole arrays \cite{Doane2013TCDAIB}.
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.65\linewidth]{/Users/jim.maloney/Book/images/ch4/herscovici/Herscovici2009_Fig1_UnitCell3D.png}
+\caption{Unit cell of the aperture-coupled fragmented microstrip array, showing the fragmented pixel pattern (top), coupling slot (center), and microstrip feed line (bottom) in the infinite array environment \cite{HerscoviciScanning}.}
+\label{fig:SAD19}
+\end{center}
+\end{figure}
+
+\textbf{Integrated balun feeds.}  For balanced radiating structures, an integrated balun can convert a single-ended transmission line to a balanced excitation at the antenna terminals without requiring a separate balun component.  Zang, Jin, and Jiao \cite{Zang2019Optimum} demonstrated a 3--10~GHz linearly polarized fragmented aperture array with an integrated balun feed, achieving broadband performance with a compact, manufacturable feed structure.  Figure~\ref{fig:SAD20} shows the cross-section of their multilayer array topology, illustrating the integrated balun formed by loaded vias and feed vias passing through the ground plane.  Figure~\ref{fig:SAD21} shows the optimized fragmented patch geometry---a 20$\times$20 binary pixel grid with overlapping diagonal pixels to ensure electrical contact at corners.  This approach is related to the integrated balun designs used in tightly coupled dipole arrays \cite{Doane2013TCDAIB}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/zang/Zang2019_Fig1_CrossSection.png}
+\caption{Cross-section of the multilayer fragmented aperture array with integrated balun feed.  The structure comprises a superstrate, radiation layer with the fragmented patch, and substrate with loaded vias and feed vias forming the unbalanced-to-balanced transition \cite{Zang2019Optimum}.}
+\label{fig:SAD20}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.55\linewidth]{/Users/jim.maloney/Book/images/ch4/zang/Zang2019_Fig2_PixelPattern.png}
+\caption{Optimized fragmented patch geometry for the 3--10~GHz array element.  The binary pixel grid shows metal (black) and non-metal (white) regions, with overlapping pixels (grey) at diagonal corners to ensure electrical contact during fabrication \cite{Zang2019Optimum}.}
+\label{fig:SAD21}
+\end{center}
+\end{figure}
 
 \textbf{Coplanar waveguide feeds.}  Coplanar waveguide (CPW) feeds offer another in-plane option that is particularly convenient for single-layer fabrication, since the signal conductor and ground conductors are on the same surface.  CPW feeds have been used with pixelated antenna designs by several groups.
 
@@ -149,7 +213,23 @@ Chapter~3 demonstrated this directly: four different antenna designs were produc
 
 This bandwidth tailoring capability has a natural extension: if the pixel pattern can be changed electronically rather than physically, the same antenna hardware could be reconfigured in real time to cover different frequency bands.  This is precisely the concept behind the reconfigurable fragmented aperture antenna described in Chapter~5, where switched links between metallic pads allow the effective pixel pattern to be changed on the fly.
 
-Several other research groups have explored bandwidth optimization of pixelated antennas.  Wang et al.\ \cite{Wang2024Machine} developed a machine learning--assisted quasi-bisection method for optimizing the bandwidth of pixelated patch antennas, demonstrating that the design space for pixelated antennas is amenable to data-driven optimization techniques.  Jayasinghe and Uduwawala \cite{Jayasinghe2010Broadband} used genetic algorithms to design broadband patch antennas, and Jayasinghe, Anguera, and Uduwawala \cite{Jayasinghe2012Multiband} extended the approach to multi-band designs for GSM, UMTS, LTE, and Bluetooth applications.
+Several other research groups have explored bandwidth optimization of pixelated antennas.  Wang et al.\ \cite{Wang2024Machine} developed a machine learning--assisted quasi-bisection method for optimizing the bandwidth of pixelated patch antennas, demonstrating that the design space for pixelated antennas is amenable to data-driven optimization techniques.  Jayasinghe and Uduwawala \cite{Jayasinghe2010Broadband} used genetic algorithms to design broadband patch antennas, and Jayasinghe, Anguera, and Uduwawala \cite{Jayasinghe2012Multiband} extended the approach to multi-band designs for GSM, UMTS, LTE, and Bluetooth applications.  Figure~\ref{fig:SAD22} shows the hexa-band design from Jayasinghe et al., including the optimized pixel pattern, 3-D model view, and photographs of the fabricated antenna.  The measured and simulated reflection coefficients (Figure~\ref{fig:SAD23}) show good agreement across all six operating bands, confirming that GA-optimized pixelated patches can achieve multi-band operation covering 880--960~MHz and 1700--2520~MHz.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/jayasinghe/Jayasinghe2012_Fig6_HexaBand_Design_Photos.png}
+\caption{Hexa-band GA-optimized fragmented patch antenna: (a) pixel pattern, (b) 3-D model, (c) fabricated antenna top view, (d) fabricated antenna showing plastic spacers and coaxial feed.  The design covers GSM900, GSM1800, GSM1900, UMTS, LTE2300, and Bluetooth bands \cite{Jayasinghe2012Multiband}.}
+\label{fig:SAD22}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch4/jayasinghe/Jayasinghe2012_Fig7_S11_MeasSim.png}
+\caption{Measured and simulated reflection coefficient of the hexa-band fragmented patch antenna, showing six operating bands below $-10$~dB across 880--960~MHz and 1700--2520~MHz \cite{Jayasinghe2012Multiband}.}
+\label{fig:SAD23}
+\end{center}
+\end{figure}
 
 Figures~\ref{fig:SAD7} and \ref{fig:SAD8} illustrate this concept with two designs from the original patent, both on the same physical aperture.  Figure~\ref{fig:SAD7} shows a broadband design optimized to cover a wide frequency range: the pixel pattern (left) was evolved by the genetic algorithm to maximize gain across the full design band, and the resulting performance (right) shows gain approaching the uniform aperture limit over approximately 2:1 bandwidth.  Figure~\ref{fig:SAD9} shows a narrowband design optimized on the same aperture for a much narrower frequency range.  The pixel pattern is visibly different---the narrowband design concentrates its conducting material differently to achieve high gain over a limited band.  Figure~\ref{fig:SAD10} confirms that the narrowband design achieves gain very close to the aperture limit within its target band.
 
@@ -278,7 +358,23 @@ Maloney and Baker \cite{MaloneyBakerGPS} further developed this concept, present
 
 \textcolor{red}{\textbf{[TODO: Add figure(s) from the GPS CRPA work: element geometry, measured radiation pattern showing the tailored beamwidth, and/or comparison with a conventional GPS patch element.  These are author's own figures from Maloney2007Fragmented / MaloneyBakerGPS.]}}
 
-Beamwidth tailoring has also been explored by other groups.  Towfiq et al.\ \cite{Towfiq2018Reconfigurable} demonstrated a reconfigurable antenna with independent beam steering and beamwidth variability, using pixelated elements to achieve a range of beamwidths for wireless communication applications.  Zechmeister, Lacik, and Kadlec \cite{Zechmeister2021Design} optimized the beamwidth of pixelated SIW horn antennas to achieve nearly equal beamwidths in the principal planes.
+Beamwidth tailoring has also been explored by other groups.  Towfiq et al.\ \cite{Towfiq2018Reconfigurable} demonstrated a reconfigurable antenna with independent beam steering and beamwidth variability, using pixelated elements to achieve a range of beamwidths for wireless communication applications.  Figure~\ref{fig:SAD24} shows the fabricated reconfigurable antenna from Towfiq et al., with labeled p-i-n diode switches and the control board used to select among 12 different beam configurations.  Figure~\ref{fig:SAD25} shows the measured and simulated performance for the broadside mode, confirming good agreement in both the reflection coefficient and the realized gain pattern.  Zechmeister, Lacik, and Kadlec \cite{Zechmeister2021Design} optimized the beamwidth of pixelated SIW horn antennas to achieve nearly equal beamwidths in the principal planes.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch4/towfiq/Towfiq2018_Fig5_Hardware.png}
+\caption{Fabricated reconfigurable antenna with beam steering and beamwidth variability.  The p-i-n diode switches (S1--S6) are controlled via the ribbon cable from the switch control board, enabling 12 different beam configurations \cite{Towfiq2018Reconfigurable}.}
+\label{fig:SAD24}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/towfiq/Towfiq2018_Fig6_MeasSim_Broadside.png}
+\caption{Measured and simulated performance of the reconfigurable antenna in broadside mode: (a) reflection coefficient and (b) realized gain pattern, showing good agreement between model and measurement \cite{Towfiq2018Reconfigurable}.}
+\label{fig:SAD25}
+\end{center}
+\end{figure}
 
 \section{Out-of-Band Rejection}
 \label{sec:ch4oob}
@@ -322,7 +418,23 @@ This array extension of the fragmented aperture concept is the subject of the re
 
 The key point for this chapter is that the same design methodology described above---pixelated aperture, genetic algorithm, full-wave simulation---applies equally to array elements.  The primary differences are the use of periodic boundary conditions instead of free-space boundaries, and a fitness function that evaluates scan performance in addition to (or instead of) broadside performance.
 
-Thors, Steyskal, and Holter \cite{Thors2005Broad-band} at the Swedish Defence Research Agency (FOI) and the US Air Force Research Laboratory demonstrated broad-band fragmented aperture phased array element design using genetic algorithms, confirming that the fragmented aperture concept could be successfully applied to array element design by independent research groups.  Ellgardt and Persson \cite{Ellgardt2006Characteristics} characterized the broadband, wide-scan performance of fragmented aperture phased array elements, and Ellgardt's doctoral thesis \cite{EllgardtThesis} provided a comprehensive treatment of wide-angle scanning with fragmented aperture array elements.
+Thors, Steyskal, and Holter \cite{Thors2005Broad-band} at the Swedish Defence Research Agency (FOI) and the US Air Force Research Laboratory demonstrated broad-band fragmented aperture phased array element design using genetic algorithms, confirming that the fragmented aperture concept could be successfully applied to array element design by independent research groups.  Figure~\ref{fig:SAD26} shows the canonical unit cell geometry from Thors et al.: (a) the side view showing the fragmented surface, dielectric substrate, and ground plane, and (b) the top view showing the 20$\times$20 pixel grid with the GA-optimized metal pattern.  Figure~\ref{fig:SAD27} shows their best design result, in which the GA was allowed to optimize the substrate thickness along with the pixel pattern, achieving a 2.23:1 bandwidth (1.5--5.0~GHz design band) with reflection coefficients below $-10$~dB (SWR~$< 2$) at broadside and $45^\circ$ scan in all principal planes.  Ellgardt and Persson \cite{Ellgardt2006Characteristics} characterized the broadband, wide-scan performance of fragmented aperture phased array elements, and Ellgardt's doctoral thesis \cite{EllgardtThesis} provided a comprehensive treatment of wide-angle scanning with fragmented aperture array elements.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch4/thors/Thors2005_Fig1_UnitCell.png}
+\caption{Unit cell geometry for a fragmented aperture phased array element: (a) side view showing the fragmented surface, dielectric substrate, and ground plane, and (b) top view showing the 20$\times$20 pixel grid with the GA-optimized metal (black) and non-metal (grey) distribution \cite{Thors2005Broad-band}.}
+\label{fig:SAD26}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.95\linewidth]{/Users/jim.maloney/Book/images/ch4/thors/Thors2005_Fig7_BestDesign.png}
+\caption{Best-performing GA-designed fragmented aperture array element from Thors et al.: (a) reflection coefficients at broadside, H-plane $45^\circ$, and E-plane $45^\circ$ scan, and (b) the optimized unit cell geometry.  The GA optimized both the pixel pattern and the substrate thickness ($d = 16.5$~mm), achieving a 2.23:1 bandwidth \cite{Thors2005Broad-band}.}
+\label{fig:SAD27}
+\end{center}
+\end{figure}
 
 \section{Summary}
 
