@@ -69,7 +69,7 @@ A multi-stage optimization procedure was also demonstrated, in which a coarse P-
 
 \textcolor{red}{\textbf{[INSERT FIGURE: Fabricated 2:1 bandpass metasurface with measured vs.\ simulated S-parameters.  Adapted from Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet}, Figure~6.]}}
 
-Howard et al.\ \cite{Howard2024Topology} subsequently applied the P-LSF methodology to the design of a wideband planar phased array element, demonstrating that the technique extends beyond metasurfaces to the phased array antenna designs that are the primary focus of this book.  Howard also applied P-LSF-designed metasurfaces to dielectric materials characterization \cite{Howard2022LossTangent}, designing a highly resonant periodic surface whose resonance magnitude depends linearly on the loss tangent of an adjacent dielectric sample.  The open-source Meep FDTD solver \cite{Oskooi2010Meep} has been used to create a publicly available working example of the P-LSF optimization methodology.
+Howard et al.\ \cite{Howard2024Topology} subsequently applied the P-LSF methodology to the design of a wideband planar phased array element, demonstrating that the technique extends beyond metasurfaces to the phased array antenna designs that are the primary focus of this book.  The non-antenna applications of the P-LSF---including metasurface design and dielectric materials characterization \cite{Howard2022LossTangent}---are discussed in Chapter~11.  The open-source Meep FDTD solver \cite{Oskooi2010Meep} has been used to create a publicly available working example of the P-LSF optimization methodology.
 
 \subsection{Level Set Designs for Fragmented Aperture Antennas}
 
@@ -199,7 +199,7 @@ Between the extremes of pure simulation and pure ML prediction, hybrid methods c
 
 Jayasinghe and Uduwawala \cite{Jayasinghe2010Broadband} demonstrated early work on genetic algorithm optimization of broadband pixelated patch antennas, establishing baseline convergence rates for conventional GA approaches.  Jayasinghe, Anguera, and Uduwawala \cite{Jayasinghe2012Multiband} extended this to multiband designs, showing that GA optimization of pixelated antennas could produce designs robust to fabrication tolerances---an important practical consideration that ML-generated designs must also address.
 
-Sun, Jiang, and Wang \cite{Sun2023PixelatedNZIM} applied an elite-preserving genetic algorithm to the design of pixelated near-zero refractive index metamaterials, demonstrating that GA-based pixelated optimization extends naturally to metamaterial structures beyond antennas.
+Sun, Jiang, and Wang \cite{Sun2023PixelatedNZIM} applied an elite-preserving genetic algorithm to the design of pixelated near-zero refractive index metamaterials, demonstrating that GA-based pixelated optimization extends naturally to metamaterial structures beyond antennas.  The application of fragmented aperture methods to metamaterials and other non-antenna electromagnetic structures is discussed further in Chapter~11.
 
 Ehrenborg and Gustafsson \cite{Ehrenborg2016PhysicalBounds} took a different approach, using genetic algorithm optimization of pixelated antennas in conjunction with physical bounds analysis.  By comparing the GA-optimized designs against theoretical Q-factor limits, they provided rigorous evidence that the GA was finding designs close to the physical optimum---an important validation that becomes even more relevant as ML methods are used to accelerate or replace the GA.
 

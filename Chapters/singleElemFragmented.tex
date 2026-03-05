@@ -1,51 +1,363 @@
-\chapter{Sample Antenna Design}
+\chapter{Sample Antenna Designs}
 %\authortoc{James G. Maloney}
 %\chapterauthor{James G. Maloney}
 
-\section{feed strategies}
+\section{Introduction}
 
-\begin{itemize}
-\item{feed strategies}
-\item{in-plane self-balun}
-\item{in-Plane twin feed}
-\item{unbalanced fed thru ground plane}
-\item{balanced fed thru ground plane}
-\item{tailor bandwidth}
-\item{fixed steering}
-\item{broadside}
-\item{forward and backward 45} 
-\item{end fire}
-\item{Polarization}
-\subitem{linear}
-\subitem{circular}
-\subitem{non-broadside cp}
-\item{tailor beamwidth}
-\item{out-band-rejection}
-\end{itemize}
+Chapters~2 and 3 described the fragmented aperture design methodology and demonstrated its effectiveness for broadside, linearly polarized antennas without ground planes.  Those early designs validated the core concept: a genetic algorithm working with a full-wave electromagnetic simulation can produce antenna geometries that approach the theoretical aperture gain limit across multi-octave bandwidths.  This chapter broadens the picture by surveying the many ways the fragmented aperture approach can be applied to meet diverse antenna requirements.
 
+The designs in this chapter illustrate that once the fundamental design machinery is in place---a pixelated aperture representation, a genetic algorithm, and a full-wave solver---the same process can be directed toward a remarkably wide range of performance objectives simply by changing the fitness function and the physical configuration.  Topics include fragmented ground planes, various feed strategies, bandwidth tailoring, fixed beam steering, polarization control (including circular polarization), beamwidth shaping, and out-of-band rejection.  The chapter concludes with a brief introduction to array element design, which is treated in depth in Chapters~6 through 8.
 
-\section{First Success}
-\label{sec:ch4first}	% specifying a section label to be used by a \ref
-\cite{Maloney1}.
+Several of the sections below include designs by other research groups who have adopted the fragmented aperture or closely related pixelated antenna approaches.  Their work demonstrates that the concept has broad applicability and has been successfully implemented by independent teams worldwide.
+
+\section{Fragmented Ground Planes}
+\label{sec:ch4gnd}
+
+Chapter~2 introduced the concept of fragmented broadband ground planes, in which the pixel pattern on a surface behind the radiating aperture is optimized to enhance the antenna's forward radiation.  The original fragmented aperture patent \cite{MaloneyFragPatent} disclosed this concept alongside the radiating aperture itself, recognizing that the same binary pixel optimization could be applied to any conducting surface in the antenna structure.
+
+The fragmented ground plane concept is closely related to the \emph{defected ground structure} (DGS) technique that has been widely studied in the microwave engineering community.  In the DGS approach, deliberate patterns of slots or removed conductor regions are introduced into the ground plane of a microstrip or stripline circuit to modify its electromagnetic behavior.  DGS techniques have been used to improve antenna bandwidth, suppress harmonics, reduce mutual coupling between array elements, and create stopband filtering characteristics.
+
+Early work by Sung, Kim, and Kim \cite{Sung2003DGS} demonstrated that a defected ground structure beneath a microstrip patch antenna could suppress higher-order harmonics, creating a stopband in the ground plane that prevented radiation at harmonic frequencies.  Liu et al.\ \cite{Liu2005DGS} combined photonic bandgap structures with DGS to achieve similar harmonic suppression.  Biswas et al.\ \cite{Biswas2016DGS} used dumbbell-shaped DGS geometries with equivalent LC circuit models to build a low-pass filter directly into the microstrip feed line.
+
+An important electromagnetic consequence of introducing defects into the ground plane is that the modified ground plane allows energy to radiate through it, increasing the backward radiation of the antenna.  This effect is clearly visible in the radiation patterns reported in several DGS studies, where the back lobe is noticeably larger than that of an antenna with an intact ground plane.  In this respect, DGS antennas share a characteristic with the fragmented aperture designs discussed throughout this book: the early fragmented aperture antennas of Chapters~2 and 3, which had no ground plane at all, radiated equally into both hemispheres.  The fragmented ground planes disclosed in the original patent \cite{MaloneyFragPatent} represent a middle ground---a ground surface whose pixel pattern is optimized to balance forward gain enhancement against the backward radiation that inevitably accompanies any disruption of the conducting ground.
+
+The distinction between the fragmented aperture approach and conventional DGS is primarily one of design methodology.  DGS designs typically use simple, analytically motivated geometries---dumbbell shapes, spirals, or periodic slot patterns---whose dimensions are tuned by parametric sweeps.  The fragmented aperture approach, by contrast, treats every sub-wavelength pixel of the ground plane as a free variable and uses a genetic algorithm to determine the optimal pattern.  This allows the optimizer to discover complex, non-intuitive geometries that may outperform hand-designed DGS patterns, particularly when broadband performance is required.
+
+As shown in Chapter~11 (Figure~\ref{fig:OES1}), the original patent demonstrated that a fragmented surface maintains a more uniform transmission phase across frequency than a solid conducting surface, demonstrating its potential as a broadband reflector.  This concept was later developed into the broadband screen backplane described in Chapter~7, which uses resistive card layers in conjunction with a conducting ground plane to achieve ultra-wideband operation.
+
+Figure~\ref{fig:SAD1} shows the fragmented ground plane concept as disclosed in the original patent.  A radiating aperture (100) is placed in front of a fragmented ground plane layer (99), separated by approximately $\lambda_0/8$.  Unlike a conventional solid ground plane, the ground plane layer itself has a pixelated pattern that is optimized to enhance the antenna's forward radiation.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/origPatentFig3.png}
-\caption{Comparison of fragmented design to uniform aperture limit $2\pi A/\lambda^2$}
-\label{fig:SED1}		% figure references have to be below the \caption line
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch4/PatentFig15_GroundPlane.png}
+\caption{The fragmented ground plane concept: a radiating aperture (100) is placed in front of a pixelated ground plane layer (99), separated by approximately $\lambda_0/8$.  Both the radiating surface and the ground plane are optimized using the genetic algorithm \cite{MaloneyFragPatent}.}
+\label{fig:SAD1}
+\end{center}
 \end{figure}
 
-Figure \ref{fig:ACF1} is a schematic drawing showing a typical volume in which Maxwell's equations are to be solved. The volume is divided into unit cells each of volume. 
+Figure~\ref{fig:SAD2} illustrates that the ground plane pattern depends on the design approach.  Two fragmented ground plane designs are shown: one optimized starting from the actual patterned radiating aperture (105), and one optimized starting from a uniform conducting sheet (106).  The two ground plane patterns differ significantly, demonstrating that the optimizer tailors the ground plane to the specific radiating surface it supports.
 
-\begin{thebibliography}{99}
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/PatentFig16_GroundPlaneDesigns.png}
+\caption{A radiating aperture (108, top) and two fragmented ground plane designs optimized for it: one designed starting from the patterned radiating aperture (105, bottom left) and one starting from a solid metal sheet (106, bottom right).  The optimizer produces different ground plane patterns depending on the initial condition \cite{MaloneyFragPatent}.}
+\label{fig:SAD2}
+\end{center}
+\end{figure}
 
- \bibitem{Yee66} K. S. Yee, ``Numerical Solution of Initial Boundary Value Problems Involving Maxwell's Equations in Isotropic Media,'' IEEE Trans. Antennas Propagat., Vol. AP-14, pp. 302-307, May 1966.
+Figure~\ref{fig:SAD3} compares the performance of the fragmented aperture with and without the optimized ground plane.  The solid curve (111) shows the uniform aperture gain limit.  Without a reflector, the antenna radiates into both hemispheres and achieves approximately half the aperture limit (curve 112).  With an optimized fragmented reflector, the forward gain is substantially increased (curves 114, 116), approaching the full aperture limit over the design band.  However, Figure~\ref{fig:SAD4} reveals an important detail: the H-plane radiation pattern of the antenna with the fragmented ground plane (125) still shows appreciable backward radiation compared to what a solid ground plane would produce.  The antenna alone (126) is nearly symmetric front-to-back, and the fragmented ground plane redirects a significant portion---but not all---of the backward energy into the forward hemisphere.  This residual backward radiation through the fragmented ground plane is a direct consequence of the non-conducting pixels in the ground surface, and it is the same phenomenon observed in defected ground structures.
 
-\bibitem{Maloney1} J. G. Maloney, G. S. Smith, and W. R. Scott, Jr., ``Accurate Computation of the Radiation from Simple Antennas Using the Finite-Difference Time-Domain Method,'' IEEE Trans. Antennas Propagat., Vol. AP-38, pp. 1059-1068, July 1990.
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/PatentFig17_GroundPlanePerf.png}
+\caption{Performance comparison of the fragmented aperture with optimized reflector (patterned initial, 114; solid initial, 116), without reflector (112), and the uniform aperture limit (111).  The optimized ground plane substantially increases the forward gain \cite{MaloneyFragPatent}.}
+\label{fig:SAD3}
+\end{center}
+\end{figure}
 
-\bibitem{BoonPist} J. J. Boonzaaier and C. W. Pistorius, ``Thin Wire Dipoles ? A Finite-Difference Time-Domain Approach,'' Electronics Lett., Vol. 26, pp. 1891-1892, 25 October, 1990.
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/PatentFig18_MeasuredPattern.png}
+\caption{Top: measured gain with (121) and without (123) the fragmented ground plane.  Bottom: H-plane radiation pattern showing the antenna alone (126, bidirectional) and with the fragmented ground plane (125, predominantly forward but with residual backward radiation).  The non-conducting pixels in the ground plane allow some energy to radiate through it \cite{MaloneyFragPatent}.}
+\label{fig:SAD4}
+\end{center}
+\end{figure}
 
-\bibitem{KatzHorn} D. S. Katz, M. J. Picket-May, A. Taflove, and K. R. Umashankar, ``FDTD Analysis of Electromagnetic Wave Radiation from Systems Containing Horn Antennas,'' IEEE Trans. Antennas Propagat., Vol. AP-39, pp. 1203-1212, August 1991.
+More recently, researchers have explored the physical bounds on antenna performance above a ground plane.  Tayli and Gustafsson \cite{Tayli2016PhysicalBounds} derived fundamental limits on the gain and bandwidth achievable by antennas above ground planes, providing a theoretical benchmark against which fragmented ground plane designs can be evaluated.  Ehrenborg and Gustafsson \cite{Ehrenborg2016PhysicalBounds} extended this work to automatic design methods, demonstrating that optimization-based approaches can approach these physical bounds.
 
-\end{thebibliography}
+\section{Feed Strategies}
+\label{sec:ch4feeds}
 
+A critical aspect of any practical antenna design is how the antenna is connected to the transmitter or receiver electronics.  The choice of feed strategy affects impedance matching, bandwidth, polarization purity, radiation pattern symmetry, and manufacturing complexity.  The fragmented aperture design process can accommodate a wide range of feed configurations, since the full-wave simulation naturally captures the electromagnetic interaction between the feed structure and the radiating aperture.
 
+This section surveys the principal feed strategies that have been used with fragmented and pixelated aperture antennas.  The categorization follows two axes: whether the feed approaches the radiating surface from the same plane (\emph{in-plane}) or passes through a ground plane (\emph{through ground plane}), and whether the feed is single-ended (unbalanced) or balanced.
+
+\subsection{In-Plane, Single-Ended Feeds}
+\label{sec:ch4feedInplane}
+
+The simplest feed configuration for a planar fragmented antenna is an in-plane microstrip feed, analogous to the way a conventional microstrip patch antenna is excited by a 50~$\Omega$ microstrip transmission line.  In this approach, the fragmented conducting pattern and the feed line exist on the same substrate layer, and the feed connects directly to the edge or interior of the pixelated region.
+
+This feed strategy has been adopted by several research groups working with fragmented or pixelated patch antennas.  Steyskal and Hanna \cite{Steyskal2007Design} at the Air Force Research Laboratory (AFRL) investigated the design of fragmented patch elements for phased arrays, studying how the pixel pattern on a patch element could be optimized while maintaining compatibility with a standard microstrip feed.  O'Donnell et al.\ \cite{ODonnell2009Hybrid} extended this work using a hybrid chromosome representation in the genetic algorithm to jointly optimize the pixel pattern and the feed location.
+
+Barani, Harvey, and Sarabandi \cite{Barani2018Fragmented} demonstrated a fragmented antenna realized using coupled small radiating elements, each individually fed, showing that the fragmented concept can be implemented with direct microstrip excitation of sub-wavelength metallic patches.  Their approach is particularly interesting because it demonstrates that the fragmented aperture concept is not limited to a single monolithic conducting surface; it can also be realized through the electromagnetic coupling between discrete conducting elements.
+
+In the microstrip-fed configuration, the feed line itself becomes part of the electromagnetic environment that the optimizer must account for.  The genetic algorithm naturally handles this: the FDTD simulation includes the feed line geometry, and the optimizer adjusts the pixel pattern to achieve a good impedance match at the feed point.
+
+Wright et al.\ \cite{Wright2018Mems} demonstrated a MEMS reconfigurable broadband patch antenna for conformal applications in which the pixelated conducting surface was fed from a microstrip line.  The MEMS switches allowed dynamic reconfiguration of the pixel pattern, and the in-plane feed remained effective across multiple configurations.  Ali et al.\ \cite{Ali2014Mems} presented a related MEMS reconfigurable pixel microstrip patch for conformal load-bearing antenna structures (CLAS), further demonstrating the compatibility of in-plane feeds with pixelated apertures.
+
+\textcolor{red}{\textbf{[TODO: Add figure showing a representative microstrip-fed fragmented patch element.  Could be from Steyskal2007 or Barani2018 (pending IEEE permissions), or author can create an original example.]}}
+
+\subsection{In-Plane, Other Strategies}
+\label{sec:ch4feedInplaneOther}
+
+Beyond simple microstrip feeds, several other in-plane excitation strategies have been applied to fragmented and pixelated antennas.
+
+\textbf{Aperture-coupled feeds.}  Herscovici et al.\ \cite{Herscovici2008Fragmented} demonstrated a fragmented aperture-coupled microstrip antenna in which the feed energy is coupled to the radiating surface through a slot in the ground plane, rather than through a direct galvanic connection.  This approach offers several advantages: the feed network is isolated on the opposite side of the ground plane from the radiating aperture, reducing spurious radiation from the feed lines; the coupling slot provides an additional degree of freedom for impedance matching; and the feed and radiating layers can be independently optimized.  In a companion study, Herscovici et al.\ \cite{HerscoviciScanning} extended the aperture-coupled fragmented concept to array configurations, investigating the scanning characteristics of aperture-coupled fed fragmented microstrip arrays.  Their unit cell element, optimized using Ansoft Designer's genetic algorithm and validated with HFSS and CST, achieved greater than 70\% bandwidth (VSWR $< 2$:1) at broadside and maintained scan performance to $30^\circ$ across the full operating band.  This work at the Air Force Research Laboratory demonstrated that the aperture-coupled feed is compatible with phased array scanning, an important practical consideration for array applications.  Bishop et al.\ \cite{Bishop2014Aperture} further extended aperture-coupled feeding to a MEMS reconfigurable pixelated patch antenna for conformal load-bearing antenna structures (CLAS).
+
+\textbf{Integrated balun feeds.}  For balanced radiating structures, an integrated balun can convert a single-ended transmission line to a balanced excitation at the antenna terminals without requiring a separate balun component.  Zang, Jin, and Jiao \cite{Zang2019Optimum} demonstrated a 3--10~GHz linearly polarized fragmented aperture array with an integrated balun feed, achieving broadband performance with a compact, manufacturable feed structure.  This approach is related to the integrated balun designs used in tightly coupled dipole arrays \cite{Doane2013TCDAIB}.
+
+\textbf{Coplanar waveguide feeds.}  Coplanar waveguide (CPW) feeds offer another in-plane option that is particularly convenient for single-layer fabrication, since the signal conductor and ground conductors are on the same surface.  CPW feeds have been used with pixelated antenna designs by several groups.
+
+\textcolor{red}{\textbf{[TODO: Check literature for specific CPW-fed fragmented/pixelated antenna references.  If none found in our .bib files, add a note or locate 1--2 references from IEEE Xplore.]}}
+
+\subsection{Through Ground Plane: Center Pin Feed}
+\label{sec:ch4feedCenterPin}
+
+For fragmented aperture antennas backed by a ground plane, a common feed approach is to pass a coaxial transmission line through the ground plane, with the center conductor extending across the cavity to make contact with the radiating surface.  This is analogous to a probe-fed microstrip patch antenna, but with the probe extending across a potentially thicker cavity that may contain dielectric layers or broadband screen backplane structures.
+
+This feed configuration was used in the original wideband fragmented aperture arrays described in Chapter~7.  As shown in Figure~\ref{fig:WSA2} in Chapter~8, the traditional construction uses machined aluminum feed towers that enclose the coaxial feed lines and provide structural support.
+
+Landgren, Dykes, and Allen \cite{Landgren2017Unbalanced} at the Georgia Tech Research Institute (GTRI) developed an unbalanced feed design for wideband phased arrays that uses a single center pin extending from the coaxial connector through the cavity to the radiating layer.  The unbalanced feed avoids the need for a balun or differential feed network, simplifying the antenna architecture and enabling compatibility with standard single-ended electronics.  This work was significant because earlier fragmented aperture arrays had typically used balanced (differential) feeds, which require either a balun at each element or differential transmit/receive electronics.
+
+Landgren et al.\ \cite{Landgren2017Wideband} demonstrated this unbalanced feed concept in a wideband millimeter-wave antenna element, showing that the fragmented aperture design process could optimize the pixel pattern to achieve good impedance matching with the unbalanced feed across a wide bandwidth.  The FDTD simulation inherently captures the asymmetry introduced by the single-pin feed and optimizes the surrounding pixel pattern accordingly.
+
+Figure~\ref{fig:SAD12} shows the fabricated mmWave fragmented aperture antenna element developed by Landgren et al.\ \cite{Landgren2017Wideband}, including the antenna board, cable/connector assembly, measurement fixture, and a close-up of the fragmented aperture region near the feed and plated vias.  The antenna aperture is approximately 5.0~mm $\times$ 2.0~mm on a 1.97~mm thick Rogers 5880LZ substrate, designed for 18--40~GHz operation with a single unbalanced coaxial feed.  Figure~\ref{fig:SAD13} shows the measured and modeled performance: the reflection coefficient (left) and broadside realized gain (right) show close agreement between the FDTD model and measurements across the design band.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch4/landgren/Landgren2017mmW_Fig6_cropped.png}
+\caption{Fabricated mmWave fragmented aperture antenna element with unbalanced feed: antenna board, cable/connector assembly, measurement fixture (left), and close-up of the fragmented aperture region near the feed and plated vias (right) \cite{Landgren2017Wideband}.}
+\label{fig:SAD12}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.95\linewidth]{/Users/jim.maloney/Book/images/ch4/landgren/Landgren2017mmW_Fig7_cropped.png}
+\caption{Measured vs.\ modeled performance of the mmWave fragmented aperture element: reflection coefficient (left) and broadside realized gain (right).  The close agreement validates the unbalanced feed design approach at millimeter-wave frequencies \cite{Landgren2017Wideband}.}
+\label{fig:SAD13}
+\end{center}
+\end{figure}
+
+\subsection{Through Ground Plane: Flanking Via Feed}
+\label{sec:ch4feedFlankingVia}
+
+A variation on the center pin feed uses a center conductor flanked by two (or more) closely spaced ground vias that extend from the ground plane to the radiating surface.  This configuration creates a quasi-coaxial transmission line within the antenna cavity, providing better control of the feed impedance and reducing the excitation of unwanted cavity modes.
+
+Landgren et al.\ \cite{Landgren2019Broadband} demonstrated a broadband array with unbalanced feeds in which the feed structure incorporated flanking vias alongside the center conductor.  This design was part of a broader effort to develop fragmented aperture arrays with integrated power combiners, where the combiner networks were also designed using the fragmented aperture principle.  The flanking via approach was also adopted in the laminated PCB construction described in Chapter~8 (see Figure~\ref{fig:WSA3}), where the feed vias are manufactured using standard multi-layer PCB plating processes.
+
+Landgren et al.\ \cite{Landgren2018Combiner} further developed this concept in a wideband phased array with fragmented combiner technology, demonstrating that the fragmented aperture optimization could be applied not only to the radiating surface but also to the power combining networks behind the ground plane.  The fragmented combiner concept---an important example of applying the fragmented aperture methodology to non-antenna electromagnetic structures---is described in detail in Chapter~11.
+
+\textcolor{red}{\textbf{[TODO: Author to create an original flanking-via feed design example.  Include figure showing the via geometry in cross-section and plan view, and a performance comparison with the center-pin-only feed.]}}
+
+\section{Bandwidth Tailoring}
+\label{sec:ch4bw}
+
+One of the most powerful aspects of the fragmented aperture design process is the ability to tailor the operating bandwidth by simply changing the fitness function presented to the genetic algorithm.  The same physical aperture---the same substrate, the same pixel grid, the same feed---can be redesigned to cover different frequency bands by changing only the target frequencies in the optimization.
+
+Chapter~3 demonstrated this directly: four different antenna designs were produced on identical $25.4~\text{cm} \times 25.4~\text{cm}$ apertures with the same pixel grid, each covering a different portion of the 500~MHz to 2.0~GHz range.  The pixel patterns differed significantly between designs, yet all achieved gain approaching the uniform aperture limit within their respective design bands.
+
+This bandwidth tailoring capability has a natural extension: if the pixel pattern can be changed electronically rather than physically, the same antenna hardware could be reconfigured in real time to cover different frequency bands.  This is precisely the concept behind the reconfigurable fragmented aperture antenna described in Chapter~5, where switched links between metallic pads allow the effective pixel pattern to be changed on the fly.
+
+Several other research groups have explored bandwidth optimization of pixelated antennas.  Wang et al.\ \cite{Wang2024Machine} developed a machine learning--assisted quasi-bisection method for optimizing the bandwidth of pixelated patch antennas, demonstrating that the design space for pixelated antennas is amenable to data-driven optimization techniques.  Jayasinghe and Uduwawala \cite{Jayasinghe2010Broadband} used genetic algorithms to design broadband patch antennas, and Jayasinghe, Anguera, and Uduwawala \cite{Jayasinghe2012Multiband} extended the approach to multi-band designs for GSM, UMTS, LTE, and Bluetooth applications.
+
+Figures~\ref{fig:SAD7} and \ref{fig:SAD8} illustrate this concept with two designs from the original patent, both on the same physical aperture.  Figure~\ref{fig:SAD7} shows a broadband design optimized to cover a wide frequency range: the pixel pattern (left) was evolved by the genetic algorithm to maximize gain across the full design band, and the resulting performance (right) shows gain approaching the uniform aperture limit over approximately 2:1 bandwidth.  Figure~\ref{fig:SAD9} shows a narrowband design optimized on the same aperture for a much narrower frequency range.  The pixel pattern is visibly different---the narrowband design concentrates its conducting material differently to achieve high gain over a limited band.  Figure~\ref{fig:SAD10} confirms that the narrowband design achieves gain very close to the aperture limit within its target band.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/PatentFig09_BroadbandDesign.png}
+\caption{Broadband fragmented aperture design: the pixel pattern (left) is optimized to maximize gain across a wide frequency range.  The performance plot (right) shows gain approaching the uniform aperture limit over the full design band \cite{MaloneyFragPatent}.}
+\label{fig:SAD7}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/PatentFig10_BroadbandPerf.png}
+\caption{Measured and simulated performance of the broadband fragmented aperture design.  The realized gain tracks the uniform aperture limit across the design band \cite{MaloneyFragPatent}.}
+\label{fig:SAD8}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/PatentFig11_NarrowbandDesign.png}
+\caption{Narrowband fragmented aperture design on the same physical aperture as the broadband design in Figure~\ref{fig:SAD7}.  The pixel pattern differs significantly, demonstrating that the bandwidth is a property of the pixel pattern, not the hardware \cite{MaloneyFragPatent}.}
+\label{fig:SAD9}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/PatentFig12_NarrowbandPerf.png}
+\caption{Performance of the narrowband fragmented aperture design.  The gain closely approaches the uniform aperture limit within the narrower target band \cite{MaloneyFragPatent}.}
+\label{fig:SAD10}
+\end{center}
+\end{figure}
+
+The key insight for the reader is that the bandwidth is not an inherent property of the antenna hardware---it is a property of the pixel pattern.  The hardware defines the \emph{design space} (the set of possible pixel patterns), while the optimization determines which pattern within that space best meets the performance requirements.  Changing the requirements produces a different optimal pattern on the same hardware.
+
+\section{Fixed Beam Steering}
+\label{sec:ch4steer}
+
+The fragmented aperture designs presented in Chapters~2 and 3 were all optimized for broadside radiation (perpendicular to the aperture plane).  A broadside design with a centrally located feed naturally exhibits quadrant symmetry in its pixel pattern: the optimizer discovers patterns that are symmetric about both the horizontal and vertical axes through the feed point.  This symmetry is a consequence of the broadside radiation requirement, which treats all four quadrants equivalently.
+
+When the design objective is changed to steer the beam to a fixed angle away from broadside, this symmetry is broken.  The optimizer must distribute conducting material asymmetrically across the aperture to create the phase gradient necessary for off-broadside radiation.  The resulting pixel patterns are visually distinct from broadside designs and provide insight into how the fragmented aperture creates its radiation characteristics.
+
+\subsection{Broadside}
+
+For reference, a broadside design places the main beam perpendicular to the aperture plane.  The pixel pattern exhibits the quadrant symmetry discussed above, and the design process exploits this symmetry to reduce the number of independent variables (as described in Chapter~3, where only one quadrant of pixels is optimized and the remaining three quadrants are generated by reflection).
+
+\subsection{Forward and Backward Steering}
+
+When the target beam direction is tilted to $45^\circ$ from broadside (or any intermediate angle), the pixel pattern loses its left-right symmetry (for steering in the H-plane) or its top-bottom symmetry (for steering in the E-plane).  The genetic algorithm must now optimize over a larger number of independent pixels, since symmetry can no longer be exploited to reduce the design space.
+
+\textcolor{red}{\textbf{[TODO: Author to create example designs showing pixel patterns for broadside, $+45^\circ$, and $-45^\circ$ beam steering on the same aperture.  A side-by-side comparison of the three pixel patterns would effectively illustrate how the symmetry changes.  Include radiation pattern plots for each.]}}
+
+The ability to design antennas with fixed beam steering has practical applications in conformal antennas, where the antenna must be mounted on a curved surface and the desired beam direction is not normal to the local surface.  It also connects directly to the reconfigurable concept of Chapter~5: if the beam direction can be changed by changing the pixel pattern, then an electronically reconfigurable aperture can steer its beam without any mechanical motion.
+
+\subsection{Endfire}
+
+Endfire radiation (in the plane of the aperture) represents the extreme case of beam steering.  As demonstrated in Chapter~5 (Figure~\ref{fig:RECAP3}), the reconfigurable fragmented aperture antenna was shown to produce endfire radiation when configured with an asymmetric pixel pattern.  The endfire configuration exhibited no right-left symmetry, in contrast to the broadside configuration which maintained full quadrant symmetry.
+
+Designing for endfire radiation is more challenging than broadside because the aperture is not oriented for maximum capture area in the endfire direction.  Nevertheless, Tang, Zhang, and colleagues \cite{Tang2023Dual-port} demonstrated a dual-port endfire millimeter-wave reconfigurable antenna with an optimized pixel surface, showing that pixelated optimization can produce useful endfire patterns even at millimeter-wave frequencies.
+
+\textcolor{red}{\textbf{[TODO: Author to create an endfire design example.  Show the pixel pattern (which should be dramatically different from the broadside pattern) and the resulting radiation pattern.  Reference the Ch 5 endfire result as a preview.]}}
+
+\section{Polarization}
+\label{sec:ch4pol}
+
+\subsection{Linear Polarization}
+
+The designs presented in Chapters~2 and 3 were all linearly polarized.  Linear polarization arises naturally when the pixel pattern and feed configuration have a preferred axis of symmetry.  The designs in those chapters used a single feed point with quadrant symmetry enforced, producing a vertically polarized radiation pattern.
+
+Linear polarization is the simplest case for the fragmented aperture design process, since the symmetry constraints reduce the number of independent pixels and the fitness function need only evaluate a single polarization component.  The examples in Chapters~2 and 3 demonstrate that the approach achieves excellent linearly polarized performance, with realized gain approaching the aperture limit.
+
+\subsection{Circular Polarization}
+
+Circular polarization (CP) requires that the radiated electric field have two orthogonal components of equal amplitude with a $90^\circ$ phase difference between them.  For a fragmented aperture antenna with a single central feed point, achieving CP requires breaking the quadrant symmetry of the pixel pattern.  Specifically, the pattern can have no lines of mirror symmetry passing through the feed point; if such a line existed, the radiated field would be linearly polarized along or perpendicular to that line.
+
+This means that a CP design must optimize over a larger design space than a linearly polarized design: all four quadrants of the pixel pattern must be treated as independent variables, quadrupling the number of free parameters compared to a design that exploits quadrant symmetry.  Despite this increase in design complexity, the genetic algorithm can successfully discover pixel patterns that produce high-quality circular polarization.
+
+An early example of polarization diversity is the dual-polarized fragmented aperture shown in Figure~\ref{fig:SAD5}, from the original patent.  This design was optimized over the 1.4--1.8~GHz frequency range to support two orthogonal linear polarizations simultaneously.  The pixel pattern exhibits four-fold rotational symmetry (90$^\circ$ rotation maps the pattern onto itself) rather than the mirror symmetry of the single-polarization designs.  This rotational symmetry ensures that the antenna performs identically for both polarizations.  The associated performance data, shown in Figure~\ref{fig:SAD11}, confirmed that the design approached the uniform aperture gain limit for both polarizations across the design band.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.65\linewidth]{/Users/jim.maloney/Book/images/ch4/PatentFig13_DualPol.png}
+\caption{Fragmented aperture antenna optimized for dual linear polarization over 1.4--1.8~GHz.  The pixel pattern exhibits four-fold rotational symmetry, ensuring equal performance for both polarizations.  Compare with the linearly polarized designs in Chapters~2 and 3, which have mirror symmetry \cite{MaloneyFragPatent}.}
+\label{fig:SAD5}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/PatentFig14_DualPolPerf.png}
+\caption{Performance of the dual-polarized fragmented aperture antenna of Figure~\ref{fig:SAD5}.  The realized gain for both polarizations approaches the uniform aperture limit across the 1.4--1.8~GHz design band, confirming that the four-fold rotationally symmetric pixel pattern provides equal performance for orthogonal polarizations \cite{MaloneyFragPatent}.}
+\label{fig:SAD11}
+\end{center}
+\end{figure}
+
+The transition from dual linear polarization to circular polarization is conceptually straightforward: the pixel pattern must support two orthogonal field components with a $90^\circ$ phase difference, which requires breaking the four-fold rotational symmetry to introduce the necessary phase asymmetry.
+
+\textcolor{red}{\textbf{[TODO: Author to create a circularly polarized fragmented aperture design.  Show the pixel pattern (which should exhibit no mirror symmetry) and the axial ratio versus frequency.  The dual-pol design above provides a starting point---the CP design should look qualitatively different, with the four-fold symmetry broken.]}}
+
+Rodrigo, Jofre, and Cetiner \cite{Rodrigo2014Frequency} demonstrated a reconfigurable antenna using a parasitic pixel layer that could switch between frequency, radiation pattern, and polarization reconfiguration, including linear-to-circular polarization switching.  Their work shows that polarization control is achievable with pixelated antenna structures.
+
+Zechmeister and Lacik \cite{Zechmeister2022Pixelated} designed a pixelated circularly polarized SIW horn antenna with nearly equal beamwidths in the principal planes, demonstrating that pixelated optimization can produce high-quality CP even in waveguide-fed configurations.
+
+\subsection{Non-Broadside Circular Polarization}
+
+The most challenging polarization design case is circular polarization at a steered beam angle.  This combines the asymmetries required for both beam steering (Section~\ref{sec:ch4steer}) and circular polarization (requiring the absence of mirror symmetry), resulting in a pixel pattern with no exploitable symmetry whatsoever.  Every pixel on the aperture is an independent variable.
+
+Despite this being the most computationally demanding design scenario, it is also one of the most practically important.  Satellite communication antennas, for example, often require CP at angles well away from broadside to maintain a link as the satellite moves across the sky.
+
+\textcolor{red}{\textbf{[TODO: Author to create a non-broadside CP design example.  This would be a flagship result for the chapter---showing that the fragmented aperture approach can simultaneously achieve beam steering and circular polarization from a single feed point, with no exploitable pixel symmetry.  Show pixel pattern, radiation pattern, and axial ratio at the design angle.]}}
+
+\section{Beamwidth Tailoring}
+\label{sec:ch4beamwidth}
+
+In addition to controlling the beam direction and polarization, the fragmented aperture design process can be used to tailor the beamwidth of the radiation pattern.  The fitness function presented to the genetic algorithm can include requirements on the angular width of the main beam, the sidelobe levels, or the gain at specific angles relative to the main beam.
+
+\subsection{GPS CRPA Element Design}
+
+A compelling example of beamwidth tailoring is the design of miniaturized GPS Controlled Reception Pattern Antenna (CRPA) elements using the fragmented aperture approach.  Maloney et al.\ \cite{Maloney2007Fragmented} demonstrated that fragmented aperture optimization could produce compact GPS antenna elements with radiation patterns tailored to the requirements of CRPA null-steering algorithms.
+
+A CRPA system uses an array of antenna elements and adaptive signal processing to steer nulls in the direction of jamming signals while maintaining reception of the desired GPS satellite signals.  The performance of the CRPA system depends on the radiation characteristics of the individual elements, including the element beamwidth and the gain roll-off toward the horizon.  The fragmented aperture approach allows these element-level pattern characteristics to be optimized directly, producing elements that are well suited for integration into the CRPA array.
+
+Maloney and Baker \cite{MaloneyBakerGPS} further developed this concept, presenting model and measurement results for a miniaturized GPS CRPA element designed using the fragmented aperture approach.  The measured results confirmed that the element met the beamwidth and gain specifications required by the CRPA processor.
+
+\textcolor{red}{\textbf{[TODO: Add figure(s) from the GPS CRPA work: element geometry, measured radiation pattern showing the tailored beamwidth, and/or comparison with a conventional GPS patch element.  These are author's own figures from Maloney2007Fragmented / MaloneyBakerGPS.]}}
+
+Beamwidth tailoring has also been explored by other groups.  Towfiq et al.\ \cite{Towfiq2018Reconfigurable} demonstrated a reconfigurable antenna with independent beam steering and beamwidth variability, using pixelated elements to achieve a range of beamwidths for wireless communication applications.  Zechmeister, Lacik, and Kadlec \cite{Zechmeister2021Design} optimized the beamwidth of pixelated SIW horn antennas to achieve nearly equal beamwidths in the principal planes.
+
+\section{Out-of-Band Rejection}
+\label{sec:ch4oob}
+
+In many practical scenarios, an antenna must operate in a specific frequency band while coexisting with strong emitters in nearby bands.  If the antenna has significant gain at the interfering frequency, the received interference can saturate the front-end electronics and degrade system performance.  Conventional approaches to this problem include external bandpass or bandstop filters in the receive chain.  The fragmented aperture approach offers an alternative: the fitness function can include a requirement that the antenna gain be minimized at the interfering frequency, effectively building the filtering function into the antenna itself.
+
+This is accomplished by adding a penalty term to the genetic algorithm fitness function.  In addition to maximizing gain within the desired operating band, the fitness function penalizes designs that exhibit significant gain at the rejection frequency.  The optimizer then searches for pixel patterns that satisfy both objectives simultaneously: high gain in-band and low gain at the rejection frequency.
+
+\textcolor{red}{\textbf{[TODO: Author to create an example design demonstrating out-of-band rejection.  Suggested scenario: an antenna operating in the 3.4--3.8~GHz 5G n78 band with a rejection notch at 5.8~GHz (C-V2X/DSRC band), representing a practical coexistence problem between 5G base station equipment and vehicular communication systems.  Alternative scenario: a military S-band communications antenna (2.2--2.4~GHz) with rejection of a co-located S-band radar at 2.7--2.9~GHz (airport surveillance radar).  Show gain vs.\ frequency with the notch clearly visible.]}}
+
+The out-of-band rejection capability is related to the broader concept of frequency-selective surfaces (FSS), which have been extensively studied using pixelated and optimization-based design approaches.  Zhao et al.\ \cite{Zhao2015Novel} designed pixelated frequency-selective surfaces using an estimation of distribution algorithm, demonstrating that optimization-driven design can achieve sharp frequency selectivity from pixelated conducting patterns.  While FSS designs are typically passive filtering structures rather than antennas, the underlying principle---that a pixelated conducting pattern can exhibit frequency-selective behavior---is the same.
+
+This capability is another illustration of the versatility of the fragmented aperture design process: by changing the fitness function, the same design machinery that produces broadband antennas can also produce antennas with deliberately shaped frequency responses.
+
+\section{Array Elements}
+\label{sec:ch4array}
+
+The preceding sections of this chapter have focused on single-element antenna designs in which the fragmented aperture operates as a standalone antenna.  The fragmented aperture concept extends naturally to the design of elements for phased array antennas, where the optimization must account for mutual coupling between adjacent elements and the impedance behavior as the array beam is scanned.
+
+Figure~\ref{fig:SAD6} shows an early example from the original patent: a linear array of three connected fragmented aperture elements, each 10~inches square, with feed points at the center of each element.  This design illustrates two concepts that proved essential for wideband array performance.  First, the pixel pattern extends continuously across element boundaries---there is no enforced gap between adjacent elements.  These inter-element connections allow currents to flow across multiple unit cells, which is critical for maintaining a good impedance match at low frequencies where the wavelength is much larger than a single element.  Second, the unit cell itself is designed directly as a phased array element, with the pixel pattern optimized in the context of the array environment rather than as an isolated antenna.  This approach---designing the unit cell directly for array operation---is the subject of Chapters~6 through 8.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/PatentFig19_ConnectedArray.png}
+\caption{Three connected fragmented aperture array elements from the original patent, each 10~inches square with a central feed point.  The pixel pattern extends continuously across element boundaries, allowing inter-element current flow.  This connected array concept proved essential for achieving wideband array performance, as discussed in Chapter~7 \cite{MaloneyFragPatent}.}
+\label{fig:SAD6}
+\end{center}
+\end{figure}
+
+In the array context, the design process uses periodic boundary conditions (PBC) in the FDTD simulation to model a single unit cell of the array as though it were embedded in an infinite array.  The genetic algorithm optimizes the pixel pattern of this unit cell, and the fitness function evaluates the embedded element performance---typically the embedded element realized gain (EERG) or the active reflection coefficient as a function of frequency and scan angle.
+
+This array extension of the fragmented aperture concept is the subject of the remaining chapters:
+
+\begin{itemize}
+\item \textbf{Chapter~6} describes the design of fragmented array elements, including the transition from standalone antennas to array elements and the incorporation of scan performance into the design process.
+
+\item \textbf{Chapter~7} describes the development of ultra-wideband fragmented arrays with bandwidths up to 33:1, including connected elements, broadband screen backplanes, and multi-layer radiators.
+
+\item \textbf{Chapter~8} describes techniques for designing wide-scan fragmented array elements using spectral-domain FDTD simulation, and presents a laminated PCB fabrication approach.
+\end{itemize}
+
+The key point for this chapter is that the same design methodology described above---pixelated aperture, genetic algorithm, full-wave simulation---applies equally to array elements.  The primary differences are the use of periodic boundary conditions instead of free-space boundaries, and a fitness function that evaluates scan performance in addition to (or instead of) broadside performance.
+
+Thors, Steyskal, and Holter \cite{Thors2005Broad-band} at the Swedish Defence Research Agency (FOI) and the US Air Force Research Laboratory demonstrated broad-band fragmented aperture phased array element design using genetic algorithms, confirming that the fragmented aperture concept could be successfully applied to array element design by independent research groups.  Ellgardt and Persson \cite{Ellgardt2006Characteristics} characterized the broadband, wide-scan performance of fragmented aperture phased array elements, and Ellgardt's doctoral thesis \cite{EllgardtThesis} provided a comprehensive treatment of wide-angle scanning with fragmented aperture array elements.
+
+\section{Summary}
+
+This chapter has surveyed the versatility of the fragmented aperture antenna design approach through a range of design examples and applications.  The key themes are:
+
+\begin{enumerate}
+
+\item \textbf{Fragmented ground planes} extend the pixel optimization concept from the radiating aperture to the ground structure, connecting to the broader literature on defected ground structures.
+
+\item \textbf{Feed strategies} range from simple in-plane microstrip feeds to through-ground-plane configurations with center pins or flanking vias.  Unbalanced feed designs simplify the antenna architecture by eliminating the need for baluns.
+
+\item \textbf{Bandwidth tailoring} is achieved by changing the fitness function, not the hardware.  The same aperture can cover different bands with different pixel patterns, motivating the reconfigurable designs of Chapter~5.
+
+\item \textbf{Fixed beam steering} changes the symmetry of the pixel pattern.  Broadside designs exhibit quadrant symmetry; steered designs progressively lose symmetry as the beam moves off broadside; endfire designs are fully asymmetric.
+
+\item \textbf{Polarization control} including circular polarization is achievable from a single feed point by breaking the pixel symmetry.  Non-broadside CP is the most general case, requiring optimization over all pixels independently.
+
+\item \textbf{Beamwidth tailoring} has been demonstrated for GPS CRPA elements, where the element pattern must be optimized for compatibility with adaptive null-steering algorithms.
+
+\item \textbf{Out-of-band rejection} is achieved by adding rejection penalties to the fitness function, building filtering into the antenna design.
+
+\item \textbf{Array elements} extend the fragmented aperture concept to phased arrays, as developed in Chapters~6--8.
+
+\end{enumerate}
+
+In every case, the same fundamental design machinery applies: a pixelated aperture, a genetic algorithm, and a full-wave electromagnetic simulation.  The remarkable versatility of the approach arises not from changes to the design process itself, but from changes to the performance objectives encoded in the fitness function.
+
+\FloatBarrier
+
+% Bibliography for Chapter 4
+% Uses chapter-specific .bib files organized by topic
+\bibliography{../Literature/master_bibliography,%
+              ../Literature/fragmented_aperture_core,%
+              ../Literature/ml_ai_optimization_methods,%
+              ../Literature/reconfigurable_ch5,%
+              ../Literature/specialized_applications,%
+              ../Literature/metamaterials_ch8}
+\bibliographystyle{IEEEtran}

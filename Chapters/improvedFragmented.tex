@@ -16,7 +16,7 @@ This chapter presents solutions to both of these shortcomings.  First, alternate
 Originally, fragmented aperture antennas were envisioned as a planar surface partitioned into a grid of rectangular pixels, each either conducting or non-conducting, as shown in Figure~\ref{fig:IFAF1}.  A genetic algorithm and a computational electromagnetic model determined which pixels should be conducting and which should be non-conducting to form an antenna surface suitable for a given application.  This concept was generalized to parallelogram-shaped pixels, as shown in Figure~\ref{fig:IFAF2}, in the original fragmented aperture patent \cite{MaloneyFragPatent}.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig1.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig1.png}
 \caption{Original fragmented aperture approach based on a lattice of rectangular pixels.  An example of diagonal touching is shown in the top right of the figure.}
 \label{fig:IFAF1}
 \end{figure}
@@ -24,7 +24,7 @@ Originally, fragmented aperture antennas were envisioned as a planar surface par
 As discussed in Chapter~2, the rectangular pixel approach was very successfully used to design novel antennas \cite{MaloneyKeslerHarms}--\cite{BalanisHB12}.  However, many of these designs proved troublesome to fabricate and measure.  The primary problem is \emph{diagonal touching} of pixels, as illustrated in the top right of Figures~\ref{fig:IFAF1} and~\ref{fig:IFAF2}.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig2.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig2.png}
 \caption{Generalized fragmented aperture approach based on parallelogram-shaped pixels.  Again, an example of diagonal touching is shown in the top right of the figure.}
 \label{fig:IFAF2}
 \end{figure}
@@ -32,7 +32,7 @@ As discussed in Chapter~2, the rectangular pixel approach was very successfully 
 Diagonal touching is not a problem during the design phase because in the FDTD numerical model, diagonally adjacent conducting pixels are always electrically connected.  However, when fabricated using processes such as printed circuit board etching, the diagonal contact is often broken due to over-etching, as illustrated in Figure~\ref{fig:IFAF3}(a).  Disconnecting metal that should be connected can seriously degrade the antenna's impedance match and gain characteristics.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig3.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig3.png}
 \caption{(a) Over-etching causing diagonal elements not to touch, as shown in the top center. (b) Close-up photograph of an etched copper fragmented antenna showing over-etch disconnecting diagonal fragments.}
 \label{fig:IFAF3}
 \end{figure}
@@ -42,7 +42,7 @@ Other researchers have also observed the difficulties caused by diagonal touchin
 In fact, nearly every antenna design included in the original fragmented aperture patent suffers from the diagonal touching problem.  Figure~\ref{fig:IFAF4} shows a few examples from U.S.\ Patent 6,323,809 \cite{MaloneyFragPatent}, with the most troublesome diagonal-touching locations near the antenna feed circled.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig4.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig4.png}
 \caption{Two sample designs from the original fragmented aperture patent exhibiting diagonal touching \cite{MaloneyFragPatent}.  The most troublesome examples of diagonal touching near the antenna feed are circled.}
 \label{fig:IFAF4}
 \end{figure}
@@ -55,7 +55,7 @@ The root cause of the problem lies in the fundamental approach to area partition
 Before presenting the improved pixel geometries, it is instructive to review several practical strategies that have been used over the years to mitigate diagonal touching in designs based on the original rectangular pixel approach.  Four such strategies are illustrated in Figure~\ref{fig:IFAF5}.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig5.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig5.png}
 \caption{Four approaches to mitigating diagonal touching: (a) super-cell approach using $3\times 3$ plus signs, (b) fabricating each pixel approximately 10\% larger than designed, (c) placing a small metal square at diagonal contact points to ensure connection, and (d) random coin-flip approach to resolve diagonal ambiguity.}
 \label{fig:IFAF5}
 \end{figure}
@@ -78,7 +78,7 @@ Other research groups have developed additional strategies.  Ellgardt and Persso
 
 While each of these mitigation strategies can be effective, they all represent workarounds for a fundamental problem.  The proper solution is to change the pixel geometry itself so that diagonal touching cannot occur, as described in the next section.
 
-\section{Three Improved Pixel Geometries}
+\section{Four Improved Pixel Geometries}
 \label{sec:IFAS4}
 
 The proper approach to eliminating diagonal touching is to break the dependence between pixel edges and lattice directions that is implicit in the rectangular and parallelogram geometries of Figures~\ref{fig:IFAF1} and~\ref{fig:IFAF2}.  The following three subsections present three different pixel geometries that accomplish this, each leading to improved fragmented aperture antennas.  Recent studies have examined important design considerations such as pixel size, symmetry constraints, and their effects on antenna performance \cite{Mair2024Design}.
@@ -88,7 +88,7 @@ The proper approach to eliminating diagonal touching is to break the dependence 
 In the first approach, the individual conducting/non-conducting elements are defined using lattice vectors that are not both parallel to the element edges, as illustrated in Figure~\ref{fig:IFAF6}.  The example shown uses square elements arranged on a skewed lattice with a skew angle of $\psi \approx 63.4^\circ$.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig6.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig6.png}
 \caption{First approach to improved fragmented aperture antennas: square elements on a skewed lattice.  Skewing the lattice vector $\vec{V}_2$ eliminates the possibility of diagonal touching.}
 \label{fig:IFAF6}
 \end{figure}
@@ -100,7 +100,7 @@ Notice that skewing the lattice vector $\vec{V}_2$ completely eliminates the pos
 In the second approach, two complementary pixel shapes are used that alternate across the aperture, as illustrated in Figure~\ref{fig:IFAF7}.  The shapes are chosen so that adjacent pixels always share a definite edge rather than merely a corner point.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig7.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig7.png}
 \caption{Second approach to improved fragmented aperture antennas: alternating pixel shapes that tessellate the plane while ensuring definite edge contact between adjacent pixels.}
 \label{fig:IFAF7}
 \end{figure}
@@ -112,12 +112,102 @@ The key requirement is that the two shapes together tessellate the plane---that 
 In the third approach, a single pixel shape is chosen that tessellates the plane by itself while ensuring that adjacent pixels share edges rather than corner points.  Figure~\ref{fig:IFAF8} shows one example of such a shape, although many other shapes satisfying these requirements exist.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig8.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig8.png}
 \caption{Third approach to improved fragmented aperture antennas: a single self-tessellating pixel shape that tiles the aperture surface while ensuring definite edge contact between all adjacent pixels.}
 \label{fig:IFAF8}
 \end{figure}
 
 The advantage of a single-shape tessellation is simplicity of implementation: only one pixel geometry needs to be defined and manufactured.  However, depending on the chosen shape, this approach may not naturally support the left-right and top-bottom symmetry constraints that are commonly imposed for broadside, linearly polarized antenna designs.  This makes the third approach particularly well suited for designs where symmetry is not required, such as beam-steered or circularly polarized antennas.
+
+\subsection{Fourth Approach: Metal Patches with Switchable Links}
+
+The fourth approach to eliminating diagonal touching was inspired by the reconfigurable fragmented aperture concept described in Chapter~5.  In the reconfigurable antenna, the aperture consists of fixed metal patches connected by switchable links---RF switches that can be opened or closed to change the effective conducting pattern.  Each switch explicitly connects two adjacent patches along a shared edge, so the connection topology is unambiguous: every electrical connection is a deliberate, edge-shared link rather than a corner contact.
+
+This observation led to a new class of fixed (non-reconfigurable) fragmented aperture designs in which the aperture is constructed as a fine grid of metal patches with narrow conducting links between them.  The metal structure resembles a maze or labyrinth, with a much finer level of detail than the original rectangular pixel designs.  Crucially, because every conducting connection passes through an explicit link between edge-adjacent patches, diagonal touching is inherently impossible.
+
+Figure~\ref{fig:IFAF16} shows the switched aperture concept from the original patent.  The aperture consists of metal patches (145) arranged on a grid, with switch locations (147) between adjacent patches.  Each switch can be open (147a, non-conducting) or closed (147b, conducting).  The feed patches (149) connect to the antenna terminals.  When a particular set of switches is closed, the resulting conducting pattern forms a fragmented aperture antenna optimized for a specific frequency band and beam direction.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig21_SwitchedConcept.png}
+\caption{The switched aperture antenna concept: metal patches (145) connected by switchable links (147).  Closed switches (147b) create conducting paths; open switches (147a) create gaps.  This structure inherently avoids diagonal touching because every connection is an explicit edge-shared link \cite{MaloneyFragPatent}.}
+\label{fig:IFAF16}
+\end{center}
+\end{figure}
+
+For a fixed antenna design, the switches are replaced by permanent conducting links (closed) or permanent gaps (open), but the underlying metal geometry is the same.  The key advantage over the original rectangular pixel approach is that the finer grid of patches and links provides more degrees of freedom per unit area, enabling more detailed control of the current distribution across the aperture.
+
+Figure~\ref{fig:IFAF17} shows a broadside design optimized for 1.4--1.8~GHz using this approach.  The resulting pattern has a characteristic maze-like appearance, with conducting paths winding through the aperture in complex patterns.  The conducting regions (152), non-conducting gaps (154), and feed location (155) are visible, along with a detail callout (156) showing the fine patch-and-link structure.  Compared to the original rectangular pixel designs of Chapter~2, this pattern has significantly finer spatial detail and no instances of diagonal touching.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig22_BroadsideSwitched.png}
+\caption{A 1.4--1.8~GHz broadside fragmented aperture antenna designed using the metal patch and link approach (Fourth Approach).  The maze-like conducting pattern (152) has much finer spatial detail than the original rectangular pixel designs and inherently avoids diagonal touching.  The feed is at location 155 \cite{MaloneyFragPatent}.}
+\label{fig:IFAF17}
+\end{center}
+\end{figure}
+
+Figure~\ref{fig:IFAF18} shows the predicted and measured performance of this broadside design.  The predicted system gain (166) approaches the uniform aperture gain limit (164) across the 1.4--1.8~GHz design band, and the measured system gain (162) confirms the predicted performance with good agreement.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig23_BroadsidePerf.png}
+\caption{Performance of the 1.4--1.8~GHz broadside switched aperture design: predicted gain (166), measured system gain (162), and uniform aperture gain limit (164).  The measured results confirm that the design approaches the aperture limit within the optimization range \cite{MaloneyFragPatent}.}
+\label{fig:IFAF18}
+\end{center}
+\end{figure}
+
+Figure~\ref{fig:IFAF19} shows the H-plane radiation pattern at 1.8~GHz, comparing the FDTD model prediction (174) with measured data (172).  The excellent agreement between model and measurement demonstrates that the fine patch-and-link structure is accurately captured by the FDTD simulation and reliably reproduced in fabrication---a significant improvement over the original rectangular pixel designs, where diagonal touching could cause large discrepancies between model and measurement.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig24_BroadsidePattern.png}
+\caption{H-plane radiation pattern at 1.8~GHz for the broadside switched aperture design: FDTD model (174) and measured (172).  The close agreement confirms that the patch-and-link metal structure is accurately modeled and reliably fabricated \cite{MaloneyFragPatent}.}
+\label{fig:IFAF19}
+\end{center}
+\end{figure}
+
+The same aperture hardware can produce different antenna designs simply by changing which links are conducting.  Figure~\ref{fig:IFAF20} shows a design on the same aperture optimized for a beam steered $30^\circ$ from broadside at 1.4--1.8~GHz.  The pixel pattern is visibly asymmetric---the left-right symmetry present in the broadside design of Figure~\ref{fig:IFAF17} is broken to create the phase gradient needed for beam steering.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig25_SteeredSwitched.png}
+\caption{A 1.4--1.8~GHz switched aperture antenna optimized for $30^\circ$ beam steering.  The asymmetric conducting pattern (181, 183) breaks the left-right symmetry of the broadside design to create the phase gradient for off-broadside radiation \cite{MaloneyFragPatent}.}
+\label{fig:IFAF20}
+\end{center}
+\end{figure}
+
+Figure~\ref{fig:IFAF21} shows the performance of the $30^\circ$-steered design.  The predicted gain (192) and measured system gain (190) are consistent, with the gain in the steered direction reduced relative to broadside by the expected $\cos\theta$ projection factor.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig26_SteeredPerf.png}
+\caption{Performance of the $30^\circ$-steered switched aperture design: predicted gain (192), measured system gain (190), and uniform aperture gain limit (188) \cite{MaloneyFragPatent}.}
+\label{fig:IFAF21}
+\end{center}
+\end{figure}
+
+The H-plane radiation pattern at 1.8~GHz for the steered design is shown in Figure~\ref{fig:IFAF22}.  The main beam is clearly steered to approximately $30^\circ$ from broadside, and the measured pattern (197) agrees closely with the FDTD model prediction (198).  The bidirectional pattern shape (forward and backward lobes of comparable magnitude) is characteristic of a planar aperture without a ground plane, as discussed in Chapter~4.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig27_SteeredPattern.png}
+\caption{H-plane radiation pattern at 1.8~GHz for the $30^\circ$-steered design: measured (197) and FDTD model (198).  The beam is steered $30^\circ$ from broadside with good model-measurement agreement \cite{MaloneyFragPatent}.}
+\label{fig:IFAF22}
+\end{center}
+\end{figure}
+
+Figure~\ref{fig:IFAF23} summarizes the system gain for three different switch configurations on the same aperture: the 1.4--1.8~GHz broadside design of Figure~\ref{fig:IFAF17} (curve 202), the 1.4--1.8~GHz $30^\circ$-steered design of Figure~\ref{fig:IFAF20} (curve 206), and a 2.4--3.0~GHz broadside design (curve 208, antenna not shown).  All three configurations approach the uniform aperture gain limit (204) within their respective design bands.  This summary demonstrates that the metal patch and link approach is versatile: the same physical aperture hardware can support multiple frequency bands and beam directions simply by changing the link pattern.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig28_SummaryPerf.png}
+\caption{Summary of system gain for three switched aperture configurations on the same hardware: 1.4--1.8~GHz broadside (202), 1.4--1.8~GHz $30^\circ$ steered (206), and 2.4--3.0~GHz broadside (208).  The uniform aperture gain limit is shown as curve 204.  All configurations approach the aperture limit within their design bands \cite{MaloneyFragPatent}.}
+\label{fig:IFAF23}
+\end{center}
+\end{figure}
+
+The metal patch and link approach thus serves a dual purpose.  As a fixed antenna design strategy, it inherently eliminates diagonal touching and provides finer spatial control of the aperture conducting pattern.  As a reconfigurable antenna concept, it enables the same hardware to support multiple antenna configurations through electronic switching.  The reconfigurable aspects are developed in detail in Chapter~5.
 
 \section{Improved Mutation Algorithm for Better Convergence}
 \label{sec:mutation}
@@ -131,7 +221,7 @@ The improved mutation algorithm is biased so that mutations preferentially exten
 To demonstrate the effectiveness of this adjacency-based mutation strategy, three independent design trials were conducted with the traditional mutation algorithm and three with the improved mutation algorithm.  Figure~\ref{fig:IFAF9} shows the convergence of the fitness score as a function of generation count, averaged over the three trials for each algorithm.  The improved mutation algorithm (green line) converges to a better fitness score in fewer generations than the traditional approach (blue line).
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig9.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig9.png}
 \caption{Convergence comparison between the traditional mutation algorithm (blue) and the improved adjacency-based mutation algorithm (green), averaged over three independent design trials.  The improved algorithm converges to a better fitness score in fewer generations.}
 \label{fig:IFAF9}
 \end{figure}
@@ -140,7 +230,7 @@ As shown in Table~\ref{tab:IFAT1}, the improved mutation algorithm produced a be
 
 \begin{table}
 \caption{Fitness score comparison across three convergence trials for the traditional and improved mutation algorithms (higher score is better).}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig16.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig16.png}
 \label{tab:IFAT1}
 \end{table}
 
@@ -159,7 +249,7 @@ The aperture designs were performed using a genetic algorithm with FDTD evaluati
 Four representative aperture designs are shown in Figure~\ref{fig:IFAF10}.  The physical shapes clearly demonstrate that none of the designs suffer from diagonal touching---every connection between adjacent conducting pixels involves a full shared edge.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig10.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig10.png}
 \caption{Four sample fragmented aperture designs produced using the skewed-lattice (First Approach) pixel geometry.  None of the designs exhibit diagonal touching.}
 \label{fig:IFAF10}
 \end{figure}
@@ -167,7 +257,7 @@ Four representative aperture designs are shown in Figure~\ref{fig:IFAF10}.  The 
 Figure~\ref{fig:IFAF11} shows the broadside realized gain of each design as a function of frequency.  The gains are compared with the aperture gain limit (black line), which for these ground-plane-free apertures is $2\pi A/\lambda^2$.  All four designs approach the aperture gain limit within their respective design bands.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig11.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig11.png}
 \caption{Broadside realized gain for the four skewed-lattice designs shown in Figure~\ref{fig:IFAF10}.  The black line indicates the aperture gain limit $2\pi A/\lambda^2$.}
 \label{fig:IFAF11}
 \end{figure}
@@ -175,7 +265,7 @@ Figure~\ref{fig:IFAF11} shows the broadside realized gain of each design as a fu
 Figure~\ref{fig:IFAF12} shows the VSWR of each design.  The VSWR remains below 1.5 across the respective design bands, consistent with the fitness function requirement of return loss better than 15~dB.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig12.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig12.png}
 \caption{VSWR for the four skewed-lattice designs shown in Figure~\ref{fig:IFAF10}.}
 \label{fig:IFAF12}
 \end{figure}
@@ -189,7 +279,7 @@ The alternating-shape approach of Figure~\ref{fig:IFAF7} was also used to design
 Figure~\ref{fig:IFAF13} shows two sample designs for the 0.5--0.8~GHz and 0.8--1.2~GHz bands.  As with the first approach designs, no diagonal touching is present in the physical structures.
 
 \begin{figure}
-\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedPatentFig13.png}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig13.png}
 \caption{Two sample fragmented aperture designs produced using the alternating-shape (Second Approach) pixel geometry for the 0.5--0.8~GHz and 0.8--1.2~GHz bands.}
 \label{fig:IFAF13}
 \end{figure}
@@ -198,7 +288,7 @@ Figures~\ref{fig:IFAF14} and~\ref{fig:IFAF15} summarize the broadside gain and V
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,scale=0.2]{/Users/jim.maloney/Book/images/improvedPatentFig14.png}
+\includegraphics[angle=0,scale=0.2]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig14.png}
 \caption{Broadside realized gain for the two alternating-shape designs shown in Figure~\ref{fig:IFAF13}.}
 \label{fig:IFAF14}
 \end{center}
@@ -206,7 +296,7 @@ Figures~\ref{fig:IFAF14} and~\ref{fig:IFAF15} summarize the broadside gain and V
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,scale=0.2]{/Users/jim.maloney/Book/images/improvedPatentFig15.png}
+\includegraphics[angle=0,scale=0.2]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig15.png}
 \caption{VSWR for the two alternating-shape designs shown in Figure~\ref{fig:IFAF13}.}
 \label{fig:IFAF15}
 \end{center}
@@ -219,25 +309,25 @@ The self-tessellating shape approach of Figure~\ref{fig:IFAF8} can also be used 
 \textcolor{red}{\textbf{[Missing content: Third Approach sample designs are needed.  Planned designs include: (a) broadside vertically polarized, (b) broadside horizontally polarized, (c) broadside slant-linear polarized, and (d) vertically polarized beam steered $45^\circ$ from broadside.  Corresponding gain, VSWR, and azimuth pattern figures are also needed.]}}
 
 %\begin{figure}
-%\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedFragFig16.png}
+%\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedFragFig16.png}
 %\caption{Four sample designs from the self-tessellating shape (Third Approach): (a) broadside vertically polarized, (b) broadside horizontally polarized, (c) broadside slant-linear polarized, (d) vertically polarized beam steered $45^\circ$ from broadside.}
 %\label{fig:IFAF16}
 %\end{figure}
 
 %\begin{figure}
-%\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedFragFig17.png}
+%\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedFragFig17.png}
 %\caption{Broadside realized gain for the four self-tessellating shape designs.}
 %\label{fig:IFAF17}
 %\end{figure}
 
 %\begin{figure}
-%\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedFragFig18.png}
+%\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedFragFig18.png}
 %\caption{VSWR for the four self-tessellating shape designs.}
 %\label{fig:IFAF18}
 %\end{figure}
 
 %\begin{figure}
-%\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/improvedFragFig19.png}
+%\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedFragFig19.png}
 %\caption{Azimuth gain pattern at midband for the four self-tessellating shape designs.}
 %\label{fig:IFAF19}
 %\end{figure}
