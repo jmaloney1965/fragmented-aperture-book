@@ -6,7 +6,7 @@
 
 The previous chapters have demonstrated that fragmented aperture arrays can achieve remarkable bandwidths---up to 33:1 and beyond---while maintaining broadside gain that closely tracks the uniform aperture limit.  However, one persistent challenge has been maintaining wide scan volume across the full operating bandwidth.  This chapter addresses that challenge, describing design techniques that achieve scan volumes exceeding $\pm 60^{\circ}$ across the entire design band.
 
-Chapter~7 presented the development of ultra-wideband fragmented arrays, culminating in a 33:1 bandwidth proof-of-concept array.  Figure~\ref{fig:WSA1} shows the measured and predicted embedded element realized gain for that array, confirming excellent agreement between model and measurement across three independent measurement facilities.  The broadside gain tracks the uniform aperture area limit well across the 0.3 to 10~GHz design band, and the inset photograph shows the array on the outdoor measurement range.
+Chapter~6 presented the development of ultra-wideband fragmented arrays, culminating in a 33:1 bandwidth proof-of-concept array.  Figure~\ref{fig:WSA1} shows the measured and predicted embedded element realized gain for that array, confirming excellent agreement between model and measurement across three independent measurement facilities.  The broadside gain tracks the uniform aperture area limit well across the 0.3 to 10~GHz design band, and the inset photograph shows the array on the outdoor measurement range.
 
 \begin{figure}
 \begin{center}
@@ -16,7 +16,7 @@ Chapter~7 presented the development of ultra-wideband fragmented arrays, culmina
 \end{center}
 \end{figure}
 
-Despite the excellent broadside performance, this array exhibited a shortcoming in its scan volume.  As discussed in Chapter~7 (see Figure~\ref{fig:WBA21}), the principal-plane antenna patterns for the 33:1 array show wide scan volume ($> \pm 60^{\circ}$) across most of the operating band.  However, near the top of the band (approximately 8.5 to 10~GHz), a significant narrowing of the scan volume is evident, reducing the usable scan range to roughly $\pm 40^{\circ}$.  In the years since the design of the 33:1 antenna, preventing this upper-band scan volume narrowing has been an active area of research.
+Despite the excellent broadside performance, this array exhibited a shortcoming in its scan volume.  As discussed in Chapter~6 (see Figure~\ref{fig:WBA21}), the principal-plane antenna patterns for the 33:1 array show wide scan volume ($> \pm 60^{\circ}$) across most of the operating band.  However, near the top of the band (approximately 8.5 to 10~GHz), a significant narrowing of the scan volume is evident, reducing the usable scan range to roughly $\pm 40^{\circ}$.  In the years since the design of the 33:1 antenna, preventing this upper-band scan volume narrowing has been an active area of research.
 
 A second shortcoming of the 33:1 array is related to aperture efficiency.  As visible in Figure~\ref{fig:WSA1}, the array was within 3~dB of the uniform aperture gain limit (better than 50\% aperture efficiency), but the majority of the loss was attributable to the resistive backplane required to suppress the ground-plane nulls over such a large bandwidth.  This loss limits the array to receive-only or low-power transmit applications.
 
@@ -36,7 +36,7 @@ Early fragmented aperture array antennas were constructed using the approach dep
 \end{center}
 \end{figure}
 
-This construction method can produce lightweight structures; for example, a 0.6~m $\times$ 0.6~m array built in this manner weighed only 4~kg for the entire antenna assembly.  This basic construction has been used to build many successful wideband fragmented aperture designs over the past two decades, including the 33:1 bandwidth array and the various designs summarized in the thickness-versus-frequency chart in Chapter~7 (Figure~\ref{fig:WBA22}).
+This construction method can produce lightweight structures; for example, a 0.6~m $\times$ 0.6~m array built in this manner weighed only 4~kg for the entire antenna assembly.  This basic construction has been used to build many successful wideband fragmented aperture designs over the past two decades, including the 33:1 bandwidth array and the various designs summarized in the thickness-versus-frequency chart in Chapter~6 (Figure~\ref{fig:WBA22}).
 
 \subsection{Laminated Printed Circuit Board Construction}
 
@@ -179,20 +179,20 @@ This is a dramatic improvement over the scan performance of the 33:1 array eleme
 
 \subsection{Bandwidth--Efficiency--Scan Trade Space}
 
-The results of this chapter highlight an important trade space in fragmented aperture array design.  The 33:1 bandwidth array described in Chapter~7 achieved extraordinary bandwidth but required a lossy broadband screen backplane to suppress ground-plane nulls, limiting the array to receive-only applications.  The X-band element described in this chapter achieves a more modest bandwidth (approximately 1.5:1) but does so without the need for a lossy backplane, enabling high-efficiency, transmit-capable operation.
+The results of this chapter highlight an important trade space in fragmented aperture array design.  The 33:1 bandwidth array described in Chapter~6 achieved extraordinary bandwidth but required a lossy broadband screen backplane to suppress ground-plane nulls, limiting the array to receive-only applications.  The X-band element described in this chapter achieves a more modest bandwidth (approximately 1.5:1) but does so without the need for a lossy backplane, enabling high-efficiency, transmit-capable operation.
 
-This trade-off is a fundamental consequence of the physics.  As discussed in Chapter~7, the broadband screen backplane uses resistive card (r-card) layers to prevent the half-wave nulls that occur when the aperture-to-ground-plane spacing is an integer multiple of $\lambda/2$.  For very large bandwidths, these nulls cannot be avoided without some form of loss.  For moderate bandwidths (on the order of 2:1 to 3:1), the aperture thickness can be chosen so that no half-wave nulls fall within the operating band, eliminating the need for lossy backplane layers entirely.
+This trade-off is a fundamental consequence of the physics.  As discussed in Chapter~6, the broadband screen backplane uses resistive card (r-card) layers to prevent the half-wave nulls that occur when the aperture-to-ground-plane spacing is an integer multiple of $\lambda/2$.  For very large bandwidths, these nulls cannot be avoided without some form of loss.  For moderate bandwidths (on the order of 2:1 to 3:1), the aperture thickness can be chosen so that no half-wave nulls fall within the operating band, eliminating the need for lossy backplane layers entirely.
 
 \subsection{PCB Design Rules}
 
-The design rules and scaling relationships discussed in Chapter~7 (Section~7.6) apply to the PCB approach as well, with one important modification.  The $\lambda/12$ rule of thumb for cavity thickness (Figure~\ref{fig:WBA22}) was derived from air-filled cavity designs.  For the PCB approach, the cavity is dielectrically loaded, so the relevant wavelength is the wavelength in the substrate material.  The modified rule of thumb is:
+The design rules and scaling relationships discussed in Chapter~6 (Section~6.6) apply to the PCB approach as well, with one important modification.  The $\lambda/12$ rule of thumb for cavity thickness (Figure~\ref{fig:WBA22}) was derived from air-filled cavity designs.  For the PCB approach, the cavity is dielectrically loaded, so the relevant wavelength is the wavelength in the substrate material.  The modified rule of thumb is:
 \begin{equation}
 \label{eq:WSAthickness}
 T \approx \frac{\lambda_{\text{substrate}}}{12} = \frac{\lambda_0}{12\sqrt{\epsilon_r}}
 \end{equation}
 where $\lambda_0$ is the free-space wavelength at the lowest operating frequency and $\epsilon_r$ is the relative permittivity of the substrate.  This dielectric loading results in a physically thinner antenna, which is one of the practical benefits of the PCB approach.
 
-\textcolor{red}{[TODO: Include a thickness vs.\ frequency chart for PCB designs analogous to the air-filled cavity chart in Chapter~7, once enough PCB designs have been completed to establish the trend.]}
+\textcolor{red}{[TODO: Include a thickness vs.\ frequency chart for PCB designs analogous to the air-filled cavity chart in Chapter~6, once enough PCB designs have been completed to establish the trend.]}
 
 \section{Summary and Conclusions}
 

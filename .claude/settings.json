@@ -4,7 +4,7 @@
       "Bash(**)",
       "Write(**)",
       "Read(**)",
-      "WebFetch(**)"
+      "WebFetch(domain:*)"
     ]
   }
 }

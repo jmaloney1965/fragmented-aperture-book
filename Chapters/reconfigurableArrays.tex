@@ -4,7 +4,7 @@
 
 \section{Introduction}
 
-The preceding chapters have treated the fragmented aperture antenna as a fixed structure: once the genetic algorithm determines the optimal pixel configuration and the antenna is fabricated, the conducting pattern is permanent.  Chapter~5 demonstrated that reconfigurable single-element fragmented apertures can dynamically change their frequency, beam direction, and polarization by switching pixel connections.  Chapter~8 showed that fixed fragmented array elements, when designed using spectral-domain FDTD, can achieve scan volumes exceeding $\pm 60^{\circ}$ across the operating bandwidth.
+The preceding chapters have treated the fragmented aperture antenna as a fixed structure: once the genetic algorithm determines the optimal pixel configuration and the antenna is fabricated, the conducting pattern is permanent.  Chapter~5 demonstrated that reconfigurable single-element fragmented apertures can dynamically change their frequency, beam direction, and polarization by switching pixel connections.  Chapter~7 showed that fixed fragmented array elements, when designed using spectral-domain FDTD, can achieve scan volumes exceeding $\pm 60^{\circ}$ across the operating bandwidth.
 
 This chapter describes the convergence of these two ideas: a phased array in which the fragmented aperture element is electronically reconfigured as the beam is steered.  The motivation is to overcome a fundamental limitation of any phased array with fixed element geometry---the scan-dependent degradation of the embedded element pattern, which causes the array gain to fall off faster than the physical aperture projection as the beam is steered away from broadside.
 
@@ -60,9 +60,9 @@ Table~\ref{tab:RCA_scanloss} quantifies the impact for $n = 1$ and $n = 2$.  At 
 
 \subsection{Why Fixed Elements Cannot Achieve $n = 1$}
 
-The $\cos\theta$ projected-area limit is the best that any fixed-geometry element can achieve, and in practice no fixed element achieves it uniformly across frequency and angle.  The fundamental reason is that a fixed conducting pattern supports a fixed set of current modes.  These modes produce a radiation pattern that is optimized (by the GA) for a particular set of conditions---typically broadside or a weighted combination of broadside and a few scan angles (as in Chapter~8).  When the beam is steered to an angle that was not explicitly optimized, the fixed current modes radiate with a pattern whose peak does not track the scan direction.
+The $\cos\theta$ projected-area limit is the best that any fixed-geometry element can achieve, and in practice no fixed element achieves it uniformly across frequency and angle.  The fundamental reason is that a fixed conducting pattern supports a fixed set of current modes.  These modes produce a radiation pattern that is optimized (by the GA) for a particular set of conditions---typically broadside or a weighted combination of broadside and a few scan angles (as in Chapter~7).  When the beam is steered to an angle that was not explicitly optimized, the fixed current modes radiate with a pattern whose peak does not track the scan direction.
 
-The spectral-domain FDTD approach described in Chapter~8 mitigates this problem by sampling the scan volume during the design process, but it does not eliminate it.  The optimizer must balance broadside performance against scanned performance, and the fixed element geometry represents a single compromise.  At any given frequency and scan angle, a design specifically optimized for that condition would outperform the compromise design.
+The spectral-domain FDTD approach described in Chapter~7 mitigates this problem by sampling the scan volume during the design process, but it does not eliminate it.  The optimizer must balance broadside performance against scanned performance, and the fixed element geometry represents a single compromise.  At any given frequency and scan angle, a design specifically optimized for that condition would outperform the compromise design.
 
 \section{Reconfigurable Array Elements for Scan Management}
 
@@ -80,7 +80,7 @@ The design procedure for a reconfigurable array element follows naturally from t
 
 For a set of $M$ discrete scan angles $\{\theta_1, \theta_2, \ldots, \theta_M\}$, the design process produces $M$ corresponding pixel configurations $\{P_1, P_2, \ldots, P_M\}$.  These configurations are stored in a look-up table.  When the array controller commands a beam steer to angle $\theta_s$, the appropriate pixel configuration $P_s$ is loaded onto every element simultaneously with the phase weights that steer the array factor.
 
-The spectral-domain FDTD approach of Chapter~8 is used for each design, but with an important distinction.  In Chapter~8, the optimizer sampled multiple scan angles simultaneously and sought a single design that performed acceptably across the full scan volume.  Here, each optimization focuses on a \emph{single} target scan angle (or a narrow range around it), freeing the optimizer to find the best possible design for that specific condition.  The result is a family of designs, each of which is individually superior at its target angle to any single fixed design.
+The spectral-domain FDTD approach of Chapter~7 is used for each design, but with an important distinction.  In Chapter~7, the optimizer sampled multiple scan angles simultaneously and sought a single design that performed acceptably across the full scan volume.  Here, each optimization focuses on a \emph{single} target scan angle (or a narrow range around it), freeing the optimizer to find the best possible design for that specific condition.  The result is a family of designs, each of which is individually superior at its target angle to any single fixed design.
 
 \subsection{Pre-Computed Design Library}
 
@@ -144,7 +144,7 @@ Reconfiguring the element pixel pattern changes the mutual coupling between elem
 
 \subsection{Scan Blindness Avoidance}
 
-Scan blindness occurs when the active impedance of the array element becomes purely reactive at a specific combination of frequency and scan angle, typically due to the excitation of a surface wave on the array aperture.  For fixed-geometry elements, scan blindness can be avoided through careful design (as discussed in Chapter~8), but the available design space is limited by the requirement that the single fixed geometry must also perform well at all other scan angles.
+Scan blindness occurs when the active impedance of the array element becomes purely reactive at a specific combination of frequency and scan angle, typically due to the excitation of a surface wave on the array aperture.  For fixed-geometry elements, scan blindness can be avoided through careful design (as discussed in Chapter~7), but the available design space is limited by the requirement that the single fixed geometry must also perform well at all other scan angles.
 
 Reconfigurable elements provide additional degrees of freedom to avoid scan blindness.  If a particular pixel configuration excites a surface wave at the current operating frequency and scan angle, the configuration can be changed to one that does not.  The pixel pattern optimized for each scan angle is inherently free of scan blindness at that angle, because the optimizer would reject any configuration that exhibited it.
 
@@ -170,7 +170,7 @@ The computational cost of generating the design library is a one-time expense.  
 
 This amounts to a total computational investment of $M$ times the cost of a single fixed design.  For $M = 50$ (hemispherical coverage at $5^{\circ}$ steps, exploiting symmetry), this is a factor of 50 increase---substantial but well within the capabilities of modern computing clusters, particularly since the optimizations for different scan angles are completely independent and can be run in parallel.
 
-The machine learning methods discussed in Chapter~10 offer a path to dramatically reducing this computational cost.  A surrogate model trained on the initial designs could predict the performance of candidate pixel configurations without running full FDTD simulations, accelerating the optimization by orders of magnitude.
+The machine learning methods discussed in Chapter~9 offer a path to dramatically reducing this computational cost.  A surrogate model trained on the initial designs could predict the performance of candidate pixel configurations without running full FDTD simulations, accelerating the optimization by orders of magnitude.
 
 \section{The DARPA ACT Program}
 
@@ -230,7 +230,7 @@ This chapter has described a reconfigurable fragmented aperture array concept th
 
 \end{enumerate}
 
-The combination of this reconfigurable scan management with the wide-bandwidth capabilities demonstrated in Chapters~7 and~8 suggests the possibility of a phased array that achieves multi-octave bandwidth with $\cos\theta$ scan loss across the entire scan volume---performance that no fixed-element array can match.
+The combination of this reconfigurable scan management with the wide-bandwidth capabilities demonstrated in Chapters~6 and~7 suggests the possibility of a phased array that achieves multi-octave bandwidth with $\cos\theta$ scan loss across the entire scan volume---performance that no fixed-element array can match.
 
 \FloatBarrier
 
