@@ -4,7 +4,7 @@
 
 The preceding chapters have focused exclusively on the application of the fragmented aperture design methodology to antennas---radiating structures that convert guided electromagnetic energy into free-space radiation (or the reverse).  However, the core idea behind the fragmented aperture approach---partitioning a conducting surface into sub-wavelength pixels and using computational optimization to determine the optimal pattern---is not limited to antenna design.  The same methodology can be applied to any electromagnetic structure whose performance depends on the spatial distribution of conducting material.
 
-This chapter surveys several non-antenna applications of the fragmented aperture concept.  These include broadband phase surfaces, RF power combining networks, frequency-selective surfaces, and metamaterials.  In each case, the same design machinery described in the earlier chapters---a pixelated conducting surface, a genetic algorithm (or other optimizer), and a full-wave electromagnetic simulation---is applied to a structure whose function is fundamentally different from that of an antenna.
+This chapter surveys several non-antenna applications of the fragmented aperture concept.  These include broadband phase surfaces, RF power combining networks, pixelated absorbers, pixelated waveguide components, and metamaterials.  In each case, the same design machinery described in the earlier chapters---a pixelated conducting surface, a genetic algorithm (or other optimizer), and a full-wave electromagnetic simulation---is applied to a structure whose function is fundamentally different from that of an antenna.
 
 \section{Fragmented Broadband Phase Surfaces}
 \label{sec:phaseSurface}
@@ -99,9 +99,249 @@ The fragmented aperture design methodology has also been applied to the design o
 
 Sun, Jiang, and Wang \cite{Sun2023PixelatedNZIM} applied an elite-preserving genetic algorithm to the design of pixelated near-zero refractive index metamaterials (NZIM).  Near-zero index metamaterials have been proposed for applications including directive emission, cloaking, and tunneling.  The pixelated approach allows the optimizer to discover complex unit cell geometries that achieve the desired near-zero index behavior across a specified frequency band, without requiring the designer to select a specific metamaterial topology (such as split-ring resonators or complementary structures) in advance.  This is the same philosophy as fragmented aperture antenna design: the optimizer discovers the structure, rather than having it imposed by the designer.
 
+Sun et al.\ designed an NZIM unit operating between 8.0 and 8.52~GHz using a 14$\times$14 pixel lattice with quarter-symmetry, reducing the binary chromosome to 28 independent bits.  The unit cell was etched on both sides of a Kappa 438 substrate and optimized using CST Microwave Studio driven by a Python-controlled elite-preserving genetic algorithm (EGA).  Figure~\ref{fig:OES_NZIM1} shows the optimized NZIM unit cell and its extracted electromagnetic properties: the relative permittivity and permeability both approach zero near 8.2~GHz, yielding a refractive index $|n_{\mathrm{re}}| < 1$ across the 8.0--8.52~GHz band.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.95\linewidth]{/Users/jim.maloney/Book/images/ch10/sun2023/Sun2023_Fig4_NZIM_unit_cell.png}
+\caption{Pixelated NZIM design by Sun et al.: (a) optimized 14$\times$14 unit cell on Kappa 438 substrate, (b) extracted relative permittivity and permeability showing near-zero values around 8.2~GHz, and (c) equivalent refractive index demonstrating $|n_{\mathrm{re}}| < 1$ across the 8.0--8.52~GHz band \cite{Sun2023PixelatedNZIM}.}
+\label{fig:OES_NZIM1}
+\end{center}
+\end{figure}
+
+To validate the NZIM performance, Sun et al.\ fabricated a 5$\times$5 array of NZIM unit cells and loaded it as a cladding layer above a rectangular microstrip patch antenna (MPA) resonating at 8.2~GHz.  The near-field simulation results show that the spherical waves radiated by the MPA are transformed into quasi-plane waves after passing through the NZIM cladding, confirming the beam-shaping effect.  Figure~\ref{fig:OES_NZIM2} shows the fabricated prototypes and the near-field distributions with and without the NZIM superstrate.  The field distributions clearly demonstrate the transition from spherical to quasi-planar wavefronts when the NZIM is present.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.95\linewidth]{/Users/jim.maloney/Book/images/ch10/sun2023/Sun2023_Fig5_prototypes_fields.png}
+\caption{Fabricated MPA and NZIM prototypes with near-field distributions: (a) MPA geometry, (b) side view showing NZIM cladding placement, (c--e) electric field of MPA alone at 8.0, 8.2, and 8.5~GHz showing spherical wavefronts, and (f--h) electric field with NZIM cladding showing quasi-planar wavefronts \cite{Sun2023PixelatedNZIM}.}
+\label{fig:OES_NZIM2}
+\end{center}
+\end{figure}
+
+The measured results confirmed that the NZIM significantly improves the MPA directivity, with an average gain enhancement of 5.3~dB and a maximum gain improvement of 6.05~dB.  Figure~\ref{fig:OES_NZIM3} shows the experimental setup and measured performance: the near-field test system, reflection coefficient comparison, radiation patterns at 5.8~GHz, and realized gain with and without the NZIM cladding.  Compared to previous manually designed NZIMs that achieved 1--5~dB gain enhancement, the automated pixelated design achieves 6.05~dB---a result enabled by the optimizer's ability to explore the full design space of the 14$\times$14 pixel grid.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.95\linewidth]{/Users/jim.maloney/Book/images/ch10/sun2023/Sun2023_Fig6_measurements.png}
+\caption{Experimental validation of the pixelated NZIM: (a) near-field test system with fabricated prototypes, (b) measured and simulated reflection coefficients, (c) radiation patterns at 5.8~GHz, and (d) realized gain comparison showing up to 6.05~dB gain enhancement with the NZIM cladding \cite{Sun2023PixelatedNZIM}.}
+\label{fig:OES_NZIM3}
+\end{center}
+\end{figure}
+
 As described in Chapter~9, the Periodic Level Set Function (P-LSF) methodology developed by Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet} has been applied to the design of broadband frequency-selective surfaces and narrowband metasurface filters.  The P-LSF approach is particularly well suited for periodic electromagnetic structures because the distance wrapping technique (Equation~\ref{eq:wrapped} in Chapter~9) ensures that the material distribution is inherently periodic, with no discontinuities at the unit cell boundaries.  The broadband 2:1 bandpass FSS (15--30~GHz) and dual-band high-Q notch filter demonstrated by Saad-Falcon et al.\ represent state-of-the-art examples of computationally optimized metasurface design.
 
 Howard et al.\ \cite{Howard2022LossTangent} applied the P-LSF methodology to a different class of electromagnetic structure: resonant periodic surfaces for dielectric materials characterization.  The optimized surface exhibits a resonance whose magnitude depends linearly on the loss tangent of an adjacent dielectric sample, enabling accurate, non-destructive measurement of dielectric loss.  This is a compelling example of the versatility of the fragmented approach---the same design machinery that produces antennas can also produce precision measurement instruments.
+
+
+\section{Pixelated Absorbers}
+\label{sec:absorbers}
+
+Electromagnetic absorbers are structures designed to capture incident electromagnetic energy and convert it to heat, minimizing both reflection and transmission.  Absorbers have important applications in radar cross-section (RCS) reduction, electromagnetic compatibility, and antenna measurement chambers.  The pixelated design approach is well suited to absorber design because the absorption properties depend directly on the geometry and distribution of conducting (and resistive) elements on a surface.
+
+Zhao et al.\ \cite{Zhao2015Novel} demonstrated a novel absorber design based on a pixelated frequency-selective surface (FSS) with integrated lumped resistors, optimized using an estimation of distribution algorithm (EDA).  The absorber consists of four layers: a pixelated FSS layer, a substrate, a dielectric (honeycomb) spacer, and a metallic ground plane.  The FSS unit cell is pixelated into a 10$\times$10 grid of sub-wavelength conducting patches, with lumped resistors placed at selected locations between adjacent pixels.  Figure~\ref{fig:OES_absorber1} shows the absorber layer structure and the simulated unit cell geometry.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.7\linewidth]{/Users/jim.maloney/Book/images/ch10/zhao2015/Zhao2015_Fig1_2_structure_unitcell.png}
+\caption{Pixelated FSS absorber by Zhao et al.: (a) side view showing the four-layer structure (FSS, substrate, dielectric spacer, ground plane), and (b) top view of the 10$\times$10 pixelated unit cell with conducting patches and resistor locations \cite{Zhao2015Novel}.}
+\label{fig:OES_absorber1}
+\end{center}
+\end{figure}
+
+The key innovation of Zhao et al.'s approach is the use of EDA rather than a conventional genetic algorithm.  EDA builds a probabilistic model of the design space and samples new candidates from the learned distribution, which is particularly effective for problems where the positions of metallic pixels and resistors are correlated.  Three parameters are jointly optimized: the metallic pixel positions ($\mathbf{F}_{\mathrm{position}}$), the resistor positions ($\mathbf{R}_{\mathrm{position}}$), and the resistor values ($\mathbf{R}_{\mathrm{value}}$).  The fitness function balances the absorption bandwidth (below $-6$~dB reflectivity) with the mean reflectivity across the 2--6~GHz target band.
+
+Figure~\ref{fig:OES_absorber2} shows the optimized unit cell geometries and reflectivity performance.  The pixelated FSS with resistors (a) achieves two strong absorption peaks at 3.64~GHz ($-8.67$~dB) and 5.86~GHz ($-9.77$~dB), while the version without resistors (b) exhibits only weak absorption.  The loaded resistors fundamentally change the absorbing mechanism by providing the necessary energy dissipation.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/zhao2015/Zhao2015_Fig5_optimized_reflectivity.png}
+\caption{Optimized pixelated FSS unit cells and performance: (a) with resistors, (b) without resistors, and (c) corresponding simulated reflectivity curves showing two strong absorption peaks for the resistor-loaded design.  Insets show surface current distributions at the two absorption peaks \cite{Zhao2015Novel}.}
+\label{fig:OES_absorber2}
+\end{center}
+\end{figure}
+
+The optimized absorber was fabricated and measured in a microwave anechoic chamber.  Figure~\ref{fig:OES_absorber3} shows the fabricated samples and measured reflectivity curves.  The measured absorption band ($-6$~dB reflectivity) extends from 3.13 to 6.42~GHz, with reflectivity values of $-14.39$~dB at 3.80~GHz and $-10.14$~dB at 5.68~GHz.  The total thickness of the absorber is only 4~mm, corresponding to approximately $0.04\lambda$ at the lowest operating frequency and $0.08\lambda$ at the highest---making this an ultra-thin wideband absorber.  The measured results fit well with simulations, validating the EDA-based pixelated design approach.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/zhao2015/Zhao2015_Fig6_fabricated_measured.png}
+\caption{Fabricated pixelated FSS absorber samples: (a) with resistors, (b) without resistors, and (c) measured and simulated reflectivity curves confirming wideband absorption from 3.13 to 6.42~GHz \cite{Zhao2015Novel}.}
+\label{fig:OES_absorber3}
+\end{center}
+\end{figure}
+
+Lee et al.\ \cite{Lee2023UWBAbsorber} extended the pixelated absorber concept to ultra-wideband operation by using two stacked GA-optimized metasurface layers separated by PMI foam dielectric spacers, backed by a carbon fiber reinforced polymer (CFRP) reflector.  Each metasurface layer uses a 20$\times$20 pixel grid with x/y-axis symmetry (55 independent pixels per layer), printed with carbon paste via silk-screen printing on polyimide film.  The dual-layer approach creates multiple destructive interference paths that broaden the absorption bandwidth dramatically.
+
+Figure~\ref{fig:OES_absorber4} shows the optimized metasurface patterns and simulated reflectance performance.  The GA-optimized design achieves greater than 90\% absorption (reflectance below $-10$~dB) from 2.2 to 18~GHz---a 156\% fractional bandwidth covering the entire S- through Ku-band range.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/lee2023/Lee2023_Fig4_patterns_reflectance.png}
+\caption{GA-optimized dual-layer pixelated absorber by Lee et al.: (a) upper and lower metasurface pixel patterns (20$\times$20 grids with x/y symmetry), and (b) simulated reflectance vs.\ sheet resistance, showing $>$90\% absorption from 2.2 to 18~GHz at the optimal 40~$\Omega$/sq \cite{Lee2023UWBAbsorber}.}
+\label{fig:OES_absorber4}
+\end{center}
+\end{figure}
+
+The absorber was fabricated as a composite structure with a glass fiber reinforced polymer (GFRP) protective outer layer, making it suitable for aerospace applications.  Figure~\ref{fig:OES_absorber5} shows the fabricated metasurface layers and the assembled composite absorber.  The prototype passed MIL-STD-810H environmental durability testing (temperature cycling and humidity exposure), demonstrating the practical viability of pixelated absorber technology for real-world deployment.  The total thickness is 13~mm ($0.06\lambda_0$ at 2~GHz), and absorption remains above 90\% for incidence angles up to 30$^\circ$ in both TE and TM polarizations.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/lee2023/Lee2023_Fig7_fabricated.png}
+\caption{Fabricated pixelated composite absorber: (a) silk-screen printed upper and lower metasurface patterns on polyimide film, and (b) assembled composite absorber showing top view and side view with layer stack (GFRP, metasurfaces, PMI foam, CFRP reflector) \cite{Lee2023UWBAbsorber}.}
+\label{fig:OES_absorber5}
+\end{center}
+\end{figure}
+
+
+\section{Pixelated Waveguide Components}
+\label{sec:waveguide}
+
+The pixelated design concept has also been applied to waveguide-based structures, particularly substrate integrated waveguide (SIW) horn antennas.  SIW technology implements conventional rectangular waveguide structures in planar printed circuit board form using rows of metallized vias as the waveguide sidewalls, enabling low-cost fabrication and easy integration with planar circuits.  However, SIW horn antennas typically suffer from narrow bandwidth, high sidelobe levels, and unequal beamwidths in the E- and H-planes.
+
+Zechmeister, Lacik, and Kadlec \cite{Zechmeister2021Design} applied pixelated optimization to the design of SIW horn antennas operating in the 24~GHz ISM band.  The antenna aperture is extended beyond the conventional flared horn and overlaid with a pixelated grid of dielectric and air-filled cells.  By optimizing the binary pattern of filled and empty cells, the radiation properties---beamwidth, sidelobe level, gain, and impedance match---can be controlled simultaneously.
+
+The optimization used a novel heuristic algorithm called Binary Ink Stamp Optimization (BISO), which is inspired by stamps with different ink saturation levels.  BISO reflects the significance of individual bits during the optimization process, giving it an advantage over standard genetic algorithms for binary pattern problems.  The fitness function combines terms for reflection coefficient, beamwidth equality in the E- and H-planes, sidelobe level, and gain.  Figure~\ref{fig:OES_SIW1} shows the simplified model of the pixelated SIW horn antenna and the optimized design with the SIW feeding structure.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.95\linewidth]{/Users/jim.maloney/Book/images/ch10/zechmeister2021/Zech2021_Fig4_6_LP_design.png}
+\caption{Pixelated SIW horn antenna design by Zechmeister et al.: (left) simplified model showing the pixelated region applied over the horn aperture, and (right) optimized linearly polarized antenna with SIW structure and coaxial-SIW transition.  The dielectric part is 3D-printed and the metal layer is cut copper foil \cite{Zechmeister2021Design}.}
+\label{fig:OES_SIW1}
+\end{center}
+\end{figure}
+
+Two antenna designs were demonstrated: a linearly polarized (LP) version and a circularly polarized (CP) version using an antipodal configuration.  Both use a single-layer structure---a key advantage over multi-layered approaches---and are fabricated using low-cost 3D printing for the dielectric substrate with copper foil for the metallization.
+
+The LP antenna achieves a measured gain of 14.2~dBi at the 24~GHz ISM band center frequency, with reflection coefficient below $-18$~dB across the full band.  The E- and H-plane half-power beamwidths are 26.5$^\circ$ and 25$^\circ$, respectively---nearly equal, which is the primary design objective.  Figure~\ref{fig:OES_SIW2} shows the manufactured prototype, and Figure~\ref{fig:OES_SIW3} shows the measured radiation patterns confirming good agreement with simulation and nearly equal beamwidths.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.65\linewidth]{/Users/jim.maloney/Book/images/ch10/zechmeister2021/Zech2021_Fig8_LP_prototype.png}
+\caption{Manufactured prototype of the linearly polarized pixelated SIW horn antenna.  The dielectric is 3D-printed XT co-polyester and the metal is cut copper foil with soldered vias \cite{Zechmeister2021Design}.}
+\label{fig:OES_SIW2}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/zechmeister2021/Zech2021_Fig10_LP_patterns.png}
+\caption{Measured and simulated radiation patterns of the linearly polarized pixelated SIW horn antenna at 24.125~GHz: (a) E-plane and (b) H-plane.  The nearly equal half-power beamwidths (26.5$^\circ$ and 25$^\circ$) confirm the effectiveness of the pixelated optimization \cite{Zechmeister2021Design}.}
+\label{fig:OES_SIW3}
+\end{center}
+\end{figure}
+
+The CP version uses an antipodal structure with top and bottom metal layers to generate circular polarization.  The pixelated grid uses 6$\times$28 cells with 13 parameterized column lengths to control the pixel pattern shape.  The measured CP antenna achieves 8.9~dBi RHCP gain, an axial ratio below 3~dB across the 24~GHz ISM band, sidelobe levels below $-7.4$~dB, and half-power beamwidths of 30.6$^\circ$ and 33.4$^\circ$ in the two principal planes.  Figure~\ref{fig:OES_SIW4} shows the manufactured CP prototype.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.55\linewidth]{/Users/jim.maloney/Book/images/ch10/zechmeister2021/Zech2021_Fig15_CP_prototype.png}
+\caption{Manufactured prototype of the circularly polarized pixelated SIW horn antenna, shown alongside a coin for scale.  The antipodal structure achieves RHCP with 8.9~dBi gain and axial ratio below 3~dB across the 24~GHz ISM band \cite{Zechmeister2021Design}.}
+\label{fig:OES_SIW4}
+\end{center}
+\end{figure}
+
+In a follow-up study, Zechmeister and Lacik \cite{Zechmeister2022Pixelated} improved the CP design by replacing the binary pixelization with a four-state scheme (air, 0.6~mm, 1.0~mm, and 1.6~mm diameter holes), providing finer control over the dielectric distribution.  The improved design is 29\% shorter than the original, with a wider $-10$~dB reflection coefficient bandwidth of 21.4\%, a 3~dB axial ratio bandwidth of 4.6\%, and improved beamwidth equality (less than 1$^\circ$ difference between principal planes).
+
+The pixelated SIW horn work demonstrates that the fragmented aperture philosophy extends naturally to volumetric waveguide structures.  Rather than optimizing a planar conducting pattern, the optimizer controls the three-dimensional distribution of dielectric material within the horn, achieving performance that would be difficult to obtain through conventional parametric design.
+
+
+\section{Pixelated Radomes and RCS Reduction}
+\label{sec:radomes}
+
+%% TODO: Add Pang et al. (2024) when PDF is obtained
+%% Pang, Zhang, Hu, Zhang, Zheng, "Broadband low-scattering and high-efficiency
+%% transmission radome by combining phase gradient metasurface and FSS,"
+%% Optics Communications, vol. 563, 130598, July 2024.
+%% DOI: 10.1016/j.optcom.2024.130598
+%% Key results: PGM-FSS radome, >10 dB RCS reduction from 7.95--18.12 GHz (78% BW),
+%% insertion loss < -1 dB in passband 15.95--17.7 GHz, PSO-optimized, ultra-thin (0.08 lambda)
+%% Fabricated and measured prototype (288x288x3 mm).
+%% Extract figures: fabricated prototype photo, RCS reduction curves, transmission curves.
+
+A particularly compelling application of pixelated and optimized metasurface design is in the development of low-observable radomes---protective enclosures for antennas that must transmit in-band signals efficiently while minimizing out-of-band radar cross section (RCS).  Conventional frequency-selective surface (FSS) radomes reflect out-of-band energy back toward the source, creating a significant RCS signature.  By combining pixelated phase gradient metasurfaces with bandpass FSS structures, and optimizing the composite design with algorithms such as particle swarm optimization (PSO), it is possible to redirect out-of-band energy away from the monostatic direction while maintaining high in-band transmission.
+
+Haji-Ahmadi et al.\ \cite{HajiAhmadi2017Checkerboard} demonstrated a pixelated checkerboard metasurface for ultra-wideband RCS reduction.  The design uses a chessboard arrangement of two types of pixelated artificial magnetic conductor (AMC) unit cells, each optimized via binary particle swarm optimization (BPSO) to produce a specific reflection phase.  Each cell uses a 16$\times$16 pixel grid with 8-fold symmetry, reducing the optimization to 36 independent bits per cell type (72 total).  The two cell types are arranged in a checkerboard pattern such that their reflected fields maintain a 180$^\circ \pm 37^\circ$ phase difference, causing destructive interference in the broadside direction and scattering the energy into other angles.
+
+Figure~\ref{fig:OES_RCS1} shows the optimized pixelated unit cell layouts and the resulting out-of-phase reflection bandwidth.  The BPSO optimizer discovers irregular, non-intuitive conducting patterns that would be impossible to design analytically.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/hajiahmadi2017/HajiAhmadi2017_Fig7_cells_phase.png}
+\caption{Pixelated checkerboard RCS reducer by Haji-Ahmadi et al.: (a) optimized pixelated unit cell layouts for cell type 1 and cell type 2, and (b) reflection phase from each cell and phase difference, showing the required 180$^\circ \pm 37^\circ$ out-of-phase condition maintained from 3.6 to 10.4~GHz \cite{HajiAhmadi2017Checkerboard}.}
+\label{fig:OES_RCS1}
+\end{center}
+\end{figure}
+
+The pixelated checkerboard metasurface was fabricated on Rogers RO4003c substrate with a PTFE spacer and measured in an anechoic chamber.  Figure~\ref{fig:OES_RCS2} shows the fabricated prototype and the measured monostatic RCS comparison.  The measured 10~dB RCS reduction bandwidth extends from 3.8 to 10.7~GHz (95\% fractional bandwidth), with a maximum reduction of 36.5~dB at 7.3~GHz.  This significantly outperforms prior checkerboard designs based on conventional (non-pixelated) AMC unit cells, which achieved fractional bandwidths of only 41--63\%.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/hajiahmadi2017/HajiAhmadi2017_Fig13_RCS_measured.png}
+\caption{Measured and simulated monostatic RCS of the pixelated checkerboard metasurface, normalized to an equal-size metal plate.  The measured 10~dB RCS reduction bandwidth extends from 3.8 to 10.7~GHz (95\% fractional bandwidth), with a maximum reduction of 36.5~dB at 7.3~GHz \cite{HajiAhmadi2017Checkerboard}.}
+\label{fig:OES_RCS2}
+\end{center}
+\end{figure}
+
+Pang et al.\ \cite{Pang2024Radome} proposed a broadband low-scattering radome that combines phase gradient metasurfaces with an FSS, achieving over 10~dB RCS reduction from 7.95 to 18.12~GHz (a 78\% relative bandwidth) while maintaining less than 1~dB insertion loss in the 15.95--17.7~GHz passband.  The PSO-optimized structure is ultra-thin at only $0.08\lambda$ at the lowest operating frequency.  \textit{[Figures and detailed discussion to be added when the full paper is obtained.]}
+
+These radome and RCS reduction designs illustrate how the pixelated optimization approach addresses a fundamentally different electromagnetic challenge: rather than maximizing radiation or absorption, the goal is to simultaneously control transmission (in-band) and scattering (out-of-band) properties of a surface.
+
+
+\section{Pixelated Energy Harvesting}
+\label{sec:harvesting}
+
+The pixelated metasurface concept has also been applied to electromagnetic energy harvesting---the capture of ambient or intentionally transmitted RF energy and its conversion to usable DC power.  Energy harvesting metasurfaces must efficiently absorb incident electromagnetic energy across multiple frequency bands and polarizations, then couple it to resistive loads (or rectifying circuits) through vias.
+
+Ghaderi et al.\ \cite{Ghaderi2018EnergyHarvesting} demonstrated a pixelated metasurface for dual-band, multi-polarization electromagnetic energy harvesting.  The unit cell combines a ring resonator (for the 2.45~GHz WiFi band) and a symmetric electric-LC (ELC) resonator (for the 6~GHz band), with resistive loads connected through vias to the ground plane.  The cell surface is pixelated into a 27$\times$27 grid (0.41~mm pixel resolution) with 4-fold symmetry, yielding approximately 105 independent optimization variables.  The BPSO algorithm simultaneously optimizes the pixel pattern, load resistance ($R = 240~\Omega$), and gap size ($g = 0.25$~mm).
+
+Figure~\ref{fig:OES_harvest1} shows the BPSO-optimized pixelated unit cell.  The irregular, fractal-like conducting pattern discovered by the optimizer combines the dual-band resonant behavior with efficient coupling to the via-connected loads.  The design achieves polarization-independent operation---a critical requirement for harvesting ambient RF energy arriving from arbitrary directions and polarizations.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/ghaderi2018/Ghaderi2018_Fig5_6_pixelated_cell.png}
+\caption{BPSO-optimized pixelated energy harvesting unit cell by Ghaderi et al.: (top) 3D view of the optimized 27$\times$27 pixel pattern showing the irregular conducting geometry with vias to loads and edge capacitors, and (bottom) top and bottom views of the fabrication-ready design with 240~$\Omega$ resistive loads \cite{Ghaderi2018EnergyHarvesting}.}
+\label{fig:OES_harvest1}
+\end{center}
+\end{figure}
+
+A 9$\times$9 array of the optimized unit cells was fabricated on Rogers RT/duroid 6006 substrate and measured in an anechoic chamber.  Figure~\ref{fig:OES_harvest2} shows the measurement setup.  The measured harvesting efficiency exceeds 90\% at both 2.45 and 6~GHz for all polarization angles, confirming the polarization-independent design.  The delivered power is also insensitive to incidence angle from 0$^\circ$ to 45$^\circ$ for both TE and TM polarizations.  This work demonstrates that the pixelated optimization approach can produce electromagnetic structures optimized for energy capture rather than radiation or scattering---yet another application of the same fundamental design philosophy.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/ghaderi2018/Ghaderi2018_Fig14_measurement.png}
+\caption{Measurement of the pixelated energy harvesting metasurface: (a) schematic of the test setup with 50-to-240~$\Omega$ converter and spectrum analyzer, and (b) anechoic chamber photograph showing the 9$\times$9 array under test with a transmitter horn antenna \cite{Ghaderi2018EnergyHarvesting}.}
+\label{fig:OES_harvest2}
+\end{center}
+\end{figure}
+
+
+\section{Pixelated Microwave Filters}
+\label{sec:filters}
+
+Microwave filters are fundamental components in communication systems, and their design has traditionally relied on analytical synthesis methods based on coupled resonator theory.  Gomez et al.\ \cite{Gomez2025PixelatedFilters} demonstrated that the pixelated inverse design approach can produce compact bandpass and notch filters in coplanar waveguide (CPW) technology, achieving performance comparable to conventional designs in a significantly smaller footprint.
+
+The filter design region is a pixelated area within a CPW transmission line, where each pixel is either conducting (copper) or absent (etched away).  The optimization uses a genetic algorithm combined with direct binary search and randomization mutation, driven by CST Microwave Studio simulations.  The design begins with a coarse 24$\times$16 grid (400~$\mu$m pixels) and refines to a 48$\times$32 grid (200~$\mu$m pixels).  A key innovation is the integration of short-circuited stubs at the top and bottom of the pixelated region, which dramatically improves stopband rejection.
+
+Figure~\ref{fig:OES_filter1} shows the proposed pixelated notch filter schematic and the fabricated prototype.  The filter is fabricated on Rogers Kappa 438 substrate via UV laser ablation, which precisely removes copper to define the pixelated pattern at 200~$\mu$m resolution.  The irregular conducting pattern discovered by the optimizer bears no resemblance to conventional coupled-line or interdigitated filter topologies.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/gomez2025/Gomez2025_Fig1_filter_photo.png}
+\caption{Pixelated microwave notch filter by Gomez et al.: (a) schematic showing the irregular optimized conducting pattern in a CPW structure, and (b) photograph of the fabricated filter on Rogers Kappa 438 substrate with SMA connectors \cite{Gomez2025PixelatedFilters}.}
+\label{fig:OES_filter1}
+\end{center}
+\end{figure}
+
+Figure~\ref{fig:OES_filter2} shows the measured and simulated S-parameters.  The filter without short-circuited stubs achieves a notch depth of $-26$~dB at 5~GHz, while the version with shorted stubs reaches $-61$~dB---a 35~dB improvement.  The pixelated filter occupies only 61.5~mm$^2$, less than half the area of an equivalent third-order Chebyshev interdigitated filter.  This compact size, combined with the single-layer, via-free construction, makes pixelated filters attractive for integrated microwave circuits.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/gomez2025/Gomez2025_Fig7_Sparams.png}
+\caption{Measured and simulated S-parameters of the pixelated filter: (top) without short-circuited stubs showing $-26$~dB notch depth, and (bottom) with shorted stubs achieving $-61$~dB notch depth---a 35~dB improvement.  The pixelated design area is less than half the size of an equivalent conventional filter \cite{Gomez2025PixelatedFilters}.}
+\label{fig:OES_filter2}
+\end{center}
+\end{figure}
 
 
 \section{Summary}
@@ -111,7 +351,12 @@ The examples in this chapter demonstrate that the fragmented aperture concept is
 \begin{itemize}
 \item \textbf{Broadband phase surfaces} with engineered transmission phase properties, as demonstrated in the original patent.
 \item \textbf{RF power combiners} that outperform conventional COTS components in insertion loss and bandwidth, enabling integrated all-fragmented antenna systems.
-\item \textbf{Metamaterials and metasurfaces} including near-zero index materials, broadband frequency-selective surfaces, and resonant structures for materials characterization.
+\item \textbf{Pixelated absorbers} that achieve ultra-thin, wideband absorption through jointly optimized conducting pixels and lumped resistors.
+\item \textbf{Pixelated waveguide components}, specifically SIW horn antennas with optimized dielectric distributions that achieve equal beamwidths and circular polarization in single-layer structures.
+\item \textbf{Radomes and RCS reduction} surfaces that combine optimized metasurfaces with frequency-selective structures for simultaneous in-band transmission and out-of-band scattering control.
+\item \textbf{Energy harvesting} metasurfaces that efficiently capture dual-band, multi-polarization RF energy for wireless power transfer applications.
+\item \textbf{Microwave filters} with pixelated conducting patterns that achieve compact notch and bandpass responses in single-layer CPW structures.
+\item \textbf{Metamaterials and metasurfaces} including near-zero index materials with measured 6~dB gain enhancement, broadband frequency-selective surfaces, and resonant structures for materials characterization.
 \end{itemize}
 
 As the fragmented aperture design process continues to be refined---through improved optimization algorithms (Chapter~3), continuous parameterizations (Chapter~9), and machine learning acceleration (Chapter~9)---its application to non-antenna electromagnetic structures will expand further.  Any electromagnetic problem that can be cast as ``what pattern of conducting material on a surface optimizes a given performance metric?'' is a candidate for the fragmented aperture approach.
@@ -124,5 +369,6 @@ As the fragmented aperture design process continues to be refined---through impr
               ../Literature/fragmented_aperture_core,%
               ../Literature/ml_ai_optimization_methods,%
               ../Literature/specialized_applications,%
-              ../Literature/recent_innovations}
+              ../Literature/recent_innovations,%
+              ../Literature/metamaterials_ch7}
 \bibliographystyle{IEEEtran}
