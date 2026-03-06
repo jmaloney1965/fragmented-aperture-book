@@ -1,4 +1,4 @@
-\chapter{Sample Antenna Designs}
+\chapter{Advanced Fragmented Aperture Antennas}
 %\authortoc{James G. Maloney}
 %\chapterauthor{James G. Maloney}
 
@@ -6,7 +6,7 @@
 
 Chapters~2 and 3 described the fragmented aperture design methodology and demonstrated its effectiveness for broadside, linearly polarized antennas without ground planes.  Those early designs validated the core concept: a genetic algorithm working with a full-wave electromagnetic simulation can produce antenna geometries that approach the theoretical aperture gain limit across multi-octave bandwidths.  This chapter broadens the picture by surveying the many ways the fragmented aperture approach can be applied to meet diverse antenna requirements.
 
-The designs in this chapter illustrate that once the fundamental design machinery is in place---a pixelated aperture representation, a genetic algorithm, and a full-wave solver---the same process can be directed toward a remarkably wide range of performance objectives simply by changing the fitness function and the physical configuration.  Topics include fragmented ground planes, various feed strategies, bandwidth tailoring, fixed beam steering, polarization control (including circular polarization), beamwidth shaping, and out-of-band rejection.  The chapter concludes with a brief introduction to array element design, which is treated in depth in Chapters~6 through 8.
+The designs in this chapter illustrate that once the fundamental design machinery is in place---a pixelated aperture representation, a genetic algorithm, and a full-wave solver---the same process can be directed toward a remarkably wide range of performance objectives simply by changing the fitness function and the physical configuration.  Topics include fragmented ground planes, fragmented superstrates for enhanced forward gain, various feed strategies, bandwidth tailoring, fixed beam steering, polarization control (including circular polarization), beamwidth shaping, out-of-band rejection, and array element design including unit cell optimization for phased arrays.
 
 Several of the sections below include designs by other research groups who have adopted the fragmented aperture or closely related pixelated antenna approaches.  Their work demonstrates that the concept has broad applicability and has been successfully implemented by independent teams worldwide.
 
@@ -23,7 +23,7 @@ An important electromagnetic consequence of introducing defects into the ground 
 
 The distinction between the fragmented aperture approach and conventional DGS is primarily one of design methodology.  DGS designs typically use simple, analytically motivated geometries---dumbbell shapes, spirals, or periodic slot patterns---whose dimensions are tuned by parametric sweeps.  The fragmented aperture approach, by contrast, treats every sub-wavelength pixel of the ground plane as a free variable and uses a genetic algorithm to determine the optimal pattern.  This allows the optimizer to discover complex, non-intuitive geometries that may outperform hand-designed DGS patterns, particularly when broadband performance is required.
 
-As shown in Chapter~11 (Figure~\ref{fig:OES1}), the original patent demonstrated that a fragmented surface maintains a more uniform transmission phase across frequency than a solid conducting surface, demonstrating its potential as a broadband reflector.  This concept was later developed into the broadband screen backplane described in Chapter~7, which uses resistive card layers in conjunction with a conducting ground plane to achieve ultra-wideband operation.
+As shown in Chapter~10 (Figure~\ref{fig:OES1}), the original patent demonstrated that a fragmented surface maintains a more uniform transmission phase across frequency than a solid conducting surface, demonstrating its potential as a broadband reflector.  This concept was later developed into the broadband screen backplane described in Chapter~6, which uses resistive card layers in conjunction with a conducting ground plane to achieve ultra-wideband operation.
 
 Figure~\ref{fig:SAD1} shows the fragmented ground plane concept as disclosed in the original patent.  A radiating aperture (100) is placed in front of a fragmented ground plane layer (99), separated by approximately $\lambda_0/8$.  Unlike a conventional solid ground plane, the ground plane layer itself has a pixelated pattern that is optimized to enhance the antenna's forward radiation.
 
@@ -64,6 +64,57 @@ Figure~\ref{fig:SAD3} compares the performance of the fragmented aperture with a
 \end{figure}
 
 More recently, researchers have explored the physical bounds on antenna performance above a ground plane.  Tayli and Gustafsson \cite{Tayli2016PhysicalBounds} derived fundamental limits on the gain and bandwidth achievable by antennas above ground planes, providing a theoretical benchmark against which fragmented ground plane designs can be evaluated.  Ehrenborg and Gustafsson \cite{Ehrenborg2016PhysicalBounds} extended this work to automatic design methods, demonstrating that optimization-based approaches can approach these physical bounds.
+
+\section{Fragmented Superstrates}
+\label{sec:ch4superstrate}
+
+The preceding section described the use of a fragmented surface \emph{behind} the radiating aperture---a fragmented ground plane---to enhance forward gain.  A complementary technique is to place a fragmented surface \emph{in front of} the radiating aperture as a superstrate.  Just as the fragmented ground plane acts as an optimized reflector, a fragmented superstrate acts as an optimized director, and the combination of reflector, driven element, and one or more directors is directly analogous to the classic Yagi-Uda antenna.
+
+\subsection{Yagi-Uda Analogy}
+
+In a Yagi-Uda antenna, a single driven element is surrounded by parasitic elements: a reflector behind the driven element and one or more directors in front of it.  The reflector is slightly longer than resonant and presents an inductive impedance that causes it to re-radiate with a phase that reinforces the forward direction.  The directors are slightly shorter than resonant and present capacitive impedances that produce a traveling-wave-like excitation across the array of parasitic elements, concentrating the radiation in the forward direction.  Adding more directors increases the electrical length of the antenna and narrows the beam, increasing the forward gain.
+
+The fragmented aperture antenna with a ground plane and one or more superstrate layers follows exactly this paradigm:
+
+\begin{itemize}
+\item The \textbf{fragmented ground plane} (Section~\ref{sec:ch4gnd}) serves as the reflector, redirecting backward radiation into the forward hemisphere.
+
+\item The \textbf{radiating aperture} is the driven element, excited by one of the feed strategies described in Section~\ref{sec:ch4feeds}.
+
+\item One or more \textbf{fragmented superstrate layers}, placed at optimized distances in front of the radiating aperture, serve as directors.  Each superstrate is a pixelated conducting surface whose pattern is optimized by the genetic algorithm to maximize the forward gain of the composite structure.
+\end{itemize}
+
+The key advantage of the fragmented aperture approach over a conventional Yagi-Uda is the same advantage that applies throughout this book: rather than using simple dipole-like elements whose lengths are tuned by hand, each surface is a pixelated aperture with hundreds or thousands of binary design variables, and the genetic algorithm is free to discover complex patterns that provide broadband directive behavior far beyond what analytical parasitic element design can achieve.
+
+\subsection{Single Superstrate Layer}
+
+The simplest superstrate configuration places a single fragmented surface at a distance of approximately $\lambda_0/4$ to $\lambda_0/2$ in front of the radiating aperture.  The spacing and the pixel pattern of the superstrate are both design variables that the genetic algorithm optimizes simultaneously.  The superstrate modifies the aperture field distribution, and when properly designed, it narrows the beam in one or both principal planes, increasing the peak directivity without increasing the physical aperture area.
+
+\textcolor{red}{[TODO: Author to create a single-superstrate design example.  Suggested approach: use the same radiating aperture and fragmented ground plane from Section~\ref{sec:ch4gnd} (Figures~\ref{fig:SAD1}--\ref{fig:SAD4}), add a superstrate layer, and optimize.  Show: (a) the superstrate pixel pattern, (b) gain comparison with and without the superstrate, and (c) radiation pattern showing the narrower beam.]}
+
+The gain enhancement from a single superstrate is analogous to adding a single director to a Yagi-Uda antenna.  The improvement is modest---typically 1 to 3~dB---but it comes at virtually no cost in aperture area, requiring only an additional planar surface and the associated mechanical support.
+
+\subsection{Multiple Superstrate Layers}
+
+Just as adding more directors to a Yagi-Uda increases the gain, stacking multiple fragmented superstrate layers in front of the radiating aperture can provide additional gain enhancement.  Each successive layer acts as an additional director, further shaping the aperture field and narrowing the beam.  The spacings between layers, as well as the pixel patterns of all layers, are jointly optimized by the genetic algorithm.
+
+The design complexity grows with each additional layer---two superstrate layers double the number of pixel variables to be optimized---but the genetic algorithm handles this naturally by concatenating the pixel chromosomes of all layers into a single design vector.  The full-wave FDTD simulation inherently accounts for all inter-layer coupling, so no approximate coupling models are needed.
+
+\textcolor{red}{[TODO: Author to create a multi-superstrate design example.  Suggested approach: use the same base design as the single-superstrate case, add two or three superstrate layers, and optimize.  Show: (a) the pixel patterns of all layers, (b) gain versus number of superstrate layers (0, 1, 2, 3), demonstrating diminishing returns, and (c) radiation patterns showing progressive beam narrowing.]}
+
+There is, of course, a point of diminishing returns.  Each additional superstrate layer adds a small amount of ohmic and dielectric loss, increases the physical depth of the antenna, and expands the design space that the genetic algorithm must search.  In practice, one or two superstrate layers provide the most favorable trade-off between gain improvement and structural complexity.
+
+\subsection{Design Considerations}
+
+Several practical considerations arise in fragmented superstrate design:
+
+\begin{itemize}
+\item \textbf{Bandwidth.}  The Yagi-Uda analogy suggests that superstrate-enhanced designs will be inherently narrower in bandwidth than the driven aperture alone, because the director behavior depends on the electrical spacing between layers, which changes with frequency.  However, the fragmented aperture optimizer can produce superstrate patterns that maintain directive behavior over a wider bandwidth than would be possible with simple resonant parasitic elements, just as fragmented ground planes outperform simple solid reflectors.
+
+\item \textbf{Scan compatibility.}  For phased array applications, the superstrate must not degrade the scan performance of the array.  The superstrate pixel pattern should be optimized jointly with scan angle performance, using the periodic boundary condition techniques described in Section~\ref{sec:ch4array}.
+
+\item \textbf{Fabrication.}  Superstrate layers can be fabricated using the same printed circuit board techniques used for the radiating aperture and ground plane, with dielectric spacer layers providing the required inter-layer separations.  This is particularly straightforward in the laminated PCB construction described in Chapter~7.
+\end{itemize}
 
 \section{Feed Strategies}
 \label{sec:ch4feeds}
@@ -185,7 +236,7 @@ Beyond simple microstrip feeds, several other in-plane excitation strategies hav
 
 For fragmented aperture antennas backed by a ground plane, a common feed approach is to pass a coaxial transmission line through the ground plane, with the center conductor extending across the cavity to make contact with the radiating surface.  This is analogous to a probe-fed microstrip patch antenna, but with the probe extending across a potentially thicker cavity that may contain dielectric layers or broadband screen backplane structures.
 
-This feed configuration was used in the original wideband fragmented aperture arrays described in Chapter~7.  As shown in Figure~\ref{fig:WSA2} in Chapter~8, the traditional construction uses machined aluminum feed towers that enclose the coaxial feed lines and provide structural support.
+This feed configuration was used in the original wideband fragmented aperture arrays described in Chapter~6.  As shown in Figure~\ref{fig:WSA2} in Chapter~7, the traditional construction uses machined aluminum feed towers that enclose the coaxial feed lines and provide structural support.
 
 Landgren, Dykes, and Allen \cite{Landgren2017Unbalanced} at the Georgia Tech Research Institute (GTRI) developed an unbalanced feed design for wideband phased arrays that uses a single center pin extending from the coaxial connector through the cavity to the radiating layer.  The unbalanced feed avoids the need for a balun or differential feed network, simplifying the antenna architecture and enabling compatibility with standard single-ended electronics.  This work was significant because earlier fragmented aperture arrays had typically used balanced (differential) feeds, which require either a balun at each element or differential transmit/receive electronics.
 
@@ -214,9 +265,9 @@ Figure~\ref{fig:SAD12} shows the fabricated mmWave fragmented aperture antenna e
 
 A variation on the center pin feed uses a center conductor flanked by two (or more) closely spaced ground vias that extend from the ground plane to the radiating surface.  This configuration creates a quasi-coaxial transmission line within the antenna cavity, providing better control of the feed impedance and reducing the excitation of unwanted cavity modes.
 
-Landgren et al.\ \cite{Landgren2019Broadband} demonstrated a broadband array with unbalanced feeds in which the feed structure incorporated flanking vias alongside the center conductor.  This design was part of a broader effort to develop fragmented aperture arrays with integrated power combiners, where the combiner networks were also designed using the fragmented aperture principle.  The flanking via approach was also adopted in the laminated PCB construction described in Chapter~8 (see Figure~\ref{fig:WSA3}), where the feed vias are manufactured using standard multi-layer PCB plating processes.
+Landgren et al.\ \cite{Landgren2019Broadband} demonstrated a broadband array with unbalanced feeds in which the feed structure incorporated flanking vias alongside the center conductor.  This design was part of a broader effort to develop fragmented aperture arrays with integrated power combiners, where the combiner networks were also designed using the fragmented aperture principle.  The flanking via approach was also adopted in the laminated PCB construction described in Chapter~7 (see Figure~\ref{fig:WSA3}), where the feed vias are manufactured using standard multi-layer PCB plating processes.
 
-Landgren et al.\ \cite{Landgren2018Combiner} further developed this concept in a wideband phased array with fragmented combiner technology, demonstrating that the fragmented aperture optimization could be applied not only to the radiating surface but also to the power combining networks behind the ground plane.  The fragmented combiner concept---an important example of applying the fragmented aperture methodology to non-antenna electromagnetic structures---is described in detail in Chapter~11.
+Landgren et al.\ \cite{Landgren2018Combiner} further developed this concept in a wideband phased array with fragmented combiner technology, demonstrating that the fragmented aperture optimization could be applied not only to the radiating surface but also to the power combining networks behind the ground plane.  The fragmented combiner concept---an important example of applying the fragmented aperture methodology to non-antenna electromagnetic structures---is described in detail in Chapter~10.
 
 \textcolor{red}{\textbf{[TODO: Author to create an original flanking-via feed design example.  Include figure showing the via geometry in cross-section and plan view, and a performance comparison with the center-pin-only feed.]}}
 
@@ -466,29 +517,43 @@ This capability is another illustration of the versatility of the fragmented ape
 
 The preceding sections of this chapter have focused on single-element antenna designs in which the fragmented aperture operates as a standalone antenna.  The fragmented aperture concept extends naturally to the design of elements for phased array antennas, where the optimization must account for mutual coupling between adjacent elements and the impedance behavior as the array beam is scanned.
 
-Figure~\ref{fig:SAD6} shows an early example from the original patent: a linear array of three connected fragmented aperture elements, each 10~inches square, with feed points at the center of each element.  This design illustrates two concepts that proved essential for wideband array performance.  First, the pixel pattern extends continuously across element boundaries---there is no enforced gap between adjacent elements.  These inter-element connections allow currents to flow across multiple unit cells, which is critical for maintaining a good impedance match at low frequencies where the wavelength is much larger than a single element.  Second, the unit cell itself is designed directly as a phased array element, with the pixel pattern optimized in the context of the array environment rather than as an isolated antenna.  This approach---designing the unit cell directly for array operation---is the subject of Chapters~6 through 8.
+\subsection{From Standalone Antenna to Array Element}
+
+A standalone fragmented aperture antenna is designed in free space (or above a ground plane) with radiation boundaries on all sides.  When the same antenna is placed into a phased array, its performance changes dramatically.  Mutual coupling between adjacent elements modifies the input impedance, the radiation pattern is replaced by the embedded element pattern, and the array beam steering introduces scan-dependent impedance variations.  An element designed in isolation will generally perform poorly in an array environment because the optimizer had no knowledge of these coupling effects during the design process.
+
+The solution is \emph{direct element design}: the unit cell is designed from the outset as an array element, with the full-wave simulation incorporating the array environment.  The FDTD simulation models a single unit cell with periodic boundary conditions (PBC) on the lateral faces, so that the element behaves as though it is embedded in an infinite array.  The genetic algorithm optimizes the pixel pattern of this unit cell, and the fitness function evaluates the embedded element performance---typically the embedded element realized gain (EERG) or the active reflection coefficient as a function of frequency and scan angle.
+
+\subsection{Unit Cell Design}
+
+The unit cell for a fragmented aperture array element is defined by the element lattice (usually square or triangular) and the element spacing, which is constrained by the grating lobe condition $d < \lambda_{\min}/(1 + \sin\theta_{\max})$ where $d$ is the element spacing, $\lambda_{\min}$ is the wavelength at the highest operating frequency, and $\theta_{\max}$ is the maximum scan angle.
+
+Within the unit cell, the pixel grid is defined in the same way as for standalone antennas: the conducting surface is divided into sub-wavelength pixels, each of which is either conducting or non-conducting.  The key difference is that the pixel pattern at the edges of the unit cell must be compatible with the periodic boundary conditions.  In the connected array approach, the pixel pattern extends continuously across element boundaries---there is no enforced gap between adjacent elements.  These inter-element connections allow currents to flow across multiple unit cells, which is critical for maintaining a good impedance match at low frequencies where the wavelength is much larger than a single element.
+
+Figure~\ref{fig:SAD6} shows an early example from the original patent: a linear array of three connected fragmented aperture elements, each 10~inches square, with feed points at the center of each element.  This connected array concept proved essential for achieving wideband array performance.
 
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch4/PatentFig19_ConnectedArray.png}
-\caption{Three connected fragmented aperture array elements from the original patent, each 10~inches square with a central feed point.  The pixel pattern extends continuously across element boundaries, allowing inter-element current flow.  This connected array concept proved essential for achieving wideband array performance, as discussed in Chapter~7 \cite{MaloneyFragPatent}.}
+\caption{Three connected fragmented aperture array elements from the original patent, each 10~inches square with a central feed point.  The pixel pattern extends continuously across element boundaries, allowing inter-element current flow.  This connected array concept proved essential for achieving wideband array performance, as discussed in Chapter~6 \cite{MaloneyFragPatent}.}
 \label{fig:SAD6}
 \end{center}
 \end{figure}
 
-In the array context, the design process uses periodic boundary conditions (PBC) in the FDTD simulation to model a single unit cell of the array as though it were embedded in an infinite array.  The genetic algorithm optimizes the pixel pattern of this unit cell, and the fitness function evaluates the embedded element performance---typically the embedded element realized gain (EERG) or the active reflection coefficient as a function of frequency and scan angle.
+The fragmented aperture array element has a strong conceptual connection to the \emph{current sheet array} concept developed by Munk \cite{Munk2003LowProfile} and further explored by Harris and others.  Munk showed that an ideal current sheet---a continuous distribution of electric current over a planar surface backed by a ground plane---can achieve a theoretical impedance bandwidth of approximately $\pi$:1 (about 3.14:1) for scan volumes up to $\pm 45^{\circ}$.  The fragmented aperture array element can be viewed as a practical realization of this concept: the connected pixel pattern approximates a current sheet, and the genetic algorithm finds the specific pattern that best approaches the current sheet performance within the constraints of the binary pixel representation and the physical feed structure.
 
-This array extension of the fragmented aperture concept is the subject of the remaining chapters:
+\subsection{Incorporating Scan Performance}
 
-\begin{itemize}
-\item \textbf{Chapter~6} describes the design of fragmented array elements, including the transition from standalone antennas to array elements and the incorporation of scan performance into the design process.
+For a fixed-beam array or a broadside-only design, the fitness function can evaluate the embedded element performance at broadside alone.  For phased arrays that must scan, the fitness function must sample the scan volume.  There are two principal approaches:
 
-\item \textbf{Chapter~7} describes the development of ultra-wideband fragmented arrays with bandwidths up to 33:1, including connected elements, broadband screen backplanes, and multi-layer radiators.
+\begin{enumerate}
+\item \textbf{Multi-angle optimization.}  The FDTD simulation is run at several scan angles (e.g., broadside, $30^{\circ}$, $45^{\circ}$, $60^{\circ}$ in the principal planes), and the fitness function combines the performance at all sampled angles.  This approach was used in the early fragmented array designs and produces a single pixel pattern that is a compromise across the scan volume.  The technique is described in detail in Chapter~7.
 
-\item \textbf{Chapter~8} describes techniques for designing wide-scan fragmented array elements using spectral-domain FDTD simulation, and presents a laminated PCB fabrication approach.
-\end{itemize}
+\item \textbf{Spectral-domain FDTD.}  A single broadband FDTD simulation with a spectral-domain excitation provides the embedded element response at all frequencies and all scan angles simultaneously, dramatically reducing the computational cost compared to separate simulations at each angle.  This approach is described in Chapter~7.
+\end{enumerate}
 
-The key point for this chapter is that the same design methodology described above---pixelated aperture, genetic algorithm, full-wave simulation---applies equally to array elements.  The primary differences are the use of periodic boundary conditions instead of free-space boundaries, and a fitness function that evaluates scan performance in addition to (or instead of) broadside performance.
+The multi-angle approach is straightforward but computationally expensive, since each fitness evaluation requires multiple FDTD simulations.  The spectral-domain approach is more efficient but requires specialized FDTD formulations.  Both approaches have been used successfully to design fragmented aperture array elements with bandwidths spanning multiple octaves.
+
+\subsection{Example Results}
 
 Thors, Steyskal, and Holter \cite{Thors2005Broad-band} at the Swedish Defence Research Agency (FOI) and the US Air Force Research Laboratory demonstrated broad-band fragmented aperture phased array element design using genetic algorithms, confirming that the fragmented aperture concept could be successfully applied to array element design by independent research groups.  Figure~\ref{fig:SAD26} shows the canonical unit cell geometry from Thors et al.: (a) the side view showing the fragmented surface, dielectric substrate, and ground plane, and (b) the top view showing the 20$\times$20 pixel grid with the GA-optimized metal pattern.  Figure~\ref{fig:SAD27} shows their best design result, in which the GA was allowed to optimize the substrate thickness along with the pixel pattern, achieving a 2.23:1 bandwidth (1.5--5.0~GHz design band) with reflection coefficients below $-10$~dB (SWR~$< 2$) at broadside and $45^\circ$ scan in all principal planes.  Ellgardt and Persson \cite{Ellgardt2006Characteristics} characterized the broadband, wide-scan performance of fragmented aperture phased array elements, and Ellgardt's doctoral thesis \cite{EllgardtThesis} provided a comprehensive treatment of wide-angle scanning with fragmented aperture array elements.
 
@@ -508,6 +573,8 @@ Thors, Steyskal, and Holter \cite{Thors2005Broad-band} at the Swedish Defence Re
 \end{center}
 \end{figure}
 
+These early results demonstrated that 2:1 to 4:1 bandwidth is achievable with single-layer fragmented aperture array elements.  Achieving wider bandwidths requires the multi-layer structures and broadband backplane techniques described in Chapter~6.  Achieving wide scan volumes ($\pm 60^{\circ}$ and beyond) across the full bandwidth requires the spectral-domain design approach described in Chapter~7, which also presents a laminated printed circuit board fabrication method that enables practical, low-cost manufacturing of fragmented aperture arrays.  The array elements are usually balanced-fed with differential feeds and electronics; unbalanced feed approaches are also discussed in Chapter~6.
+
 \section{Summary}
 
 This chapter has surveyed the versatility of the fragmented aperture antenna design approach through a range of design examples and applications.  The key themes are:
@@ -515,6 +582,8 @@ This chapter has surveyed the versatility of the fragmented aperture antenna des
 \begin{enumerate}
 
 \item \textbf{Fragmented ground planes} extend the pixel optimization concept from the radiating aperture to the ground structure, connecting to the broader literature on defected ground structures.
+
+\item \textbf{Fragmented superstrates} provide the complementary function: optimized director layers in front of the radiating aperture that enhance forward gain, analogous to adding directors to a Yagi-Uda antenna.
 
 \item \textbf{Feed strategies} range from simple in-plane microstrip feeds to through-ground-plane configurations with center pins or flanking vias.  Unbalanced feed designs simplify the antenna architecture by eliminating the need for baluns.
 
@@ -528,7 +597,7 @@ This chapter has surveyed the versatility of the fragmented aperture antenna des
 
 \item \textbf{Out-of-band rejection} is achieved by adding rejection penalties to the fitness function, building filtering into the antenna design.
 
-\item \textbf{Array elements} extend the fragmented aperture concept to phased arrays, as developed in Chapters~6--8.
+\item \textbf{Array elements} extend the fragmented aperture concept to phased arrays using periodic boundary conditions and scan-aware fitness functions, as developed further in Chapters~6 and~7.
 
 \end{enumerate}
 
