@@ -63,13 +63,51 @@ The second design objective was a dual-band high-Q notch filter, with notch freq
 
 A multi-stage optimization procedure was also demonstrated, in which a coarse P-LSF basis is first optimized and then \emph{upsampled} to a fine basis using a pseudo-inverse technique.  This allows the optimizer to quickly converge on a coarse approximation and then refine it, reducing the total number of expensive electromagnetic simulations required.
 
-\textcolor{red}{\textbf{[INSERT FIGURE: Side-by-side comparison of fragmented (binary) and P-LSF parameterizations, showing the binary pixel grid vs.\ the continuous level set function and resulting metal pattern.  Adapted from Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet}, Figure~1.]}}
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/saadfalcon/SaadFalcon2024_Fig1_BinaryVsPLSF.png}
+\caption{Comparison of the fragmented (binary) and periodic level set function (P-LSF) parameterizations for topology optimization of a metasurface bandpass filter (15--30~GHz).  (a) The fragmented parameterization uses binary-valued design variables on a pixel grid.  (b) The P-LSF parameterization uses real-valued design variables in a continuous search space.  The P-LSF design achieves improved bandpass performance \cite{SaadFalcon2024LevelSet}.}
+\label{fig:RI_PLSF1}
+\end{center}
+\end{figure}
 
-\textcolor{red}{\textbf{[INSERT FIGURE: Convergence comparison for the broadband bandpass objective, showing P-LSF (GA and CMA-ES) vs.\ fragmented (GA) cost function histories.  Adapted from Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet}, Figure~5.]}}
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/saadfalcon/SaadFalcon2024_Fig5_Convergence.png}
+\caption{Convergence comparison for the broadband bandpass design objective.  (a) The P-LSF methods (multi-stage GA and CMA-ES) converge more quickly and to a higher cost function value than the fragmented GA.  (b) The resulting best mask from each optimization method.  (c) Reflection coefficient comparison showing that the P-LSF designs achieve better passband performance \cite{SaadFalcon2024LevelSet}.}
+\label{fig:RI_PLSF5}
+\end{center}
+\end{figure}
 
-\textcolor{red}{\textbf{[INSERT FIGURE: Fabricated 2:1 bandpass metasurface with measured vs.\ simulated S-parameters.  Adapted from Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet}, Figure~6.]}}
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/saadfalcon/SaadFalcon2024_Fig6_Fabricated.png}
+\caption{Fabricated broadband 2:1 bandpass metasurface.  (a) FDTD-computed electric and magnetic field maps at six frequencies across the passband.  (b) Measured vs.\ simulated S-parameters showing close agreement; the shaded region indicates the 15--30~GHz design passband.  (c) Photograph of the fabricated metasurface on Rogers RO3003 substrate \cite{SaadFalcon2024LevelSet}.}
+\label{fig:RI_PLSF6}
+\end{center}
+\end{figure}
 
-Howard et al.\ \cite{Howard2024Topology} subsequently applied the P-LSF methodology to the design of a wideband planar phased array element, demonstrating that the technique extends beyond metasurfaces to the phased array antenna designs that are the primary focus of this book.  The non-antenna applications of the P-LSF---including metasurface design and dielectric materials characterization \cite{Howard2022LossTangent}---are discussed in Chapter~10.  The open-source Meep FDTD solver \cite{Oskooi2010Meep} has been used to create a publicly available working example of the P-LSF optimization methodology.
+Howard et al.\ \cite{Howard2024Topology} subsequently applied the P-LSF methodology to the design of a wideband planar phased array element, demonstrating that the technique extends beyond metasurfaces to the phased array antenna designs that are the primary focus of this book.  Figure~\ref{fig:RI_HowardFlow} illustrates the basic topology optimization routine using a level set function: the smooth topography of the LSF determines the metal/air distribution, which is discretized for electromagnetic simulation, and the optimizer iteratively updates the LSF coefficients to minimize the difference between the simulated and desired system response.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/howard/Howard2024_Fig1_LSFFlowchart.png}
+\caption{Topology optimization flowchart using a level set function.  (a) The LSF produces a smooth topography of hills and valleys.  (b) Metal is placed where the LSF exceeds the threshold.  (c) The material distribution is discretized onto a simulation grid.  (d) Full-wave electromagnetic simulation.  (e) The simulated response is compared to the desired response.  (f) The optimizer updates the LSF coefficients \cite{Howard2024Topology}.}
+\label{fig:RI_HowardFlow}
+\end{center}
+\end{figure}
+
+Figure~\ref{fig:RI_HowardComp} compares the convergence rate and realized gain of an LSF-optimized connected array element against a fragmented aperture element designed with the same genetic algorithm and fitness function.  The LSF optimization begins improving immediately and converges to higher fitness values, while the fragmented optimization requires many more evaluations before finding competitive designs.  The realized gain of the 18$\times$18 element LSF array (with an extra boundary of dummy elements for a total of 155.4~mm $\times$ 155.4~mm) ranges from 70\% to over 100\% aperture efficiency across the 4.35:1 bandwidth.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/howard/Howard2024_Fig6_7_LSFvsFragmented.png}
+\caption{Comparison of LSF and fragmented aperture optimization for a connected array element.  Left: convergence of normalized fitness---the LSF parameterization converges faster and to higher values.  Right: broadside realized gain of the 18$\times$18 LSF-designed array, showing 70--100\% aperture efficiency across a 4.35:1 bandwidth \cite{Howard2024Topology}.}
+\label{fig:RI_HowardComp}
+\end{center}
+\end{figure}
+
+The non-antenna applications of the P-LSF---including metasurface design and dielectric materials characterization \cite{Howard2022LossTangent}---are discussed in Chapter~10.  The open-source Meep FDTD solver \cite{Oskooi2010Meep} has been used to create a publicly available working example of the P-LSF optimization methodology.
 
 \subsection{Level Set Designs for Fragmented Aperture Antennas}
 
@@ -91,10 +129,28 @@ At VHF and lower frequencies, the physical size of antennas becomes a significan
 
 Barani, Harvey, and Sarabandi \cite{Barani2018Fragmented} proposed an elegant solution that applies the fragmented aperture philosophy to this problem: instead of placing a single large antenna on a single platform, distribute the antenna across a \emph{formation} of platforms and exploit near-field electromagnetic coupling between the individual elements to synthesize a larger effective aperture.  The concept is illustrated schematically in Figure~\ref{fig:RI_UAVconcept}.
 
-\textcolor{red}{\textbf{[INSERT FIGURE: Conceptual illustration of three UAVs in linear formation, each carrying an inductively end-loaded folded dipole antenna, with coupling indicated between adjacent elements.  Based on Barani et al.\ \cite{Barani2018Fragmented}, Figure~1.]}}
 \begin{figure}
-\caption{Conceptual illustration of the distributed fragmented antenna on UAV platforms.  Three miniaturized antennas are carried by separate UAVs in formation, with near-field coupling between their inductive end loads creating a larger effective radiating aperture \cite{Barani2018Fragmented}.}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig1_UAVConcept.png}
+\caption{Proposed distributed fragmented antenna concept for bandwidth enhancement of miniaturized antenna elements mounted on robotic flyers.  Three UAVs in formation carry inductively end-loaded folded dipole antennas; near-field coupling between adjacent elements creates a larger effective radiating aperture.  Only the center antenna (driver) is actively excited; the two assistive antennas are terminated with optimized loads \cite{Barani2018Fragmented}.}
 \label{fig:RI_UAVconcept}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.55\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig2_ElementGeometry.png}
+\caption{Configuration of a single inductively end-loaded folded dipole antenna element.  The element is confined to a volume of $\lambda/12 \times \lambda/10$ at the operating frequency of 240~MHz.  The inductive end loads (wire loops) increase the electrical length and produce strong near-field coupling to adjacent elements \cite{Barani2018Fragmented}.}
+\label{fig:RI_UAVelement}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.55\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig5_CouplingMechanisms.png}
+\caption{Three coupling mechanisms between adjacent antennas in the distributed fragmented configuration: magnetic (inductive) coupling between end loads via their normal magnetic fields (dominant mechanism), electric (capacitive) coupling between dipole arms, and capacitive coupling between end loops and dipole arms \cite{Barani2018Fragmented}.}
+\label{fig:RI_UAVcoupling}
+\end{center}
 \end{figure}
 
 The key insight is that a cluster of coupled antennas occupying a given volume has a lower radiation quality factor $Q$ than any single antenna confined to a smaller sub-volume, and can therefore radiate efficiently over a wider bandwidth.  The fragmented antenna is ``assembled'' by flying the platforms into formation, and ``disassembled'' when they disperse.
@@ -152,9 +208,21 @@ The three-element coupled antenna array was fabricated and measured in the anech
 \item \textbf{Radiation pattern:}  Patterns characteristic of a dipole antenna with somewhat higher directivity due to the larger effective aperture.
 \end{itemize}
 
-\textcolor{red}{\textbf{[INSERT FIGURE: Measured and simulated return loss for three separation distances ($d = 12$, 14, 16~cm) compared to the isolated single antenna.  Based on Barani et al.\ \cite{Barani2018Fragmented}, Figures~10 and~17.]}}
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig16_FabricatedPhotos.png}
+\caption{Fabricated distributed fragmented antenna.  (a) Three coupled inductively end-loaded folded dipole antennas inside the anechoic chamber at the University of Michigan.  (b) Close-up of the fabricated tunable matching circuit integrated with the driver antenna, showing the varactor diode, balun transformer, series LC, and DC block capacitor \cite{Barani2018Fragmented}.}
+\label{fig:RI_UAVfab}
+\end{center}
+\end{figure}
 
-\textcolor{red}{\textbf{[INSERT FIGURE: Photograph of fabricated antennas in the anechoic chamber.  Based on Barani et al.\ \cite{Barani2018Fragmented}, Figure~16.]}}
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig17_MeasuredReturnLoss.png}
+\caption{Measured and simulated return loss for the distributed fragmented antenna at three separation distances ($d = 12$, 14, and 16~cm) compared to the isolated single antenna.  The coupled configuration achieves a measured $-10$~dB bandwidth of 18.4~MHz at $d = 12$~cm, compared to only 2.4~MHz for the single element---a 7.7-fold improvement \cite{Barani2018Fragmented}.}
+\label{fig:RI_UAVmeas}
+\end{center}
+\end{figure}
 
 The close agreement between simulation and measurement validates the design approach and confirms that the fragmented antenna concept can be successfully extended to multi-platform, formation-based configurations.
 
@@ -173,7 +241,23 @@ Several distinct approaches have emerged in recent years, and they are largely c
 
 The most straightforward application of machine learning to antenna design is the construction of a \emph{surrogate model}---a fast, data-driven approximation to the electromagnetic simulation that can be evaluated in milliseconds rather than minutes.  The surrogate is trained on a dataset of (pixel configuration, performance metric) pairs generated by running full-wave simulations on a representative sample of designs.  Once trained, the surrogate replaces the simulator in the optimization loop, enabling the genetic algorithm (or any other optimizer) to evaluate orders of magnitude more candidates in the same wall-clock time.
 
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch9/wu/Wu2024_Fig3_MLAOFlowchart.png}
+\caption{Flowchart of the machine-learning-assisted optimization for antenna geometry design (MLAO-AGD) algorithm.  The process iterates between geometry generation, full-wave simulation, ML model building, and optimization, with the ML surrogate model accelerating the search by reducing the number of expensive electromagnetic simulations required \cite{Wu2024MLGeometry}.}
+\label{fig:RI_MLflow}
+\end{center}
+\end{figure}
+
 Wu et al.\ \cite{Wu2024MLGeometry} demonstrated a machine-learning-assisted optimization framework for antenna geometry design in which a convolutional neural network (CNN) was trained to predict antenna performance metrics (return loss, gain, bandwidth) directly from a pixelated representation of the antenna geometry.  The CNN treats the binary pixel grid as an image, making it a natural fit for the fragmented aperture parameterization.  The trained surrogate was then used within a Gaussian process-based Bayesian optimization loop to efficiently search the design space.  The authors reported convergence to high-quality designs using an order of magnitude fewer full-wave simulations than a conventional GA approach.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/jacobs/Jacobs2021_Fig1_NNvsCNN.png}
+\caption{Comparison of neural network architectures for pixelated antenna modeling.  (a) A standard feedforward network takes the pixel pattern as a flattened vector, losing spatial information.  (b) A convolutional neural network (CNN) takes the 2D pixel grid directly as an image input, preserving the spatial relationships between pixels that determine the antenna's electromagnetic behavior \cite{Jacobs2021CNN}.}
+\label{fig:RI_CNNarch}
+\end{center}
+\end{figure}
 
 Jacobs \cite{Jacobs2021CNN} applied CNN regression to predict the resonant frequencies of dual-band pixelated microstrip antennas directly from the pixel pattern.  The network was trained on 10,000 FDTD simulations and achieved prediction accuracy of better than 2\% on unseen designs, with evaluation times of microseconds per design.  In earlier work, Jacobs \cite{Jacobs2022Accurate} extended deep neural networks to model the full gain pattern of multiband pixelated antennas, demonstrating that the directional radiation characteristics---not just scalar performance metrics---can be accurately captured by neural network surrogates.
 
@@ -183,6 +267,14 @@ Wang et al.\ \cite{Wang2024Machine} proposed a quasi-bisection method assisted b
 
 Surrogate-based optimization still requires an explicit optimization loop, even though each iteration is fast.  A more ambitious approach is \emph{inverse design}: training a neural network to directly map from a desired performance specification to a pixel configuration that achieves it.  If successful, this approach would replace the entire optimization process with a single forward pass through a trained network.
 
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/gupta/Gupta2023_Fig2_TandemNN.png}
+\caption{Tandem neural network architecture for inverse design of multiband pixelated antennas.  The inverse network takes a desired $S_{11}$ spectrum as input and produces a binary antenna design at an intermediate layer.  This design is then evaluated by a pre-trained (frozen) forward CNN to predict the resulting spectrum.  The tandem architecture avoids the one-to-many problem of direct inverse design \cite{Gupta2023Tandem}.}
+\label{fig:RI_tandem}
+\end{center}
+\end{figure}
+
 Gupta et al.\ \cite{Gupta2023Tandem} demonstrated a tandem neural network architecture for inverse design of multiband pixelated antennas.  The tandem network consists of two sub-networks trained sequentially: a \emph{forward model} that predicts antenna performance from the pixel pattern, and an \emph{inverse model} that generates a pixel pattern from a desired performance specification.  The inverse model is trained to minimize the discrepancy between the desired specification and the forward model's prediction of the generated design, avoiding the well-known one-to-many problem in which multiple different pixel configurations can produce similar performance.  The tandem architecture ensures that the generated designs are physically realizable and electromagnetically consistent.
 
 Li et al.\ \cite{Li2025Inverse} applied residual neural networks (ResNets) to the inverse design of pixelated antennas, exploiting the skip connections in the ResNet architecture to maintain gradient flow through deep networks with many layers.  The deeper network captures more complex relationships between the pixel pattern and the antenna response, enabling accurate inverse design for multi-objective specifications.
@@ -190,6 +282,14 @@ Li et al.\ \cite{Li2025Inverse} applied residual neural networks (ResNets) to th
 \subsection{Generative Models}
 
 Generative models---neural networks that learn to produce new samples from a training distribution---offer a particularly promising direction for antenna design.  Rather than predicting the performance of a given design (forward modeling) or generating a single design for a given specification (inverse design), generative models can produce a \emph{diverse set} of candidate designs that satisfy the specifications, giving the designer multiple options to choose from.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.45\linewidth]{/Users/jim.maloney/Book/images/ch9/noakoasteen/Noakoasteen2022_Fig1_ConvVsGAN.png}
+\caption{Comparison of antenna design approaches: (a) conventional design using analytical equations and parametric optimization, (b) conditional GAN (CGAN) approach where a trained generator produces structural parameters from noise and class labels, and (c) library of label-switched vanilla GANs for different design classes \cite{Noakoasteen2022GAN}.}
+\label{fig:RI_GAN}
+\end{center}
+\end{figure}
 
 Noakoasteen et al.\ \cite{Noakoasteen2022GAN} demonstrated the use of generative adversarial networks (GANs) for antenna design.  The GAN was trained on a dataset of antenna geometries and their corresponding performance metrics, and was then able to generate synthetic antenna designs that achieved specified performance targets.  The GAN approach also addresses a persistent practical challenge in ML-assisted antenna design: the cost of generating training data.  By using the GAN to generate synthetic training examples, the authors reduced the number of expensive full-wave simulations required to build the training dataset.
 
