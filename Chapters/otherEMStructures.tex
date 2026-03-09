@@ -285,6 +285,8 @@ The pixelated checkerboard metasurface was fabricated on Rogers RO4003c substrat
 
 Pang et al.\ \cite{Pang2024Radome} proposed a broadband low-scattering radome that combines phase gradient metasurfaces with an FSS, achieving over 10~dB RCS reduction from 7.95 to 18.12~GHz (a 78\% relative bandwidth) while maintaining less than 1~dB insertion loss in the 15.95--17.7~GHz passband.  The PSO-optimized structure is ultra-thin at only $0.08\lambda$ at the lowest operating frequency.  \textit{[Figures and detailed discussion to be added when the full paper is obtained.]}
 
+More recently, Zeng et al.\ \cite{Zeng2026ChessboardRCS} applied a CNN-KAN (convolutional neural network--Kolmogorov-Arnold network) deep learning framework to accelerate inverse design of chessboard metasurfaces for RCS reduction.  By training on a dataset of pixelated unit cell geometries and their full-wave simulated reflection phases, the surrogate model replaces iterative electromagnetic simulation during optimization, reducing design time from hours to seconds.  The resulting optimized checkerboard metasurface achieved greater than 10~dB monostatic RCS reduction from 7.4 to 15.2~GHz (69\% relative bandwidth), demonstrating that machine learning can effectively navigate the vast design space of pixelated surfaces.
+
 These radome and RCS reduction designs illustrate how the pixelated optimization approach addresses a fundamentally different electromagnetic challenge: rather than maximizing radiation or absorption, the goal is to simultaneously control transmission (in-band) and scattering (out-of-band) properties of a surface.
 
 

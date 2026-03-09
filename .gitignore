@@ -22,5 +22,9 @@ texput.log
 *.scad
 *.mov
 
+# PDFs (too large for git tracking)
+*.pdf
+!Chapters/topLevel.pdf
+
 # Binaries
 openTDA
