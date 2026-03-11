@@ -167,7 +167,7 @@ Figure~\ref{fig:IFAF19} shows the H-plane radiation pattern at 1.8~GHz, comparin
 \end{center}
 \end{figure}
 
-The same aperture hardware can produce different antenna designs simply by changing which links are conducting.  Figure~\ref{fig:IFAF20} shows a design on the same aperture optimized for a beam steered $30^\circ$ from broadside at 1.4--1.8~GHz.  The pixel pattern is visibly asymmetric---the left-right symmetry present in the broadside design of Figure~\ref{fig:IFAF17} is broken to create the phase gradient needed for beam steering.
+The same aperture hardware can produce different antenna designs simply by changing which links are conducting.  Figure~\ref{fig:IFAF20} shows a design on the same aperture optimized for a beam steered $30^{\circ}$ from broadside at 1.4--1.8~GHz.  The pixel pattern is visibly asymmetric---the left-right symmetry present in the broadside design of Figure~\ref{fig:IFAF17} is broken to create the phase gradient needed for beam steering.
 
 \begin{figure}
 \begin{center}
@@ -208,6 +208,129 @@ Figure~\ref{fig:IFAF23} summarizes the system gain for three different switch co
 \end{figure}
 
 The metal patch and link approach thus serves a dual purpose.  As a fixed antenna design strategy, it inherently eliminates diagonal touching and provides finer spatial control of the aperture conducting pattern.  As a reconfigurable antenna concept, it enables the same hardware to support multiple antenna configurations through electronic switching.  The reconfigurable aspects are developed in detail in Chapter~5.
+
+\section{Additional Pixel Geometries Explored by Other Groups}
+\label{sec:otherpixels}
+
+The four improved pixel geometries presented in the preceding section were developed in the original fragmented aperture work.  In the years since, other research groups have independently explored alternative pixel shapes and design paradigms that address similar challenges.  This section surveys three notable approaches: cross-shaped pixels, aperiodic Einstein Hat tile pixels, and wire-based fragmented antennas.
+
+\subsection{Cross-Shaped Pixels}
+
+Mair et al.\ \cite{Mair2022Evolutionary} introduced \emph{cross-shaped pixels} as an alternative to rectangular pixels for evolutionary optimization of pixelated antennas.  The key insight is illustrated in Figure~\ref{fig:MairCrossPixels}: when four rectangular pixels meet at a corner, a singularity occurs where the four metal corners converge to a single point [Figure~\ref{fig:MairCrossPixels}(a)].  This singularity creates difficulties for both electromagnetic simulation (slow convergence of the numerical solution) and fabrication (the point contact is fragile and unreliable).  Cross-shaped pixels [Figure~\ref{fig:MairCrossPixels}(b)] eliminate this singularity entirely, because adjacent crosses always share a finite-width edge rather than a single point.  Each cross can be decomposed into simulation cells of size $S_{\text{cell}}$ [Figure~\ref{fig:MairCrossPixels}(c)--(d)], with smaller cells providing finer resolution.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2022/Mair2022_Fig1_CrossVsRect.png}
+\caption{Cross-shaped pixels compared to rectangular pixels: (a)~rectangular pixels create singularities where four corners meet at a point; (b)~cross-shaped pixels eliminate these singularities; (c)--(d)~decomposition into simulation cells at two resolutions \cite{Mair2022Evolutionary}.}
+\label{fig:MairCrossPixels}
+\end{center}
+\end{figure}
+
+Using this cross-pixel geometry, Mair et al.\ conducted a large-scale study of 400 antenna designs at 868~MHz to establish a scaling law relating antenna size to achievable bandwidth.  Figure~\ref{fig:MairBWScaling} shows the $-10$~dB bandwidth as a function of antenna diagonal expressed as a percentage of wavelength.  The median bandwidth (solid line) increases roughly linearly with antenna size, providing a useful rule of thumb for initial sizing of pixelated antenna designs.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2022/Mair2022_Fig3_BWScaling.png}
+\caption{Bandwidth scaling law from a 400-antenna study at 868~MHz using cross-shaped pixels.  The $-10$~dB bandwidth increases roughly linearly with antenna diagonal (as a percentage of wavelength).  Solid line: median; dashed lines: upper and lower bounds \cite{Mair2022Evolutionary}.}
+\label{fig:MairBWScaling}
+\end{center}
+\end{figure}
+
+The cross-pixel approach was applied to design a compact 5G IoT antenna for the N20 band (826.5~MHz).  The optimized design, shown in Figure~\ref{fig:MairDesignS11}(left), uses a $13 \times 17$ grid of cross pixels on an $83.7 \times 80.6$~mm FR-4 substrate.  Measured results [Figure~\ref{fig:MairDesignS11}(right)] show a $-10$~dB bandwidth of 93~MHz covering the full 5G N20 band, with excellent agreement between Sonnet simulation, ANSYS HFSS, and measurement (0.6\% frequency error).  The measured peak gain was 2.63~dBi with 95.7\% simulated radiation efficiency.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.48\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2022/Mair2022_Fig4_OptimizedDesign.png}
+\hfill
+\includegraphics[angle=0,width=0.48\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2022/Mair2022_Fig5_S11.png}
+\caption{Left: optimized cross-pixel antenna layout ($13 \times 17$ pixels, $83.7 \times 80.6$~mm).  Right: $S_{11}$ comparison showing Sonnet simulation (dashed), ANSYS HFSS (dash-dot), and measurement (solid) with 0.6\% frequency error \cite{Mair2022Evolutionary}.}
+\label{fig:MairDesignS11}
+\end{center}
+\end{figure}
+
+\subsection{Aperiodic Einstein Hat Tile Pixels}
+
+Mair and Baumgarten \cite{Mair2024IFA} took the concept of alternative pixel shapes further by employing \emph{Einstein Hat tiles}---an aperiodic monotile discovered in 2023 that tiles the plane without ever repeating.  The motivation for using aperiodic tiles is that the non-repeating pattern creates variable connection widths between neighboring elements, potentially enlarging the design space available to the optimizer compared to periodic pixel grids.
+
+Figure~\ref{fig:MairHatGeometry} illustrates the Hat tile geometry.  When two neighboring Hat tiles meet, point-contact singularities can occur [Figure~\ref{fig:MairHatGeometry}(a)], similar to the rectangular pixel problem.  The authors address this by adding a small outline extension of percentage $O_T$ to each tile [Figure~\ref{fig:MairHatGeometry}(b)--(c)], ensuring finite-width connections.  The tile size $S_T$ is defined as the diameter of the enclosing circle [Figure~\ref{fig:MairHatGeometry}(d)].
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_hat/Mair2024_Fig1_HatTileGeometry.png}
+\caption{Einstein Hat tile geometry for pixelated antenna design: (a)~singularities at tile boundaries (red); (b)~outline extension applied; (c)~resolved geometry with no singularities; (d)~tile size $S_T$ defined as the enclosing circle diameter \cite{Mair2024IFA}.}
+\label{fig:MairHatGeometry}
+\end{center}
+\end{figure}
+
+Using this aperiodic pixel geometry, the authors designed a 2.4~GHz WiFi antenna in the inverted-F antenna (IFA) configuration on a 40~mm $\times$ 40~mm ground plane.  Each Hat tile ($S_T = 1.5$~mm) is assigned a binary conducting/non-conducting state, and a genetic algorithm optimizes the tile pattern.  Figure~\ref{fig:MairHatDesign} shows the optimized design in simulation [Figure~\ref{fig:MairHatDesign}(a)], the fabricated prototype on Rogers RO4350B [Figure~\ref{fig:MairHatDesign}(b)], and a close-up of the intricate Hat-tile conducting pattern [Figure~\ref{fig:MairHatDesign}(c)].
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_hat/Mair2024_Fig6_DesignAndPrototype.png}
+\caption{Pixelated IFA using Einstein Hat tiles: (a)~optimized design in simulation; (b)~fabricated prototype on Rogers RO4350B; (c)~close-up showing the aperiodic Hat-tile conducting pattern.  Red circles mark vias connecting shorting elements to the ground plane \cite{Mair2024IFA}.}
+\label{fig:MairHatDesign}
+\end{center}
+\end{figure}
+
+The measured results, shown in Figure~\ref{fig:MairHatResults}, demonstrate a $-10$~dB bandwidth of 308~MHz (12.6\% relative bandwidth), well exceeding the 2.4~GHz WiFi band requirement.  The measured $S_{11}$ reached $-37.9$~dB at resonance, with excellent agreement between CST, ANSYS HFSS, and measurement.  The antenna achieved 92.2\% simulated radiation efficiency and a measured gain of 4.07~dBi---an electrically small antenna ($ka = 0.447$) that surpasses the Chu--Harrington limit for its size.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_hat/Mair2024_Fig7_S11AndPatterns.png}
+\caption{Performance of the Einstein Hat tile IFA: (a)~$S_{11}$ comparison between CST (dotted), ANSYS HFSS (dashed), and measurement (solid), showing 308~MHz $-10$~dB bandwidth; (b)~3D gain pattern at 2.45~GHz \cite{Mair2024IFA}.}
+\label{fig:MairHatResults}
+\end{center}
+\end{figure}
+
+\subsection{Pixel Size and Symmetry Considerations}
+
+A practical question facing any pixelated antenna designer is: how small should the pixels be, and should symmetry constraints be imposed?  Mair et al.\ \cite{Mair2024Design} addressed these questions through a systematic study of cross-shaped pixel antennas across a wide range of electrical sizes ($ka = 0.39$ to $2.21$).
+
+Figure~\ref{fig:MairPixelSize} shows the achievable antenna gain as a function of normalized pixel size ($S_{\text{cross}}/\lambda$) for ten different antenna electrical sizes.  The results reveal that for electrically large antennas ($ka > 1$), pixel size has negligible effect on gain---the optimizer finds good solutions regardless of pixel resolution.  However, for electrically small antennas ($ka < 0.6$), smaller pixels yield noticeably higher gain (up to $\sim$1~dB improvement), because the optimizer needs finer control over the current distribution to achieve good performance in a constrained volume.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_pixelsize/Mair2024_Fig5_GainVsPixelSize.png}
+\caption{Antenna gain versus normalized pixel size for ten electrical sizes ($ka = 0.39$ to $2.21$).  For large antennas ($ka > 1$), pixel size has minimal impact; for small antennas ($ka < 0.6$), smaller pixels yield higher gain \cite{Mair2024Design}.}
+\label{fig:MairPixelSize}
+\end{center}
+\end{figure}
+
+The study also compared asymmetrical designs against designs with various symmetry constraints (x-axis, y-axis, and dual-axis symmetry).  Figure~\ref{fig:MairSymmetry} shows the gain and $S_{11}$ achieved by all optimized antennas at $ka \approx 1.9$, color-coded by symmetry type.  Asymmetrical designs consistently achieve the best combined gain and matching, and only asymmetrical designs exceed the Chu--Harrington limit.  This finding is consistent with the observation in Section~\ref{sec:IFAS4} that the Third Approach pixel geometry, which does not naturally support symmetry, is best suited for applications where symmetry is not required.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_pixelsize/Mair2024_Fig8_SymmetryScatter.png}
+\caption{Gain versus $S_{11}$ for optimized pixelated antennas at $ka \approx 1.9$ with different symmetry constraints.  Asymmetrical designs (red) achieve the highest gain and best matching; only asymmetrical designs exceed the Chu--Harrington limit (shaded band) \cite{Mair2024Design}.}
+\label{fig:MairSymmetry}
+\end{center}
+\end{figure}
+
+\subsection{Wire-Based Fragmented Antennas}
+
+Merulla and Bansal \cite{Merulla2008FragmentedWire} demonstrated that the fragmented aperture concept extends beyond planar metallic patches to \emph{wire} elements.  In their approach, the aperture is discretized as a grid of thin wire segments, where each segment is either present (conducting) or absent (non-conducting).  A binary genetic algorithm optimizes the wire pattern using a method-of-moments (MoM) simulation based on NEC-4.
+
+Two designs were demonstrated: a broadband omnidirectional antenna covering 1750--3500~MHz (2:1 bandwidth), and a directional WiFi antenna for 2400--2480~MHz.  Figure~\ref{fig:MerullaWire} shows the optimized wire layout and the fabricated prototype of the omnidirectional design, etched on 30-mil Rogers RT-5880.  The wire antenna layout has a distinctly different visual character from the solid-patch fragmented apertures of the preceding sections, yet the underlying design principle---binary optimization of a pixelated aperture---is identical.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.48\linewidth]{/Users/jim.maloney/Book/images/ch3/merulla2008/Merulla2008_Fig5_WireOmniLayout.png}
+\hfill
+\includegraphics[angle=0,width=0.48\linewidth]{/Users/jim.maloney/Book/images/ch3/merulla2008/Merulla2008_Fig6_FabricatedPrototype.png}
+\caption{Wire-based fragmented aperture antenna: (left)~optimized wire layout for a 1750--3500~MHz omnidirectional design; (right)~fabricated prototype on Rogers RT-5880 \cite{Merulla2008FragmentedWire}.}
+\label{fig:MerullaWire}
+\end{center}
+\end{figure}
+
+Figure~\ref{fig:MerullaVSWR} shows the simulated and measured VSWR for the omnidirectional wire antenna.  The VSWR remains below 2.8:1 across the 1750--3500~MHz band, with good agreement between simulation and measurement.  The average measured gain exceeded 1.9~dBi.  While the bandwidth of 2:1 is modest compared to the broadband fragmented apertures discussed in Chapters~4 and~6, the wire-based approach demonstrates the generality of the fragmented aperture concept: any discretizable antenna structure---patches, wires, or other element types---can benefit from evolutionary optimization of its conducting topology.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/merulla2008/Merulla2008_Fig10_VSWR.png}
+\caption{VSWR of the wire-based fragmented omnidirectional antenna: simulated (solid) and measured (squares), 1750--3500~MHz.  VSWR remains below 2.8:1 across the band \cite{Merulla2008FragmentedWire}.}
+\label{fig:MerullaVSWR}
+\end{center}
+\end{figure}
 
 \section{Improved Mutation Algorithm for Better Convergence}
 \label{sec:mutation}
@@ -302,6 +425,34 @@ Figures~\ref{fig:IFAF14} and~\ref{fig:IFAF15} summarize the broadside gain and V
 \end{center}
 \end{figure}
 
+\subsection{Exhaustive Evaluation of the Design Space}
+
+A natural question about any optimization-driven design process is: does the genetic algorithm actually find a good design, or does it converge to a mediocre local optimum?  For small enough design spaces, this question can be answered definitively by evaluating \emph{every possible design} and comparing the GA's result against the known global optimum.
+
+Maloney, Lee, and Landgren \cite{Maloney2013Genetic} performed this exercise for a 24-bit fragmented aperture design, in which 23 bits controlled the conducting/non-conducting state of pixel regions and a 24th bit selected between two feed configurations.  The complete design space of $2^{24} = 16{,}777{,}216$ antennas was exhaustively evaluated on a large computer cluster over the course of nearly a month, producing gigabytes of simulation results.  Figure~\ref{fig:IFA_24bit} shows the 24-bit encoding scheme that maps binary design variables to physical pixel regions on the aperture.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/maloney2013/Maloney2013_Fig1_24bitEncoding.png}
+\caption{The 24-bit fragmented aperture encoding, showing how binary design variables map to conducting and non-conducting regions on the aperture.  The two images correspond to the two feed configurations selected by the 24th bit.  By evaluating all $2^{24}$ possible designs, the performance of any search algorithm can be benchmarked against the known global optimum \cite{Maloney2013Genetic}.}
+\label{fig:IFA_24bit}
+\end{center}\end{figure}
+
+This exhaustive dataset serves as a valuable benchmark: any proposed search algorithm---genetic algorithm, machine learning-assisted optimization, or other approach---can be tested against the complete performance landscape to determine whether it reliably finds designs near the global optimum.  An earlier, smaller study had exhaustively evaluated an 18-bit design space ($2^{18} = 262{,}144$ designs) to validate GA convergence; the 24-bit study extends this by a factor of 64 in design space size.  The results confirmed that well-configured genetic algorithms consistently find designs within a few tenths of a dB of the global optimum.
+
+\subsection{Multi-Objective Optimization of Pixelated Topologies}
+
+The GA-based design approach presented in this chapter uses a single-objective fitness function.  However, antenna design inherently involves multiple competing objectives---for example, minimizing return loss while simultaneously maximizing gain across multiple frequency bands.  Li et al.\ \cite{Li2019Automated} applied multi-objective binary particle swarm optimization (MOBPSO) to pixelated antenna topology design, demonstrating that multi-objective methods can automatically generate a family of Pareto-optimal designs representing different trade-offs between objectives.
+
+In their work, an $8 \times 7$ grid of rectangular pixels (56 binary design variables) was optimized for dual-band WLAN operation at 2.4~GHz and 5.2/5.8~GHz, simultaneously minimizing in-band $S_{11}$ and maximizing realized gain.  Figure~\ref{fig:Li2019Pareto} shows the resulting Pareto front, where each point represents a distinct optimized antenna topology.  The designer can then select the preferred design based on application requirements---for example, accepting slightly lower gain in exchange for deeper impedance matching, or vice versa.  This multi-objective approach is particularly valuable for pixelated antenna design because the irregular topologies produced by optimization often exhibit non-intuitive trade-offs between performance metrics.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch3/li2019/Li2019_Fig4_ParetoFront.png}
+\caption{Pareto front from multi-objective binary particle swarm optimization (MOBPSO) of a dual-band pixelated antenna.  Each diamond represents a distinct Pareto-optimal topology offering a different trade-off between mean in-band $S_{11}$ ($F_1$) and mean gain ($F_2$) \cite{Li2019Automated}.}
+\label{fig:Li2019Pareto}
+\end{center}
+\end{figure}
+
 \subsection{Third Approach Designs}
 
 The self-tessellating shape approach of Figure~\ref{fig:IFAF8} can also be used to design fragmented aperture antennas.  As noted earlier, for vertically or horizontally polarized elements with a broadside beam, the lack of inherent left-right and top-bottom symmetry in many self-tessellating shapes is a drawback.  However, for applications where the desired beam direction is not broadside or the desired polarization is circular or slant-linear, symmetry constraints are not needed and the third approach is fully competitive with the first and second.
@@ -339,5 +490,6 @@ The self-tessellating shape approach of Figure~\ref{fig:IFAF8} can also be used 
 % Uses chapter-specific .bib files organized by topic
 \bibliography{../Literature/master_bibliography,%
               ../Literature/fragmented_aperture_core,%
-              ../Literature/ml_ai_optimization_methods}
+              ../Literature/ml_ai_optimization_methods,%
+              ../Literature/recent_innovations}
 \bibliographystyle{IEEEtran}

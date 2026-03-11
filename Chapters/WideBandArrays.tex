@@ -274,6 +274,10 @@ A 4$\times$4 prototype array was fabricated and measured to validate the design.
 
 This prototype array was subsequently scaled to a full 16$\times$16 element array with integrated fragmented power combiners for deployment at the U.S.\ Army Aberdeen Test Center; the combiner technology is described in Chapter~10.
 
+\section{Competing Approaches: Tightly Coupled Dipole Arrays}
+
+The fragmented aperture approach is not the only path to ultra-wideband phased arrays.  Tightly coupled dipole arrays (TCDAs) achieve wide bandwidth through strong inter-element coupling between closely spaced dipoles, an approach with roots in Wheeler's current sheet concept and Munk's complementary antenna theory.  Doane, Sertel, and Volakis \cite{Doane2013TCDAIB} demonstrated a TCDA with an integrated Marchand balun achieving 7.35:1 bandwidth (0.68--5.0~GHz) with scanning to $\pm 45^{\circ}$---bandwidth competitive with fragmented aperture arrays.  More recently, Dang, Yong, and Glazunov \cite{Dang2025LowProfile} presented a low-profile TCDA with a metasurface superstrate operating from 12--30~GHz with $\pm 60^{\circ}$ scanning, targeting Ku/K/Ka-band SATCOM and 6G applications.  Hosseini and Atlasbaf \cite{Hosseini2023TCDA} developed a semi-analytical transmission-line model for TCDAs with metasurface superstrates that runs approximately $7\times$ faster than full-wave simulation, highlighting one advantage of the TCDA approach: its canonical dipole geometry is analytically tractable, enabling rapid design-space exploration that the fragmented aperture approach, which relies on full-wave optimization, cannot match.  However, TCDAs require balanced feeds (baluns) that add complexity, and their achievable bandwidth is determined largely by element geometry and feed design rather than by algorithmic optimization of the conducting pattern.  The fragmented aperture approach trades analytical tractability for design flexibility: by optimizing pixel-by-pixel, it can exploit mutual coupling in ways that a prescribed dipole geometry cannot.
+
 \section{Summary and Conclusions}
 
 The successful design of ultra-wideband phased arrays has been enabled by several factors.  These designs require high-fidelity time-domain electromagnetic solvers.  The necessity to optimize over many frequencies simultaneously would be prohibitively time-consuming with frequency-domain codes.  All designs described in this chapter were developed using a finite-difference time-domain (FDTD) code (see Appendix~A), the results of which are Fourier transformed to produce the requisite range of frequency predictions.  In early design stages, it is important to move through iterations rapidly to converge on a good initial design.  In the final stages, accurate predictions are required to account for realistic details such as feed structures and material characteristics.
@@ -299,5 +303,6 @@ The author would like to thank Mr.\ Paul Friederich for his efforts in convertin
 % Bibliography for Chapter 7
 % Uses chapter-specific .bib files organized by topic
 \bibliography{../Literature/master_bibliography,%
-              ../Literature/fragmented_aperture_core}
+              ../Literature/fragmented_aperture_core,%
+              ../Literature/ml_ai_optimization_methods}
 \bibliographystyle{IEEEtran}

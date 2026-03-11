@@ -72,15 +72,13 @@ All of these effects are captured naturally by the FDTD simulation used in the g
 
 \subsection{Limitations of Standard Periodic Boundary Conditions}
 
-The design process for fragmented aperture array elements uses a genetic algorithm to optimize a single unit cell of the array, terminated by periodic boundary conditions (PBC) that simulate an infinite array environment.  The FDTD method is ideal for this purpose because a single time-domain simulation produces the full frequency-domain response across the entire design bandwidth.
+The design process for fragmented aperture array elements uses a genetic algorithm to optimize a single unit cell of the array, terminated by periodic boundary conditions (PBC) that simulate an infinite array environment (see ``FDTD Analysis of Periodic Structures'' in Appendix~A for the FDTD formulation of PBC).  The FDTD method is ideal for this purpose because a single time-domain simulation produces the full frequency-domain response across the entire design bandwidth.
 
-In the standard FDTD implementation of periodic boundary conditions, the PBC is applied as a wrap-around boundary at the edges of the unit cell.  This approach naturally models the infinite array at broadside (zero scan angle) and provides the complete broadband response in a single simulation.  This is the approach that was used to design the earlier fragmented aperture arrays, including the 33:1 bandwidth design.
-
-However, standard broadside-only PBC does not provide information about the array's scan performance.  The scan volume narrowing observed in the 33:1 array (Figure~\ref{fig:WBA21}) was a consequence of optimizing only for broadside performance: the genetic algorithm had no information about off-broadside behavior, so it had no mechanism to prevent scan volume degradation.
+In the standard implementation, the PBC is applied as a wrap-around boundary at the edges of the unit cell, naturally modeling the infinite array at broadside.  This is the approach that was used to design the earlier fragmented aperture arrays, including the 33:1 bandwidth design.  However, standard broadside-only PBC does not provide information about off-broadside scan performance.  The scan volume narrowing observed in the 33:1 array (Figure~\ref{fig:WBA21}) was a direct consequence: the genetic algorithm had no mechanism to prevent scan volume degradation because it received no information about off-broadside behavior.
 
 \subsection{The Spectral-Domain FDTD Approach}
 
-To incorporate scan performance into the design process, a spectral-domain FDTD approach to periodic boundary conditions \cite{Aminian} was integrated into the design suite.  In the spectral-domain formulation, the FDTD simulation is performed at a fixed transverse wavenumber $(k_x, k_y)$ rather than at a fixed scan angle $(\theta, \phi)$.  The PBC is still implemented as a wrap-around boundary, but the constant transverse wavenumber assumption means that the effective scan angle is frequency dependent.
+To incorporate scan performance into the design process, a spectral-domain FDTD approach to periodic boundary conditions \cite{Aminian} was integrated into the design suite (see also ``Spectral-Domain FDTD'' in Appendix~A).  In the spectral-domain formulation, the FDTD simulation is performed at a fixed transverse wavenumber $(k_x, k_y)$ rather than at a fixed scan angle $(\theta, \phi)$.  The PBC is still implemented as a wrap-around boundary, but the constant transverse wavenumber assumption means that the effective scan angle is frequency dependent.
 
 Figure~\ref{fig:WSA4} illustrates this relationship.  Each curve shows the elevation angle as a function of frequency for a specific normalized transverse wavenumber $K_z$.  The dashed box indicates the target design space: the 8--12~GHz X-band with a scan volume of $\pm 60^{\circ}$.  Because the contours are not horizontal (i.e., constant angle versus frequency), a single spectral-domain simulation does not map to a single scan angle.  Instead, each simulation sweeps through different scan angles as it sweeps through frequency.
 
@@ -194,6 +192,30 @@ where $\lambda_0$ is the free-space wavelength at the lowest operating frequency
 
 \textcolor{red}{[TODO: Include a thickness vs.\ frequency chart for PCB designs analogous to the air-filled cavity chart in Chapter~6, once enough PCB designs have been completed to establish the trend.]}
 
+\subsection{Independent Validation by Other Research Groups}
+
+The wide-scan fragmented aperture array concept has been independently investigated by researchers outside of GTRI.  Ellgardt and Persson at the Royal Institute of Technology (KTH) in Sweden \cite{Ellgardt2006Wide} designed and analyzed wide-scan fragmented aperture elements for operation in the 1.5--4.5~GHz range with scan volumes up to $60^{\circ}$.  Their work addressed two practical challenges: restricting dielectric materials to commercially available substrates (rather than allowing arbitrary permittivity values during optimization), and resolving the diagonal pixel contact problem discussed in Chapter~3.
+
+Figure~\ref{fig:EllgardtNoSup} shows a design without a superstrate, using a $20 \times 20$ pixel grid on a substrate with $\epsilon_r = 2.2$ and thickness $d_1 = 10$~mm.  This element achieves VSWR~$\leq 2$ over a 1.94:1 bandwidth for $45^{\circ}$ scan in all planes, but does not meet the VSWR~$\leq 2$ criterion for $60^{\circ}$ scan.  The H-plane is consistently the limiting factor for wide-scan performance.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch7/ellgardt2006/Ellgardt2006_Fig6_NoSuperstrate.png}
+\caption{Wide-scan fragmented array element without superstrate: (a)~reflection coefficient at broadside and E/H-plane scan to $45^{\circ}$ and $60^{\circ}$; (b)~$20 \times 20$ pixel unit cell geometry ($d_1 = 10$~mm, $\epsilon_{r1} = 2.2$, $Z_c = 171~\Omega$).  The element achieves VSWR~$\leq 2$ over 1.94:1 bandwidth for $45^{\circ}$ scan \cite{Ellgardt2006Wide}.}
+\label{fig:EllgardtNoSup}
+\end{center}
+\end{figure}
+
+Figure~\ref{fig:EllgardtSup} shows a second design that adds a dielectric superstrate ($d_2 = 8$~mm, $\epsilon_{r2} = 3.38$) above the fragmented layer.  The superstrate improves the scan bandwidth to 2.20:1 for $45^{\circ}$ scan and 2.16:1 for $60^{\circ}$ scan (at VSWR~$\leq 3$), though it introduces a surface wave resonance near 4~GHz.  These results---obtained completely independently using the same GA/FDTD design methodology---corroborate the scan performance achievable with fragmented aperture elements and highlight the role of superstrate layers in extending the scan volume.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch7/ellgardt2006/Ellgardt2006_Fig7_WithSuperstrate.png}
+\caption{Wide-scan fragmented array element with superstrate: (a)~reflection coefficient at multiple scan angles; (b)~unit cell geometry ($d_1 = 8.67$~mm, $\epsilon_{r1} = 3.00$, $d_2 = 8$~mm, $\epsilon_{r2} = 3.38$, $Z_c = 173~\Omega$).  The superstrate improves scan bandwidth to 2.20:1 for $45^{\circ}$ scan \cite{Ellgardt2006Wide}.}
+\label{fig:EllgardtSup}
+\end{center}
+\end{figure}
+
 \section{Summary and Conclusions}
 
 This chapter described three advances that address key limitations of earlier fragmented aperture array designs:
@@ -220,6 +242,8 @@ These advances were demonstrated through the design of a whole X-band (8--12~GHz
 \bibitem{Aminian} A.~Aminian and Y.~Rahmat-Samii, ``Spectral FDTD: A novel technique for the analysis of oblique incident plane wave on periodic structures,'' IEEE Trans.\ Antennas Propag., vol.~54, no.~6, pp.~1818--1825, June 2006.
 
 \bibitem{BalanisHB} C.~A.~Balanis, Modern Antenna Handbook, Chapter~12, Wiley, 2008.
+
+\bibitem{Ellgardt2006Wide} A.~Ellgardt and P.~Persson, ``Characteristics of a broad-band wide-scan fragmented aperture phased array antenna,'' in Proc.\ European Conference on Antennas and Propagation (EuCAP), Nice, France, November 2006, ESA SP-626.
 
 \end{thebibliography}
 

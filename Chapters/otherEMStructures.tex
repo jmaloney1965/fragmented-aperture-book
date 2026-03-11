@@ -26,6 +26,34 @@ This result was significant because it demonstrated that the fragmented aperture
 The concept of designing surfaces with optimized phase properties is closely related to the broader field of frequency-selective surfaces (FSS) and metasurfaces.  As described in Chapter~9, Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet} applied the Periodic Level Set Function parameterization to design broadband bandpass and narrowband notch filter metasurfaces, achieving excellent agreement between simulation and measurement.  Howard et al.\ \cite{Howard2022LossTangent} applied similar techniques to design resonant periodic surfaces for dielectric materials characterization, where the resonance magnitude depends linearly on the loss tangent of an adjacent dielectric sample.  These recent developments demonstrate that the fragmented aperture approach to surface design has matured from the original broadband phase concept into a versatile tool for engineering a wide range of electromagnetic surface behaviors.
 
 
+\section{Pixelated Reflectarrays}
+\label{sec:reflectarrays}
+
+Reflectarray antennas combine the high gain of parabolic reflectors with the low profile of planar arrays: an array of reflecting elements on a flat surface is illuminated by a feed horn, and each element imparts a specific reflection phase to steer and focus the beam.  Conventional reflectarray elements (patches, rings, stubs) provide phase control through a single geometric parameter, but the limited phase range and narrow bandwidth of these canonical shapes constrain overall performance.  Ethier et al.\ \cite{Ethier2014Reflectarray} demonstrated that fragmenting each reflectarray element into a sub-wavelength pixel grid and optimizing the pixel pattern with a genetic algorithm yields a powerful alternative approach.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/ethier2014/Ethier2014_Fig4_SimilarityElements.png}
+\caption{Set of 31 similarity-optimized fragmented reflectarray elements, each with its reflection phase indicated.  Each element is a 19$\times$19 pixel grid ($\lambda/6$ cell at 12~GHz) with quadrantal symmetry.  The GA optimizes each element's pixel pattern to achieve the target phase while maximizing geometric similarity to neighboring elements in the array \cite{Ethier2014Reflectarray}.}
+\label{fig:OES_reflectarray1}
+\end{center}
+\end{figure}
+
+Each element in the reflectarray occupies a 4~mm cell ($\sim\!\lambda/6$ at 12~GHz) subdivided into a 19$\times$19 grid of 0.2~mm pixels with quadrantal symmetry.  The key innovation is \emph{similarity optimization}: the GA shapes each element to provide the required reflection phase while maximizing geometric similarity to its neighbors, measured by an XNOR-based metric.  This ensures that the aperiodic reflectarray more closely resembles the infinite periodic assumption used in element design, reducing phase errors at Fresnel zone boundaries (Figure~\ref{fig:OES_reflectarray1}).
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.65\linewidth]{/Users/jim.maloney/Book/images/ch10/ethier2014/Ethier2014_Fig12_FabricatedArray.png}
+\caption{Fabricated similarity-optimized fragmented reflectarray (Design~D) with 9{,}801 elements on a 420$\times$420~mm aperture, indicating the 4~mm cell dimension.  Each element is a unique fragmented pixel pattern optimized for its required reflection phase \cite{Ethier2014Reflectarray}.}
+\label{fig:OES_reflectarray2}
+\end{center}
+\end{figure}
+
+A 99$\times$99 element reflectarray (9{,}801 elements) was fabricated on FR4 substrate backed by 4~mm Rohacell foam over an aluminum ground plane (Figure~\ref{fig:OES_reflectarray2}).  The similarity-optimized design achieved 33.1~dBi gain at 11.2~GHz with 12.3\% bandwidth (1~dB), first sidelobe level of $-20.6$~dB, and an aperture phase efficiency of approximately 97\%---far exceeding the 40--55\% typical of conventional reflectarrays.  The dissimilarity-optimized counterpart, using the same pixel parameterization but without the similarity constraint, achieved 0.9~dB lower gain and 3.4~dB worse sidelobe performance, confirming the importance of inter-element similarity.
+
+The authors also demonstrated a ``mosaic reflectarray'' concept: by controlling both the reflection phase and the pixel density (metal fill fraction) of each element, the reflectarray surface can simultaneously display a grayscale optical image while functioning as a high-gain antenna.  A mosaic reflectarray displaying the University of Ottawa logo achieved 32.4~dBi gain---only 0.7~dB below the similarity-optimized design---demonstrating that fragmented reflectarray elements offer sufficient design freedom to satisfy both electromagnetic and visual constraints simultaneously.
+
+
 \section{Fragmented RF Power Combiners}
 \label{sec:combiners}
 
@@ -132,6 +160,8 @@ The measured results confirmed that the NZIM significantly improves the MPA dire
 As described in Chapter~9, the Periodic Level Set Function (P-LSF) methodology developed by Saad-Falcon et al.\ \cite{SaadFalcon2024LevelSet} has been applied to the design of broadband frequency-selective surfaces and narrowband metasurface filters.  The P-LSF approach is particularly well suited for periodic electromagnetic structures because the distance wrapping technique (Equation~\ref{eq:wrapped} in Chapter~9) ensures that the material distribution is inherently periodic, with no discontinuities at the unit cell boundaries.  The broadband 2:1 bandpass FSS (15--30~GHz) and dual-band high-Q notch filter demonstrated by Saad-Falcon et al.\ represent state-of-the-art examples of computationally optimized metasurface design.
 
 Howard et al.\ \cite{Howard2022LossTangent} applied the P-LSF methodology to a different class of electromagnetic structure: resonant periodic surfaces for dielectric materials characterization.  The optimized surface exhibits a resonance whose magnitude depends linearly on the loss tangent of an adjacent dielectric sample, enabling accurate, non-destructive measurement of dielectric loss.  This is a compelling example of the versatility of the fragmented approach---the same design machinery that produces antennas can also produce precision measurement instruments.
+
+A related and rapidly emerging area is the application of machine learning to digitally programmable metasurfaces, which use pixelated unit cell arrays with electronically controlled phase states to dynamically manipulate electromagnetic waves.  Ayele, Noakoasteen, and Christodoulou \cite{Ayele2025PatternCode} demonstrated the use of CNNs for efficient pattern-to-code mapping of digital metasurfaces: given a desired far-field radiation pattern, the CNN predicts the 2-bit coding sequence for a 15$\times$15 element metasurface operating at 100~GHz.  In a companion study, Ayele et al.\ \cite{Ayele2025SpaceTimeCoding} extended the approach to space-time-coding digital metasurfaces, using a hybrid CNN-LSTM architecture to predict the time-varying coding sequences that produce desired radiation patterns across multiple harmonics.  These works bridge the pixelated metasurface concept with real-time reconfigurability, addressing the computational bottleneck that has limited the practical deployment of programmable metasurfaces for applications including beam steering, RCS reduction, and wireless communications.
 
 
 \section{Pixelated Absorbers}
@@ -309,6 +339,8 @@ Figure~\ref{fig:OES_harvest1} shows the BPSO-optimized pixelated unit cell.  The
 
 A 9$\times$9 array of the optimized unit cells was fabricated on Rogers RT/duroid 6006 substrate and measured in an anechoic chamber.  Figure~\ref{fig:OES_harvest2} shows the measurement setup.  The measured harvesting efficiency exceeds 90\% at both 2.45 and 6~GHz for all polarization angles, confirming the polarization-independent design.  The delivered power is also insensitive to incidence angle from 0$^\circ$ to 45$^\circ$ for both TE and TM polarizations.  This work demonstrates that the pixelated optimization approach can produce electromagnetic structures optimized for energy capture rather than radiation or scattering---yet another application of the same fundamental design philosophy.
 
+Keshavarz et al.\ \cite{Keshavarz2024PixelatedRectenna} applied pixelated antenna design to rectenna (rectifying antenna) systems for wireless power transfer.  In a conventional rectenna, a matching network is required between the receiving antenna and the rectifier diode to conjugate-match their impedances; this network adds loss, size, and design complexity.  By optimizing the pixel pattern of the receiving antenna using binary particle swarm optimization (BPSO) with a multi-objective fitness function that simultaneously targets resonant frequency, conjugate impedance match to the diode, and antenna gain, the authors eliminated the matching network entirely.  The BPSO discovers a non-intuitive pixel pattern that provides the correct complex impedance at the antenna terminals to directly drive the rectifier.  The resulting pixelated rectenna achieved 37\% RF-to-DC conversion efficiency at 0~dBm input power (2.5~GHz), rising to 64\% at $+12$~dBm, in a compact single-layer structure---demonstrating that the fragmented aperture approach can co-optimize antenna radiation and circuit-level impedance matching in a single design step.
+
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/ghaderi2018/Ghaderi2018_Fig14_measurement.png}
@@ -337,6 +369,8 @@ Figure~\ref{fig:OES_filter1} shows the proposed pixelated notch filter schematic
 
 Figure~\ref{fig:OES_filter2} shows the measured and simulated S-parameters.  The filter without short-circuited stubs achieves a notch depth of $-26$~dB at 5~GHz, while the version with shorted stubs reaches $-61$~dB---a 35~dB improvement.  The pixelated filter occupies only 61.5~mm$^2$, less than half the area of an equivalent third-order Chebyshev interdigitated filter.  This compact size, combined with the single-layer, via-free construction, makes pixelated filters attractive for integrated microwave circuits.
 
+Karahan, Liu, and Sengupta \cite{Karahan2023InverseMMWave} demonstrated that the pixelated inverse design concept extends to on-chip millimeter-wave circuits.  By discretizing a 300$\times$300~$\mu$m area into a 16$\times$16 pixel grid and training a deep CNN forward model on the scattering parameters, they enabled rapid synthesis of multi-port EM structures with designer S-parameters.  The approach was applied to the co-design of a broadband 30--100~GHz output matching network with a SiGe power amplifier, achieving 16\%--24.7\% power-added efficiency across a 103.2\% fractional bandwidth---performance that would be extremely difficult to achieve through conventional template-based circuit design.  This work demonstrates that the pixelated optimization philosophy, originally developed for antenna apertures, can produce globally competitive designs in the domain of integrated circuits.
+
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch10/gomez2025/Gomez2025_Fig7_Sparams.png}
@@ -346,19 +380,41 @@ Figure~\ref{fig:OES_filter2} shows the measured and simulated S-parameters.  The
 \end{figure}
 
 
+\section{Photonic Integration with Fragmented Arrays}
+\label{sec:photonic}
+
+An emerging application of fragmented aperture antennas is their integration with high-power photodiodes for fiber-fed RF arrays.  In conventional phased array systems, RF signals are distributed to antenna elements through coaxial cables or waveguides, which become increasingly lossy and heavy at higher frequencies and over longer runs.  Replacing these metallic feed lines with optical fiber offers dramatic reductions in size, weight, and power (SWaP): fiber is lighter, lower-loss over long distances, and immune to electromagnetic interference.  The challenge is integrating the photodiode---which converts the modulated optical signal back to RF---directly at the antenna element without degrading the antenna's wideband performance.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch10/hughes2015/Hughes2015_Fig1_XBandArray.png}
+\caption{X-band fragmented aperture array integrated with high-power photodiodes.  (a) Design goals and measured performance (gain and port reflection vs.\ frequency); (b) rendering of a unit cell showing the fragmented conducting layer, substrate, and feed; (c) fabricated 5$\times$5 array on Rogers PCB; (d) close-up of the fragmented aperture pattern; (e) measured horizontal scan pattern showing $\sim\!13$~dB sidelobe suppression across 5--14~GHz \cite{Hughes2015Integration}.}
+\label{fig:OES_photonic1}
+\end{center}
+\end{figure}
+
+Hughes et al.\ at GTRI and the University of Virginia demonstrated this integration in two complementary efforts \cite{Hughes2015Co-design,Hughes2015Integration}.  The fragmented aperture array was designed for linear polarization, 50-$\Omega$ input impedance, $>$10~dB return loss, and flat gain response across 6--12~GHz (Figure~\ref{fig:OES_photonic1}).  The GA-optimized unit cell was tessellated into a 5$\times$5 array on low-cost Rogers PCB.  At 12~GHz, the array demonstrated approximately 10~dBi gain with 20$^\circ$ beamwidth, and measured gain mismatch between any two elements was less than 5~dB across 5--14~GHz.
+
+The UVA-developed InGaAs/InP modified uni-traveling carrier (MUTC) photodiodes exhibited $\sim\!10$~GHz RF bandwidth and CW output power exceeding 1~W---sufficient to enable net positive RF gain over the photonic link.  GTRI developed a custom coupon board packaging approach that co-locates four active photodiodes with the antenna elements, using fiber-attached lenses for optical injection through a quartz window.  The integrated photodiode-antenna assembly demonstrated passband operation from 8.2 to 12.4~GHz with less than 6~dB gain variation.
+
+The fragmented aperture design proved particularly well-suited to photonic integration because the optimizer could account for the photodiode packaging in the electromagnetic model, ensuring that the nearby photonic structures did not degrade antenna performance.  This flexibility---the ability to co-optimize the antenna pixel pattern in the presence of non-traditional feed structures---is a distinctive advantage of the fragmented aperture approach over conventional antenna topologies.
+
+
 \section{Summary}
 
 The examples in this chapter demonstrate that the fragmented aperture concept is not limited to antenna design.  The core methodology---pixelated conducting surfaces optimized by evolutionary algorithms with full-wave electromagnetic evaluation---applies to any electromagnetic structure whose performance depends on the spatial distribution of conducting material:
 
 \begin{itemize}
 \item \textbf{Broadband phase surfaces} with engineered transmission phase properties, as demonstrated in the original patent.
+\item \textbf{Reflectarrays} with similarity-optimized fragmented elements achieving 97\% aperture phase efficiency and the ability to simultaneously display optical images.
 \item \textbf{RF power combiners} that outperform conventional COTS components in insertion loss and bandwidth, enabling integrated all-fragmented antenna systems.
 \item \textbf{Pixelated absorbers} that achieve ultra-thin, wideband absorption through jointly optimized conducting pixels and lumped resistors.
 \item \textbf{Pixelated waveguide components}, specifically SIW horn antennas with optimized dielectric distributions that achieve equal beamwidths and circular polarization in single-layer structures.
 \item \textbf{Radomes and RCS reduction} surfaces that combine optimized metasurfaces with frequency-selective structures for simultaneous in-band transmission and out-of-band scattering control.
-\item \textbf{Energy harvesting} metasurfaces that efficiently capture dual-band, multi-polarization RF energy for wireless power transfer applications.
+\item \textbf{Energy harvesting} metasurfaces and rectennas, including pixelated designs that eliminate matching networks by co-optimizing antenna impedance with rectifier diode requirements.
 \item \textbf{Microwave filters} with pixelated conducting patterns that achieve compact notch and bandpass responses in single-layer CPW structures.
 \item \textbf{Metamaterials and metasurfaces} including near-zero index materials with measured 6~dB gain enhancement, broadband frequency-selective surfaces, and resonant structures for materials characterization.
+\item \textbf{Photonic integration} of fragmented aperture arrays with high-power photodiodes for fiber-fed RF systems, exploiting the design flexibility of the GA-optimized pixel pattern to accommodate non-traditional feed structures.
 \end{itemize}
 
 As the fragmented aperture design process continues to be refined---through improved optimization algorithms (Chapter~3), continuous parameterizations (Chapter~9), and machine learning acceleration (Chapter~9)---its application to non-antenna electromagnetic structures will expand further.  Any electromagnetic problem that can be cast as ``what pattern of conducting material on a surface optimizes a given performance metric?'' is a candidate for the fragmented aperture approach.

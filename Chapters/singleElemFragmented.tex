@@ -371,6 +371,7 @@ The designs presented in Chapters~2 and 3 were all linearly polarized.  Linear p
 Linear polarization is the simplest case for the fragmented aperture design process, since the symmetry constraints reduce the number of independent pixels and the fitness function need only evaluate a single polarization component.  The examples in Chapters~2 and 3 demonstrate that the approach achieves excellent linearly polarized performance, with realized gain approaching the aperture limit.
 
 \subsection{Circular Polarization}
+\label{sec:ch4cp}
 
 Circular polarization (CP) requires that the radiated electric field have two orthogonal components of equal amplitude with a $90^\circ$ phase difference between them.  For a fragmented aperture antenna with a single central feed point, achieving CP requires breaking the quadrant symmetry of the pixel pattern.  Specifically, the pattern can have no lines of mirror symmetry passing through the feed point; if such a line existed, the radiated field would be linearly polarized along or perpendicular to that line.
 
@@ -511,6 +512,35 @@ This is accomplished by adding a penalty term to the genetic algorithm fitness f
 The out-of-band rejection capability is related to the broader concept of frequency-selective surfaces (FSS), which have been extensively studied using pixelated and optimization-based design approaches.  Zhao et al.\ \cite{Zhao2015Novel} designed pixelated frequency-selective surfaces using an estimation of distribution algorithm, demonstrating that optimization-driven design can achieve sharp frequency selectivity from pixelated conducting patterns.  While FSS designs are typically passive filtering structures rather than antennas, the underlying principle---that a pixelated conducting pattern can exhibit frequency-selective behavior---is the same.
 
 This capability is another illustration of the versatility of the fragmented aperture design process: by changing the fitness function, the same design machinery that produces broadband antennas can also produce antennas with deliberately shaped frequency responses.
+
+\section{Three-Dimensional Fragmented Antennas}
+\label{sec:ch4_3d}
+
+All of the fragmented aperture antennas described thus far are fundamentally two-dimensional: one or more planar layers with binary conducting/non-conducting pixel patterns.  Cook et al.\ \cite{Cook2019Printed} at GTRI extended the concept to three dimensions by replacing planar pixels with volumetric \emph{voxels}---rectangular prisms filling a cylindrical volume.
+
+The design used voxels 2.5~mm on a side arranged in a brick-laying (staggered-layer) pattern to prevent the corner-touching connectivity problem familiar from 2D fragmented apertures (see Chapter~3).  The solution space comprised $2^{801}$ possible configurations.  A multi-objective genetic algorithm optimized both VSWR and broadside right-hand circular polarization (RHCP) gain from 6 to 18~GHz, with disconnected (floating) metal identified and removed using an adjacency-matrix method from graph theory.
+
+Fabrication posed a unique challenge.  Direct Metal Laser Sintering (DMLS) was attempted first, but vendors were unable to remove residual metal powder from the complex internal voids.  The successful approach used laser sintering of plastic by ProtoLabs, followed by nickel electroplating by RepliForm Inc.  Three identical test articles were fabricated.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=0.55\linewidth]{/Users/jim.maloney/Book/images/ch4/cook2019/Cook2019_Fig3_CrossSection.png}
+\caption{Cross-section of the GA-optimized 3D fragmented aperture antenna, showing the complex voxel geometry within the 43-mm diameter, 15-mm tall cylindrical volume.  The feed point is labeled \cite{Cook2019Printed}.}
+\label{fig:SAD3D1}
+\end{center}\end{figure}
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=0.55\linewidth]{/Users/jim.maloney/Book/images/ch4/cook2019/Cook2019_Fig4_Hardware.png}
+\caption{One of the three 3D-printed and nickel-plated fragmented aperture test articles.  The complex, non-intuitive voxel geometry discovered by the genetic algorithm is clearly visible \cite{Cook2019Printed}.}
+\label{fig:SAD3D2}
+\end{center}\end{figure}
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch4/cook2019/Cook2019_Fig5_GainVsFreq.png}
+\caption{Measured RHCP broadside gain for the three 3D-printed test articles (Antennas A, B, C) compared with the FDTD model prediction.  The design achieves greater than 3:1 bandwidth (6--18~GHz) with RHCP from a single unbalanced feed.  The excellent consistency among the three articles demonstrates fabrication repeatability \cite{Cook2019Printed}.}
+\label{fig:SAD3D3}
+\end{center}\end{figure}
+
+Figure~\ref{fig:SAD3D1} shows a cross-section of the optimized design, revealing the intricate internal voxel structure.  Figure~\ref{fig:SAD3D2} shows one of the fabricated test articles, and Figure~\ref{fig:SAD3D3} compares the measured RHCP broadside gain of all three articles with the FDTD model prediction.  The measured gain of approximately 5--15~dBi across the 6--18~GHz band agrees closely with the model and is remarkably consistent across the three fabricated articles.  Notably, the design achieves circular polarization from a single unbalanced feed---a capability that required breaking all pixel symmetries in the 2D case (see Section~\ref{sec:ch4cp}) but arises naturally in three dimensions where the voxel geometry has no inherent planar symmetry to constrain the current distribution.
 
 \section{Array Elements}
 \label{sec:ch4array}

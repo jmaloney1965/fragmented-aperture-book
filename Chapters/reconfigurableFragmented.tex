@@ -22,9 +22,23 @@ The Agile Aperture Antenna implementation that was successfully demonstrated is 
 
 The Agile Aperture Antenna can be understood as a variant of the fragmented aperture antenna in which the fundamental unit is not a single pixel but a metallic pad composed of a group of pixels.  The pads are not contiguous; they are separated by narrow dielectric gaps.  The antenna structure for any given configuration consists of the conducting pads that are connected by closed switches, together with all of the unconnected pads that remain present on the substrate.  This is an important distinction from a conventional fragmented aperture: in the Agile Aperture Antenna, the unconnected pads are always physically present and contribute to the electromagnetic behavior of the antenna through scattering, even when they are not part of the connected conducting structure.
 
-\section{Static Proof of Concept}
+\section{Early Experimental Validation}
 
-\textcolor{red}{INSERT: Description of the first two static (hard-wired) pixelated designs that demonstrated the unconnected pads did not prevent good antenna performance.  Include figures showing the two designs and their measured performance.}
+The first experimental demonstration of the switched fragmented aperture concept was reported by Maloney et al.\ in 2000 \cite{Maloney2000Switched}.  Two generations of test beds were constructed.  The first generation used hard-wired connections (soldered or open gaps) to validate the basic concept.  The second generation, shown in Figure~\ref{fig:RECAP_EARLY1}, used magnetically actuated reed switches as stand-ins for the FET or MEMS switches envisioned for future electronically reconfigurable antennas.  Active or inactive magnets were manually placed to set each switch state.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch5/maloney2000/Maloney2000_Fig3_TestBed.png}
+\caption{Second-generation switched fragmented aperture test bed using magnetically actuated reed switches.  Inset shows an individual switch/magnet assembly.  This test bed permitted rapid evaluation of different switch configurations \cite{Maloney2000Switched}.}
+\label{fig:RECAP_EARLY1}
+\end{center}\end{figure}
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch5/maloney2000/Maloney2000_Fig5_BroadsideEndfire.png}
+\caption{Beam steering demonstration on the second-generation test bed.  Two different switch configurations (left) and their measured radiation patterns (right): broadside (top) and endfire (bottom).  The strikingly different conducting patterns produce fundamentally different radiation characteristics from the same physical aperture \cite{Maloney2000Switched}.}
+\label{fig:RECAP_EARLY2}
+\end{center}\end{figure}
+
+Multiple switch configurations were optimized covering sub-bands from 500~MHz to 2.5~GHz, and beam steering from broadside to endfire was demonstrated at 800~MHz.  Figure~\ref{fig:RECAP_EARLY2} shows the broadside and endfire configurations and their measured radiation patterns, clearly demonstrating that a single aperture can be reconfigured for fundamentally different beam directions.  These early results, funded by DARPA, established the foundation for the more sophisticated Agile Aperture Antenna described in the following sections.
 
 \section{Reconfigurable Proof of Concept}
 
@@ -118,6 +132,30 @@ However, for the Agile Aperture Antenna to transition from a laboratory concept 
 
 Subsequent research has explored several promising switch technologies for reconfigurable pixelated antennas.  MEMS-based switches have been successfully demonstrated for reconfigurable patch antennas \cite{Wright2016Effect,Ali2014Mems,Wright2018Mems}, offering excellent RF performance with low insertion loss and high isolation.  Phase transition materials such as vanadium dioxide (VO2) provide another approach, enabling frequency reconfiguration through voltage-controlled phase changes \cite{Lou2025Frequency}.  Other techniques include magnetically actuated pixels \cite{Pal2018Magnetically} and tunable designs using varactors \cite{Ouedraogo2014Tunable}.  More recent work has focused on dual-port mmWave reconfigurable designs with optimized pixel configurations \cite{Tang2023Dual-port} and novel frequency reconfigurable implementations \cite{Qiao2023Novel,Bichara2021Miniaturized}.
 
+The reconfigurable pixelated antenna concept has also attracted interest from the wireless communications community, where the ability to dynamically reshape the aperture offers advantages beyond traditional beam steering.  Chen et al.\ \cite{Chen2025REMAA} proposed reconfigurable pixel antenna arrays for multiuser MIMO, in which discrete pixel states effectively shift the radiation position across the aperture without mechanical motion, achieving near-ideal performance compared to hypothetical mechanically movable antennas.  Han et al.\ \cite{Han2026AngularSensing} introduced a ``highly reconfigurable pixel antenna'' (HRPA) that jointly optimizes both the radiating aperture configuration and the feeding port selection for angle-of-arrival sensing, reducing angular estimation error by more than 50\% compared to a conventional uniform planar array of the same size.  Shen, Wong, and Murch \cite{Shen2025AntennaCoding} formulated the concept of ``antenna coding,'' treating the binary switch states of a pixel antenna as a codeword and developing codebook design algorithms that achieve up to 5.4$\times$ channel gain improvement and 3.1$\times$ MIMO capacity improvement over fixed-configuration antennas.  These works demonstrate that the reconfigurable fragmented aperture concept, originally developed for radar and communications antenna applications, is increasingly recognized as a key enabler for next-generation wireless systems.
+
+\section{Cylindrical Reconfigurable Antennas}
+
+The flat Agile Aperture Antenna described above provides beam steering within the half-space in front of the aperture.  Kiesel and Strates \cite{Kiesel2017Cylindrical} at GTRI extended the switched-pixel concept to a cylindrical geometry to achieve full hemispherical coverage from a single antenna element with no phased array beamformer.
+
+The cylindrical antenna is constructed from modular ``smart pixel'' boards---the same COTS pixel technology developed for the flat reconfigurable aperture.  Each board contains four RF switches, a control circuit, and bias/RF bus connections, costing approximately US\$10 per pixel with 300~$\mu$W DC consumption.  Two antenna sizes were built: a 133-mm diameter cylinder (24 pixels, 140~mm tall) and a 75-mm diameter cylinder (24 body pixels + 5 top-cap pixels, 85~mm tall).  Figure~\ref{fig:RECAP_CYL1} shows the 133-mm cylindrical antenna.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=0.55\linewidth]{/Users/jim.maloney/Book/images/ch5/kiesel2017/Kiesel2017_Fig2_CylindricalAntenna.png}
+\caption{The 133-mm diameter cylindrical reconfigurable pixel antenna mounted on a ground plane in the anechoic chamber.  The smart pixel boards wrap around the cylinder, providing 24 independently switchable pixels for full azimuthal beam steering \cite{Kiesel2017Cylindrical}.}
+\label{fig:RECAP_CYL1}
+\end{center}\end{figure}
+
+Switch configurations were optimized using a genetic algorithm with measured realized gain as the fitness metric, evaluated directly in the anechoic chamber.  The GA discovered configurations for frequency tuning (1--5~GHz), azimuthal beam steering ($360^{\circ}$), elevation steering ($0^{\circ}$--$90^{\circ}$), and signal-to-interference ratio (SIR) optimization.  The SIR-optimized states achieved approximately 20~dB of interference suppression by jointly maximizing signal gain and minimizing interference gain---a significant improvement over the 10~dB achievable with gain-only beam states.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch5/kiesel2017/Kiesel2017_Fig7_HemisphericalCoverage.png}
+\caption{Hemispherical coverage of the 75-mm cylindrical antenna at 1.6~GHz across 58 optimized beam states: (a) maximum steered gain at each point in the hemisphere (generally $>0$~dBi, up to 6~dBi at zenith), and (b) minimum achievable gain showing that deep nulls can be placed anywhere in the hemisphere \cite{Kiesel2017Cylindrical}.}
+\label{fig:RECAP_CYL2}
+\end{center}\end{figure}
+
+Figure~\ref{fig:RECAP_CYL2} summarizes the hemispherical coverage capability: across 58 optimized beam states, the 75-mm antenna achieves positive gain ($>0$~dBi) over most of the hemisphere and can place deep nulls at any direction.  The complete wearable rig (antenna, controller, and software-defined radio) weighs less than 340~g, and the system can reconfigure at approximately 1000 beam states per second---fast enough for real-time adaptation to changing signal environments.
+
 \section{Acknowledgement}
 The author would like to thank Professor Glenn Smith for his dedication in writing the original IEEE paper \cite{RECAP} on which much of this chapter is based.  The author also acknowledges the contributions of the full research team as described in \cite{MaloneySmithAntChapters}.
 
@@ -129,7 +167,8 @@ The author would like to thank Professor Glenn Smith for his dedication in writi
 \bibliography{../Literature/master_bibliography,%
               ../Literature/fragmented_aperture_core,%
               ../Literature/reconfigurable_ch5,%
-              ../Literature/ml_ai_optimization_methods}
+              ../Literature/ml_ai_optimization_methods,%
+              ../Literature/recent_innovations}
 \bibliographystyle{IEEEtran}
 
 

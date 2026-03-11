@@ -235,7 +235,7 @@ The computational bottleneck in fragmented aperture design has always been the f
 
 This cost is tolerable for a one-time design, but it becomes prohibitive when the design space must be explored more broadly---for example, when generating the library of scan-angle configurations described in Chapter~8, when performing parameter sweeps over element geometry, or when optimizing multi-layer structures with many design variables.  Machine learning and artificial intelligence methods offer the prospect of dramatically accelerating this design cycle by replacing or augmenting the computationally expensive full-wave simulations.
 
-Several distinct approaches have emerged in recent years, and they are largely complementary: surrogate-based optimization replaces the simulator with a fast approximation, inverse design methods bypass the optimization loop entirely, and hybrid methods combine ML acceleration with physics-based simulation.  The broader field of AI-assisted antenna design is surveyed comprehensively in \cite{Sarker2023MLReview} and \cite{Shereen2025DLReview}.
+Several distinct approaches have emerged in recent years, and they are largely complementary: surrogate-based optimization replaces the simulator with a fast approximation, inverse design methods bypass the optimization loop entirely, and hybrid methods combine ML acceleration with physics-based simulation.  The broader field of AI-assisted antenna design is surveyed comprehensively in \cite{Sarker2023MLReview}, \cite{Shereen2025DLReview}, and \cite{ElMisilmani2019MLOverview}.
 
 \subsection{Surrogate-Based Optimization}
 
@@ -263,9 +263,19 @@ Jacobs \cite{Jacobs2021CNN} applied CNN regression to predict the resonant frequ
 
 Wang et al.\ \cite{Wang2024Machine} proposed a quasi-bisection method assisted by a machine learning model for bandwidth optimization of pixelated patch antennas, combining the efficiency of ML prediction with a systematic search strategy that provably converges.
 
-Koziel et al.\ \cite{Koziel2022DomainConfinementDNN} developed a surrogate modeling approach based on pyramidal deep neural networks with domain confinement, in which the training data is concentrated in the region of the design space most relevant to the optimization target rather than spread uniformly across all possible configurations.  This targeted training strategy significantly improves prediction accuracy for a given training set size, which is particularly important when each training sample requires an expensive full-wave simulation.
+Koziel et al.\ \cite{Koziel2022DomainConfinementDNN} developed a surrogate modeling approach based on pyramidal deep neural networks with domain confinement, in which the training data is concentrated in the region of the design space most relevant to the optimization target rather than spread uniformly across all possible configurations.  This targeted training strategy significantly improves prediction accuracy for a given training set size, which is particularly important when each training sample requires an expensive full-wave simulation.  In subsequent work, Koziel, Pietrenko-Dabrowska, and Leifsson \cite{Koziel2024Reduced} demonstrated that a fast global sensitivity analysis can identify a reduced-dimensionality subspace capturing the maximum antenna response variability, enabling kriging surrogate models to achieve accurate global optimization with only $\sim\!300$ EM evaluations.  Koziel, Pietrenko-Dabrowska, and Szczepanski \cite{Koziel2024Versatile} took a different approach entirely, proposing a fully unsupervised design procedure that parameterizes planar antennas using re-sizable elliptical patches and gaps---an alternative to pixel-grid representations that avoids the combinatorial explosion of binary arrays while still enabling topology exploration through a floating-point evolutionary algorithm.
 
 Chen, Sun, and Wang \cite{Chen2025InverseDesignDL} demonstrated a complete inverse design framework combining a CNN surrogate with binary particle swarm optimization (BPSO) for pixelated microstrip antenna design.  The radiating patch was discretized into a $10 \times 10$ binary matrix, and the CNN was trained on 150,000 CST-simulated S-parameter datasets, achieving an $R^2$ of 0.94.  Using the trained CNN as a fast surrogate, BPSO optimized the pixel states to design a dual-band antenna operating at 2.8 and 3.7~GHz, with the CNN-predicted S$_{11}$ closely matching full-wave verification.  The authors reported a 25$\times$ speedup over direct MATLAB-CST co-simulation, completing 500 optimization iterations in 30 minutes rather than 12.5 hours---a concrete demonstration of the computational savings achievable with ML surrogates for pixelated antenna design.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch9/dou2024/Dou2024_Fig1_SDSIAGAFlowchart.png}
+\caption{Two-stage simulation-driven surrogate optimization (SDS-IAGA) for automated pixelated antenna topology design.  Stage~1 (left) screens the initial population using a current-driven search on a low-fidelity EM model.  Stage~2 (right) uses frequency scaling to correct the low-fidelity surrogate during the improved adaptive genetic algorithm (IAGA) optimization loop, reducing the number of expensive high-fidelity simulations required \cite{Dou2024SurrogateAGA}.}
+\label{fig:RI_SDSIAGA}
+\end{center}
+\end{figure}
+
+Dou et al.\ \cite{Dou2024SurrogateAGA} proposed a simulation-driven surrogate approach (SDS-IAGA) that uses a coarse-mesh EM model as a fast surrogate during GA optimization, with a frequency-scaling correction to approximate fine-mesh results without running the expensive high-fidelity simulation at every iteration (Figure~\ref{fig:RI_SDSIAGA}).  The method also employs a current-driven search to generate a high-quality initial population: by analyzing current distributions from low-fidelity simulations, mutations are concentrated on pixels in strong-current regions where changes most affect performance.  Applied to an $8 \times 10$ pixelated tri-band antenna (2.45/3.5/5.8~GHz), SDS-IAGA achieved a 63\% reduction in optimization time compared to a standard adaptive GA, converging in approximately 8~hours with only $\sim\!500$ equivalent high-fidelity simulations rather than the $\sim\!1{,}300$ required by the conventional approach.
 
 \subsection{Inverse Design with Neural Networks}
 
@@ -281,7 +291,19 @@ Surrogate-based optimization still requires an explicit optimization loop, even 
 
 Gupta et al.\ \cite{Gupta2023Tandem} demonstrated a tandem neural network architecture for inverse design of multiband pixelated antennas.  The tandem network consists of two sub-networks trained sequentially: a \emph{forward model} that predicts antenna performance from the pixel pattern, and an \emph{inverse model} that generates a pixel pattern from a desired performance specification.  The inverse model is trained to minimize the discrepancy between the desired specification and the forward model's prediction of the generated design, avoiding the well-known one-to-many problem in which multiple different pixel configurations can produce similar performance.  The tandem architecture ensures that the generated designs are physically realizable and electromagnetically consistent.
 
-Li et al.\ \cite{Li2025Inverse} applied residual neural networks (ResNets) \cite{He2016ResNet} to the inverse design of pixelated antennas, exploiting the skip connections in the ResNet architecture to maintain gradient flow through deep networks with many layers.  The deeper network captures more complex relationships between the pixel pattern and the antenna response, enabling accurate inverse design for multi-objective specifications.
+Xiao et al.\ \cite{Xiao2021InverseANN} proposed an inverse artificial neural network with three parallel branches---one each for S-parameters, gain, and radiation pattern---merged through a second-stage extreme learning machine (ELM) to produce the geometrical design variables directly.  By accepting the full set of performance indices as input and outputting the corresponding antenna geometry, the inverse model eliminates the need for iterative optimization entirely.  The authors demonstrated the approach on multimode resonant and triband printed antennas, achieving accurate inverse solutions with a small number of training samples.
+
+Karahan, Gupta, Khankhoje, and Sengupta \cite{Karahan2022InverseRFmmWave} demonstrated a deep CNN-based forward model for near-arbitrary planar pixelated antenna structures, trained on 0.7~million RF and 1.1~million mmWave randomized structures on a 12$\times$12 pixel grid.  The CNN predicts S-parameters and radiation patterns from the pixel configuration, and when coupled with a genetic algorithm, enables inverse design of compact broadband and dual-band antennas at both RF (2--5~GHz) and mmWave (20--40~GHz) frequencies.  The fabricated designs---including a broadband mmWave antenna achieving 3~GHz bandwidth and a dual-band RF antenna 30\% more compact than a conventional patch---validated the approach with close agreement between CNN prediction, full-wave simulation, and measurement.  Karahan, Shao, and Sengupta \cite{Karahan2024Deep} extended this framework to multi-port pixelated antennas, using the CNN surrogate with GA optimization to synthesize dual-band two-port mmWave designs with port isolation exceeding 15~dB.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch9/li2025/Li2025_Fig1_InverseFramework.png}
+\caption{ResNet-based inverse design framework for pixelated antennas.  The inverse model (ResNet) maps a desired $S_{11}$ response to a binary pixel configuration; the result is validated by a pre-trained forward model (CNN, weights frozen) that predicts $S_{11}$ from the structure.  The total loss combines a structure loss with a weighted $S_{11}$ loss \cite{Li2025Inverse}.}
+\label{fig:RI_ResNetInverse}
+\end{center}
+\end{figure}
+
+Li et al.\ \cite{Li2025Inverse} applied residual neural networks (ResNets) \cite{He2016ResNet} to the inverse design of pixelated antennas (Figure~\ref{fig:RI_ResNetInverse}), exploiting the skip connections in the ResNet architecture to maintain gradient flow through deep networks with many layers.  (The practical training of such deep networks at scale has been enabled by advances in distributed training, such as the linear scaling rule for learning rates \cite{Goyal2017LargeMinibatchSGD}.)  The inverse ResNet takes a target $S_{11}$ spectrum as input and produces a $4 \times 4$ binary pixel matrix, which is then validated by a frozen forward CNN that predicts the resulting $S_{11}$.  The composite loss---structure loss plus a weighted $S_{11}$ loss---addresses the one-to-many problem.  The ResNet converged approximately 2.7$\times$ faster than a plain CNN inverse model, and successfully designed both single-band and dual-band antennas across 2--22~GHz with close agreement between target and predicted responses.
 
 \subsection{Generative Models}
 
@@ -297,17 +319,43 @@ Generative models---neural networks that learn to produce new samples from a tra
 
 Noakoasteen et al.\ \cite{Noakoasteen2022GAN} demonstrated the use of generative adversarial networks (GANs) for antenna design.  The GAN was trained on a dataset of antenna geometries and their corresponding performance metrics, and was then able to generate synthetic antenna designs that achieved specified performance targets.  The GAN approach also addresses a persistent practical challenge in ML-assisted antenna design: the cost of generating training data.  By using the GAN to generate synthetic training examples, the authors reduced the number of expensive full-wave simulations required to build the training dataset.
 
+Guo et al.\ \cite{Guo2025DallEM} introduced \emph{Dall-EM}, the first application of conditional diffusion models to the synthesis of electromagnetic structures.  Inspired by image-generation models such as DALL-E, the approach trains a diffusion network to generate pixelated EM structures (represented as 18$\times$18 binary grids) conditioned on a target S-parameter vector.  Starting from random noise, the model iteratively denoises the grid to produce a structure whose S-parameters match the specified target across the 10--30~GHz band.  Compared to GANs and variational autoencoders, diffusion models explore a richer design space and produce more diverse candidate structures for a given specification.  The authors demonstrated design convergence in seconds---at least 10$\times$ faster than prior predictive AI models and orders of magnitude faster than traditional genetic algorithms---while achieving close agreement between the diffusion-generated designs and full-wave simulation verification.  This work opens a new dimension for generative AI in electromagnetic design, suggesting that the same diffusion model architectures that have revolutionized image generation can be adapted to discover non-intuitive, high-performance EM structures.
+
 \subsection{GA Acceleration and Hybrid Methods}
 
-Between the extremes of pure simulation and pure ML prediction, hybrid methods combine machine learning with evolutionary optimization to accelerate convergence without fully replacing the physics-based simulator.
+Between the extremes of pure simulation and pure ML prediction, hybrid methods combine machine learning with evolutionary optimization to accelerate convergence without fully replacing the physics-based simulator.  A particularly intriguing direction is physics-informed machine learning, in which the network architecture or training procedure incorporates knowledge of the underlying physics.  Noakoasteen et al.\ \cite{Noakoasteen2020PhysicsInformed} proposed a deep neural network comprising a convolutional encoder, a convolutional LSTM recurrent network, and a convolutional decoder, trained on FDTD simulations of plane wave scattering from distributed conducting objects.  The trained network emulates transient electrodynamic physics with more than 17$\times$ speedup over traditional FDTD solvers, demonstrating that neural networks can learn the time-evolution of electromagnetic fields directly from simulation data.  While not applied to antenna design per se, such physics-informed approaches could eventually replace or augment the full-wave simulations in the fragmented aperture optimization loop.
 
-The use of genetic algorithms for antenna design has a long history predating the recent ML revolution.  Villegas et al.\ \cite{Villegas2004ParallelEGO} demonstrated a parallel electromagnetic genetic algorithm optimization (EGO) framework for patch antenna design, exploiting distributed computing to evaluate multiple candidate designs simultaneously---an early recognition that the computational cost of fitness evaluation is the dominant bottleneck.  Haupt \cite{Haupt2007MixedIntegerGA} introduced a mixed integer genetic algorithm that simultaneously optimized continuous parameters (dimensions, feed position) and discrete parameters (number of elements, material selection), providing a flexible framework applicable to pixelated antenna problems where both binary pixel states and continuous geometric parameters must be co-optimized.
+The use of genetic algorithms for antenna design has a long history predating the recent ML revolution.  Altshuler and Linden \cite{Altshuler1997GAWire} published one of the seminal papers on GA-optimized wire antennas, demonstrating four designs---including a ``crooked-wire'' genetic antenna for circular polarization and a high-gain genetic Yagi---all fabricated and measured with good NEC2 agreement.  Altshuler \cite{Altshuler2002SmallGA} later used a GA to find self-resonant wire configurations fitting within progressively smaller cubes (down to $0.026\lambda$), demonstrating that evolutionary optimization could discover non-intuitive topologies near fundamental size limits without requiring external matching networks.  O'Donnell, Altshuler, and Best \cite{ODonnell2003Representation} showed that the choice of chromosome representation (coordinate-based, absolute-angle, or relative-angle) significantly affects which solutions the GA can access---a finding directly relevant to fragmented aperture design, where the choice between binary pixel grids, connectivity matrices, or parameterized geometry representations determines the reachable design space.  Altshuler and O'Donnell \cite{Altshuler2011MultiFreqDielectric} extended GA wire antennas to operation immersed in dielectric powders, achieving multi-frequency self-resonant performance at electrical sizes below $\lambda/50$.
+
+More recently, Villegas et al.\ \cite{Villegas2004ParallelEGO} demonstrated a parallel electromagnetic genetic algorithm optimization (EGO) framework for patch antenna design, exploiting distributed computing to evaluate multiple candidate designs simultaneously---an early recognition that the computational cost of fitness evaluation is the dominant bottleneck.  Haupt \cite{Haupt2007MixedIntegerGA} introduced a mixed integer genetic algorithm that simultaneously optimized continuous parameters (dimensions, feed position) and discrete parameters (number of elements, material selection), providing a flexible framework applicable to pixelated antenna problems where both binary pixel states and continuous geometric parameters must be co-optimized.
 
 Jayasinghe and Uduwawala \cite{Jayasinghe2010Broadband} demonstrated early work on genetic algorithm optimization of broadband pixelated patch antennas, establishing baseline convergence rates for conventional GA approaches.  Jayasinghe, Anguera, and Uduwawala \cite{Jayasinghe2012Multiband} extended this to multiband designs, showing that GA optimization of pixelated antennas could produce designs robust to fabrication tolerances---an important practical consideration that ML-generated designs must also address.
+
+Ullah et al.\ \cite{Ullah2022PixelatedIoT} designed a low-profile dual-band antenna (3.5 and 5.8~GHz) using a pixelated defected ground with 512 binary pixels optimized via V-shaped binary particle swarm optimization (VBPSO), demonstrating that metaheuristic optimization of pixelated ground planes---essentially fragmented aperture techniques applied to defected ground structures---can produce compact, efficient multistandard IoT antennas.  Jiang et al.\ \cite{Jiang2025Multiband} proposed a novel design pathway in which a predefined shape (such as a logo) is converted into a pixelated patch antenna via image segmentation; inter-pixel connections are modeled as a multi-port network and optimized by a GA to achieve tri-band operation, illustrating how the fragmented aperture paradigm can be combined with unconventional design constraints.
 
 Sun, Jiang, and Wang \cite{Sun2023PixelatedNZIM} applied an elite-preserving genetic algorithm to the design of pixelated near-zero refractive index metamaterials, demonstrating that GA-based pixelated optimization extends naturally to metamaterial structures beyond antennas.  The application of fragmented aperture methods to metamaterials and other non-antenna electromagnetic structures is discussed further in Chapter~10.
 
 Ehrenborg and Gustafsson \cite{Ehrenborg2016PhysicalBounds} took a different approach, using genetic algorithm optimization of pixelated antennas in conjunction with physical bounds analysis.  By comparing the GA-optimized designs against theoretical Q-factor limits, they provided rigorous evidence that the GA was finding designs close to the physical optimum---an important validation that becomes even more relevant as ML methods are used to accelerate or replace the GA.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch9/wang2024_rl/Wang2024_Fig2_RLFramework.png}
+\caption{Localized reinforcement learning (LRL) framework for pixelated antenna bandwidth optimization.  The agent performs pixel flip operations on an $8 \times 8$ action space, with CST EM simulation providing the environment (state space: $|S_{11}|$).  A Deep Q-Network (DQN) is trained within each episode from an experience pool of (configuration, reward) pairs, with a rollback mechanism to prevent entrapment in local optima \cite{Wang2024Bandwidth}.}
+\label{fig:RI_RLframework}
+\end{center}
+\end{figure}
+
+An alternative to evolutionary optimization is reinforcement learning (RL), in which an agent learns to improve the antenna design through sequential pixel-flip actions rather than operating on a population of candidates.  Wang et al.\ \cite{Wang2024Bandwidth} proposed a localized reinforcement learning (LRL) algorithm for bandwidth optimization of pixelated patch antennas (Figure~\ref{fig:RI_RLframework}).  Starting from a known E-shaped patch topology discretized into an $8 \times 8$ binary pixel grid (exploiting symmetry), the agent selects individual pixels to flip, with CST EM simulation computing the resulting $S_{11}$ as the state.  A Deep Q-Network (DQN) learns Q-values for each pixel-flip action, and a rollback mechanism reverts to the best-seen configuration when no improvement is found within an episode.  The LRL agent achieved 34\% relative bandwidth (1.9--2.6~GHz), compared to 26\% for a surrogate-assisted PSO approach applied to the same design.
+
+\begin{figure}
+\begin{center}
+\includegraphics[angle=0,width=0.65\linewidth]{/Users/jim.maloney/Book/images/ch9/zeghdoud2025/Zeghdoud2025_Fig6_S11Comparison.png}
+\caption{Return loss comparison for three GA mutation probability strategies applied to a $10 \times 10$ pixelated patch antenna: fixed probability (dashed), fuzzy logic adaptive (solid), and AI-driven regression tree adaptive (dash-dot).  The AI-adaptive approach achieves the deepest $S_{11}$ match at 2.16~GHz \cite{Zeghdoud2025Accelerated}.}
+\label{fig:RI_FuzzyML}
+\end{center}
+\end{figure}
+
+Zeghdoud, Derbal, and Nedil \cite{Zeghdoud2025Accelerated} addressed a complementary problem: improving the convergence of the GA itself through adaptive mutation control.  Rather than replacing the simulator, they proposed two strategies for dynamically adjusting the mutation probability during optimization of a $10 \times 10$ pixelated patch antenna.  The first uses fuzzy logic rules that monitor population diversity and improvement stagnation, increasing the mutation rate when the population converges prematurely.  The second trains a regression tree on the first 20~generations of optimization data and then uses the trained model to predict the optimal mutation probability for all subsequent generations (Figure~\ref{fig:RI_FuzzyML}).  The AI-adaptive approach yielded approximately 5~dB deeper $S_{11}$ matching than a fixed-probability GA, with the regression tree outperforming the fuzzy logic strategy by an additional 1~dB---demonstrating that even simple ML models can meaningfully accelerate GA convergence for pixelated antenna design when applied to hyperparameter control.
 
 \subsection{Outlook}
 
@@ -317,6 +365,46 @@ Despite these challenges, the trajectory is clear.  As the design problems becom
 
 \textcolor{red}{\textbf{[PLACEHOLDER: This section will be expanded with the author's own results applying ML methods to fragmented aperture antenna design as they become available.]}}
 
+
+\section{Fielded Fragmented Aperture Systems}
+
+The preceding sections of this chapter have focused on research innovations---new parameterizations, new platforms, and new computational approaches.  This section describes a fragmented aperture antenna system that has been built, tested, and deployed for operational use, demonstrating the transition of the technology from the laboratory to the field.
+
+\subsection{CARAMEL: A VHF Fragmented Array in a Conex Container}
+
+Kiesel et al.\ \cite{Kiesel2018Conex} at GTRI designed and built a ten-element VHF fragmented aperture array integrated into a modified 20-foot Conex shipping container for the National RCS Test Facility (NRTF) at White Sands Missile Range.  The system, named CARAMEL (Conex Antenna, Radar, and Measurement Equipment Lab), operates from 30 to 120~MHz and supports both H-pol and V-pol measurements for low-frequency radar cross section characterization.
+
+The antenna occupies one full sidewall of the Conex container, with a fiberglass radome replacing the corrugated steel panel.  The design comprises fragmented driven and parasitic layers with a resistive layer for bandwidth, backed by a mesh ground plane that also serves as a Faraday cage for the electronics lab housed inside the container.  A semi-infinite periodic model was used for the initial FDTD/GA optimization (approximately $20\times$ faster than the full finite model), followed by a finite model constrained by the actual Conex geometry.  Figure~\ref{fig:RI_CARAMEL1} shows an annotated rendering of the complete system.
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch9/kiesel2018/Kiesel2018_Fig4_SystemRendering.png}
+\caption{Annotated 3D rendering of the CARAMEL system: a ten-element VHF fragmented aperture array built into a 20-foot Conex shipping container.  The antenna occupies one full sidewall, with HVAC, rack space, and storage accommodated within the container \cite{Kiesel2018Conex}.}
+\label{fig:RI_CARAMEL1}
+\end{center}\end{figure}
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=0.65\linewidth]{/Users/jim.maloney/Book/images/ch9/kiesel2018/Kiesel2018_Fig13b_CompletedConex.png}
+\caption{The completed CARAMEL system ready for shipment from Atlanta to White Sands Missile Range.  The white fiberglass radome panel (right side) replaces the original steel sidewall and houses the antenna array \cite{Kiesel2018Conex}.}
+\label{fig:RI_CARAMEL2}
+\end{center}\end{figure}
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=0.65\linewidth]{/Users/jim.maloney/Book/images/ch9/kiesel2018/Kiesel2018_Fig15a_AntennaInterior.png}
+\caption{Interior view of the CARAMEL antenna cavity, showing the fragmented aperture elements, expanded metal mesh ground plane, and fiberglass structural members \cite{Kiesel2018Conex}.}
+\label{fig:RI_CARAMEL3}
+\end{center}\end{figure}
+
+\begin{figure}\begin{center}
+\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch9/kiesel2018/Kiesel2018_Fig17_ReturnLoss.png}
+\caption{Measured versus modeled return loss for the complete CARAMEL system, including combiners and T/R modules.  The close agreement between model and measurement across the 30--120~MHz band validates the FDTD design methodology for this electrically small, mechanically constrained antenna \cite{Kiesel2018Conex}.}
+\label{fig:RI_CARAMEL4}
+\end{center}\end{figure}
+
+The system incorporates custom T/R modules (200~W peak / 50~W average), three combiner networks with amplitude tapering for sidelobe control, and full H-pol/V-pol switching capability.  The mechanical design was verified by finite element analysis for ISO~1496-1 stacking compliance (8 containers) and 6500-lb racking loads.  The completed system (Figures~\ref{fig:RI_CARAMEL2} and~\ref{fig:RI_CARAMEL3}) was shipped from Atlanta to White Sands by standard cargo carrier.
+
+Figure~\ref{fig:RI_CARAMEL4} compares the measured and modeled return loss across the operating band.  The agreement validates the two-stage optimization approach (periodic model for speed, finite model for accuracy) in a heavily constrained real-world geometry.  The system achieves approximately 0~dBi realized gain in the upper half of the band---a respectable result given that the aperture is only $1 \times 2.4$ wavelengths at 120~MHz and $0.25 \times 0.6$ wavelengths at 30~MHz.
+
+CARAMEL demonstrates that the fragmented aperture design methodology scales from laboratory prototypes to fielded systems operating under real environmental constraints---desert temperatures, high winds, sand intrusion---while maintaining the close model-measurement agreement that has characterized the technology since its inception.
 
 \section{Summary}
 
@@ -328,7 +416,9 @@ The distributed fragmented antenna of Barani et al.\ \cite{Barani2018Fragmented}
 
 Machine learning and AI methods are rapidly maturing as tools for antenna design.  Surrogate models based on convolutional neural networks can predict antenna performance from pixel patterns in microseconds, enabling orders-of-magnitude acceleration of the genetic algorithm optimization loop.  Inverse design networks and generative adversarial networks go further, producing candidate designs directly from performance specifications without an explicit optimization loop.  These methods promise to address the computational bottleneck that has been the primary limitation of the fragmented aperture design methodology since its inception, and will be particularly transformative for the design library generation required by the reconfigurable array concept of Chapter~8.
 
-These three innovations are largely complementary.  One can envision, for example, using ML-accelerated optimization with a P-LSF parameterization to design the individual elements of a distributed coupled antenna system.  As these and other advances mature, the fragmented aperture concept will continue to expand in capability and find new applications.
+The CARAMEL system of Kiesel et al.\ \cite{Kiesel2018Conex} demonstrates that the fragmented aperture technology has successfully transitioned from the research laboratory to fielded operational systems.  This VHF array, built into a standard shipping container and deployed to White Sands Missile Range for low-frequency RCS measurements, validates the entire design-to-deployment pipeline: GA optimization, FDTD modeling, fabrication, and system integration under real-world environmental and mechanical constraints.
+
+These innovations are largely complementary.  One can envision, for example, using ML-accelerated optimization with a P-LSF parameterization to design the individual elements of a distributed coupled antenna system.  As these and other advances mature, the fragmented aperture concept will continue to expand in capability and find new applications.
 
 
 \FloatBarrier

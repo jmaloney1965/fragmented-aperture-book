@@ -493,6 +493,47 @@ In some cases, special techniques can be applied to shorten the computation for 
 \label{fig:ACF26}
 \end{center}\end{figure}
 
+\section{FDTD Analysis of Periodic Structures}
+\label{sec:FDTD_PBC}
+
+Many structures of electromagnetic interest possess a periodicity in one or more dimensions.  For example, a frequency selective surface (FSS) is commonly used in a radome to control the energy that reaches an antenna.  A typical FSS consists of one or more layers of material, each formed from an element periodically replicated in two dimensions.  Another periodic structure that has received considerable attention in recent years is the photonic bandgap (PBG) or electronic bandgap (EBG) structure---a type of periodic dielectric structure that has frequency regions in which electromagnetic propagation is forbidden.  A third type of structure that can be considered periodic is an antenna array.  If large enough, many of the important parameters of an array can be analyzed by assuming that the structure is infinitely periodic.  The fragmented aperture array antennas described in this book are designed using precisely this approach.
+
+\subsection{The Unit Cell and Periodic Boundary Conditions}
+
+The FDTD technique can be applied to the analysis of periodic structures by modeling only a single \emph{unit cell} and using boundary conditions to simulate the effect of periodic replication.  This dramatically reduces the computational burden compared to modeling an entire array or surface.
+
+As an example, consider a two-dimensional electromagnetic screen consisting of infinitely long, periodic conducting bars of width $w$, thickness $d$, and separation gap $g$.  The illumination is an electromagnetic plane wave with the electric field parallel to the bars (TE polarization) and direction of propagation at angle $\phi_i$ with respect to the $x$~axis.  Because of the periodicity inherent in the geometry, only the fields in the unit cell are unique and need to be determined.
+
+Now consider discretizing the solution space within the unit cell using a lattice of traditional Yee cells \cite{Yee66}.  Field components that can be updated using fields entirely within the unit cell are straightforward.  However, field components at the edges of the unit cell require values from outside the cell.  These ``missing'' values are supplied by periodic boundary conditions (PBCs) that relate the fields on one side of the unit cell to those on the other side.  The relationship depends on the angle at which the incident field impinges on the structure.  In the frequency domain, the relationship is:
+\begin{align}
+\begin{split}
+H_x(x, y_p + \Delta y/2, \omega) &= H_x(x, \Delta y/2, \omega) \exp(-j k_y y_p), \\
+E_z(x, 0, \omega) &= E_z(x, y_p, \omega) \exp(+j k_y y_p),
+\label{eqn:PBC_freq}
+\end{split}
+\end{align}
+where $k_y = k_o \sin(\phi_i)$, $k_o = \omega/c$ is the free-space wavenumber, and $c$ is the free-space speed of light.  Since FDTD operates in the time domain, the boundary conditions must be expressed accordingly.  In the time domain, (\ref{eqn:PBC_freq}) becomes
+\begin{align}
+\begin{split}
+H_x(x, y_p + \Delta y/2, t) &= H_x(x, \Delta y/2, t - y_p \sin\phi_i / c), \\
+E_z(x, 0, t) &= E_z(x, y_p, t + y_p \sin\phi_i / c).
+\label{eqn:PBC_time}
+\end{split}
+\end{align}
+
+\subsection{The Causality Problem}
+
+Equation~(\ref{eqn:PBC_time}) reveals a fundamental difficulty: the periodic boundary condition requires both previous \emph{and future} field values.  Specifically, the $H_x$ values at $y = y_p + \Delta y/2$ are equal to \emph{previous} values of $H_x$ at $y = \Delta y/2$---these can simply be stored.  However, the $E_z$ values at $y = 0$ are equal to \emph{future} values of $E_z$ at $y = y_p$, and there is no simple way to obtain field values that have not yet been computed.
+
+This causality problem has been addressed by a variety of techniques, which can be broadly divided into two classes: those that avoid the problem by reformulating the equations (e.g., the sine/cosine method, split-field method, and spectral-domain method) and those that solve the problem directly (e.g., time-shift interpolation and multiple-angle methods).  A comprehensive discussion of all these techniques can be found in \cite{MaloneyKeslerPBC}.
+
+\subsection{Spectral-Domain FDTD}
+\label{sec:spectral_FDTD}
+
+One particularly useful approach for antenna array design is the spectral-domain FDTD method \cite{Aminian}.  In the spectral-domain formulation, the FDTD simulation is performed at a fixed transverse wavenumber $(k_x, k_y)$ rather than at a fixed scan angle $(\theta, \phi)$.  The PBC is still implemented as a wrap-around boundary, but the constant transverse wavenumber means that the effective scan angle is frequency dependent.
+
+This has an important practical consequence: a single broadband FDTD simulation at a given transverse wavenumber sweeps through different scan angles as it sweeps through frequency.  By running a small number of such simulations at different transverse wavenumbers, the full scan-volume performance of an array element can be characterized over a wide bandwidth with modest computational cost.  This technique is central to the wide-scan fragmented aperture array design methodology described in Chapter~7.
+
 \section{Summary and Conclusions}
 
 In this appendix, we have presented an introduction to the finite-difference time-domain method, aimed at readers who have little or no experience with the method.  We have limited the presentation to the basics of the method, avoiding mention of many refinements that are generally restricted to particular applications.  To give the reader a sense of the breadth of application allowed by these refinements, we present a partial list below.
@@ -500,7 +541,6 @@ In this appendix, we have presented an introduction to the finite-difference tim
   \item{Techniques for handling materials with dispersive properties (properties that are a function of the frequency), anisotropic properties (properties that depend on the direction of the field components), and nonlinear properties.}
   \item{Methods for incorporating impedance boundary conditions.}
   \item{Subcell methods for treating material sheets that are thinner than an FDTD cell.}
-  \item{Methods for incorporating periodic boundary conditions, which are useful in treating antenna arrays.}
   \item{Higher-order FDTD schemes that have lower error (numerical dispersion) than the conventional Yee algorithm.}
   \item{Techniques for incorporating nonuniform and nonorthogonal grids.}
   \item{Special procedures for handling objects that are bodies of revolution.}
@@ -605,5 +645,9 @@ All of the numerical results presented in the examples were obtained by the auth
 \bibitem{RECAP} L. N. Pringle, P. H. Harms, S. P. Blalock, G. N. Kiesel, E. J. Kuster, P. G. Friederich, R. J. Prado, J. M. Morris, and G. S. Smith, ``A Reconfigurable Aperture Antenna Based on Switched Links Between Electrically Small Metallic Patches,'' IEEE Trans. Antennas Propagat., Vol. AP-52, pp. 1434--1445, June 2004.
 
 \bibitem{BalanisHB} \textcolor{red}{\textbf{[Incomplete reference: Balanis Antenna Engineering Handbook chapter --- need full citation with chapter number, page range, edition, and year.]}}
+
+\bibitem{MaloneyKeslerPBC} J. G. Maloney and M. P. Kesler, ``Analysis of Periodic Structures,'' Chapter 6 in A. Taflove, Editor, Advances in Computational Electrodynamics, The Finite-Difference Time-Domain Method, pp. 345--407, Artech House, Boston, 1998. Also, J. G. Maloney and M. P. Kesler, ``Analysis of Periodic Structures,'' Chapter 13 in A. Taflove and S. Hagness, Editors, Computational Electrodynamics: The Finite-Difference Time-Domain Method, 3rd Edition, Artech House, Boston, 2005.
+
+\bibitem{Aminian} A. Aminian and Y. Rahmat-Samii, ``Spectral FDTD: A Novel Technique for the Analysis of Oblique Incident Plane Wave on Periodic Structures,'' IEEE Trans. Antennas Propagat., Vol. 54, pp. 1818--1825, June 2006.
 
 \end{thebibliography}
