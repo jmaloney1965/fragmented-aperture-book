@@ -13,7 +13,7 @@ In the Yee algorithm, both space and time are discretized, with the increments i
 
 \begin{figure} \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig1.png}
-\caption{Schematic drawing showing the computational volume, FDTD spatial lattice, and unit cell.}
+\caption[FDTD computational volume, lattice, and unit cell]{Schematic drawing showing the computational volume, FDTD spatial lattice, and unit cell.}
 \label{fig:ACF1}
 \end{center}\end{figure}
 
@@ -53,7 +53,7 @@ When there is numerical dispersion, a pulse that starts out with one shape ends 
 \begin{center}
 \includegraphics[angle=0,scale=0.6]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig2.png}
 \end{center}
-\caption{Numerical dispersion as a function of the number of cells per wavelength, $N_\lambda$, for a time-harmonic plane wave propagating along one of the axes of an FDTD lattice of cubical cells. Solid line: the relative error in the phase velocity in percent. Dashed line: the error in the phase per cell in degrees. $S=0.5$.}
+\caption[FDTD numerical dispersion vs.\ cells per wavelength]{Numerical dispersion as a function of the number of cells per wavelength, $N_\lambda$, for a time-harmonic plane wave propagating along one of the axes of an FDTD lattice of cubical cells. Solid line: the relative error in the phase velocity in percent. Dashed line: the error in the phase per cell in degrees. $S=0.5$.}
 \label{fig:ACF2}
 \end{figure}
 
@@ -73,13 +73,13 @@ The finite computational volume in Figure~\ref{fig:ACF3}(a) is surrounded by an 
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig3.png}
-\caption{(a) Schematic drawing showing the basic elements involved in the FDTD analysis of a transmitting antenna. (b) Details for the near-field to far-field transformation.}
+\caption[FDTD transmitting antenna analysis schematic]{(a) Schematic drawing showing the basic elements involved in the FDTD analysis of a transmitting antenna. (b) Details for the near-field to far-field transformation.}
 \label{fig:ACF3}
 \end{figure}
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig4.png}
-\caption{The details for the feed region of (a) the transmitting antenna and (b) the receiving antenna. The characteristic impedance of the transmission line is $R_o$, and the source and termination are matched to this impedance.}
+\caption[Feed region details for transmitting and receiving]{The details for the feed region of (a) the transmitting antenna and (b) the receiving antenna. The characteristic impedance of the transmission line is $R_o$, and the source and termination are matched to this impedance.}
 \label{fig:ACF4}
 \end{figure}
 
@@ -143,7 +143,7 @@ The scattered field is the field produced by the currents induced in the antenna
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig5.png}
-\caption{(a) Schematic drawing showing the basic elements involved in the FDTD analysis of a receiving antenna. (b) Details for the plane-wave source.}
+\caption[FDTD receiving antenna analysis schematic]{(a) Schematic drawing showing the basic elements involved in the FDTD analysis of a receiving antenna. (b) Details for the plane-wave source.}
 \label{fig:ACF5}
 \end{figure}
 
@@ -244,7 +244,7 @@ F(\omega) & =j\sqrt{\pi/2}\,\tau_p \left\{ \exp\left[ -(\omega+\omega_o)^2\tau^2
 \noindent \textcolor{red}{\textbf{[Note: Verify the coefficient in Equation~\ref{eqn:ACE21}; the Fourier transform expression was incomplete in the source material.]}}
 
 \begin{table}
-\caption{Characteristics for Various Input Signals.}
+\caption[Input signal characteristics]{Characteristics for Various Input Signals.}
 \label{tab:ACT1}
 \textcolor{red}{\textbf{[Missing content: Table data for characteristics of various input signals was not provided in the source material.]}}
 \end{table}
@@ -253,7 +253,7 @@ The differentiated Gaussian pulse has a rather large fractional bandwidth that i
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig6.png}
-\caption{(a) The Gaussian pulse (solid line) and the differentiated Gaussian pulse (dashed line) and the magnitude of their Fourier transforms. (b) The sinusoid of frequency $\omega_o$ amplitude modulated by a Gaussian pulse and the magnitude of its Fourier transform. All waveforms are normalized to have a maximum value of 1.0.}
+\caption[FDTD input signal waveforms and spectra]{(a) The Gaussian pulse (solid line) and the differentiated Gaussian pulse (dashed line) and the magnitude of their Fourier transforms. (b) The sinusoid of frequency $\omega_o$ amplitude modulated by a Gaussian pulse and the magnitude of its Fourier transform. All waveforms are normalized to have a maximum value of 1.0.}
 \label{fig:ACF6}
 \end{figure}
 
@@ -269,7 +269,7 @@ The monopole antenna, shown in Figure~\ref{fig:ACF7}(a), is formed by extending 
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig7.png}
-\caption{(a) Cylindrical monopole antenna fed through an image plane from a coaxial transmission line. (b) FDTD model for the cylindrical monopole antenna. The PML that surrounds the computational space is not shown.}
+\caption[Cylindrical monopole antenna and FDTD model]{(a) Cylindrical monopole antenna fed through an image plane from a coaxial transmission line. (b) FDTD model for the cylindrical monopole antenna. The PML that surrounds the computational space is not shown.}
 \label{fig:ACF7}
 \end{figure}
 
@@ -286,7 +286,7 @@ Figure~\ref{fig:ACF8}(a) is for the reflected voltage, $V^\text{-}_t$, in the tr
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig8.png}
-\caption{Comparison of theoretical and measured results for the cylindrical monopole antenna. (a) Reflected voltage in the coaxial line. (b) Electric field on the image plane at $\rho/h = 12.7$.}
+\caption[Monopole antenna: theory vs.\ measurement]{Comparison of theoretical and measured results for the cylindrical monopole antenna. (a) Reflected voltage in the coaxial line. (b) Electric field on the image plane at $\rho/h = 12.7$.}
 \label{fig:ACF8}
 \end{figure}
 
@@ -294,7 +294,7 @@ The FDTD method inherently provides information about the electromagnetic field 
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig9.png}
-\caption{Three snapshots in time showing the magnitude (right) and direction (left) of the Poynting vector surrounding the cylindrical monopole antenna. Logarithmic scaling is used for both plots. Notice that (a) and (b) only show a portion of the monopole. (After Smith and Hertel \cite{Smith2001}, \copyright~2001 IEEE.)}
+\caption[Poynting vector snapshots around monopole antenna]{Three snapshots in time showing the magnitude (right) and direction (left) of the Poynting vector surrounding the cylindrical monopole antenna. Logarithmic scaling is used for both plots. Notice that (a) and (b) only show a portion of the monopole. (After Smith and Hertel \cite{Smith2001}, \copyright~2001 IEEE.)}
 \label{fig:ACF9}
 \end{figure}
 
@@ -303,7 +303,7 @@ In Figure~\ref{fig:ACF9}(a), the pulse has just left the drive point and is trav
 The input impedance or admittance $Y_A(\omega) = 1/Z_A(\omega) = G_A(\omega) + jB_A(\omega)$ of the monopole antenna is a useful parameter for practical applications, and it is also a sensitive measure of the accuracy of any theoretical model.  It is easily calculated from the FDTD time-domain results using Equations~(\ref{eqn:ACE12}) and~(\ref{eqn:ACE13}).  In Figure~\ref{fig:ACF10} the input admittance is graphed as a function of frequency for a monopole with the same dimensions as used for Figure~\ref{fig:ACF8} \cite{Smith2003}.  FDTD results (lines) for three different levels of discretization~(A, B, C) are compared with measurements (dots).  The parameters for the three levels of discretization are given in Table~\ref{tab:ACT2}.
 
 \begin{table}
-\caption{FDTD Discretization Parameters for the Cylindrical Monopole Antenna.}
+\caption[FDTD discretization for cylindrical monopole]{FDTD Discretization Parameters for the Cylindrical Monopole Antenna.}
 \label{tab:ACT2}
 \textcolor{red}{\textbf{[Missing content: Table data for discretization parameters (A, B, C) was not provided in the source material.  Should include cell size, number of cells across the gap, number of cells along monopole, and cells per wavelength at the highest frequency.]}}
 \end{table}
@@ -314,7 +314,7 @@ In this graph we observe the convergence of the FDTD method.  Consider the input
 \begin{center}
 \includegraphics[angle=0,scale=0.5]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig10.png}
 \end{center}
-\caption{Comparison of theoretical and measured results for the input admittance of the cylindrical monopole antenna. Results are shown for three levels of discretization (A, B, C) in the FDTD method. (After Hertel and Smith \cite{Smith2003}, \copyright~2003 IEEE.)}
+\caption[Monopole input admittance convergence study]{Comparison of theoretical and measured results for the input admittance of the cylindrical monopole antenna. Results are shown for three levels of discretization (A, B, C) in the FDTD method. (After Hertel and Smith \cite{Smith2003}, \copyright~2003 IEEE.)}
 \label{fig:ACF10}
 \end{figure}
 
@@ -325,7 +325,7 @@ For the models shown in Figure~\ref{fig:ACF11}, the cylindrical conductor of the
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig11.png}
-\caption{Simplified models for the cylindrical monopole antenna. (a) Model incorporating a ``hard source.'' (b) Model incorporating a virtual one-dimensional transmission line. The monopole conductor has a square cross section in both models.}
+\caption[Simplified FDTD monopole models]{Simplified models for the cylindrical monopole antenna. (a) Model incorporating a ``hard source.'' (b) Model incorporating a virtual one-dimensional transmission line. The monopole conductor has a square cross section in both models.}
 \label{fig:ACF11}
 \end{figure}
 
@@ -337,7 +337,7 @@ In Figure~\ref{fig:ACF12}, FDTD results for the input admittance for both models
 \begin{center}
 \includegraphics[angle=0,scale=0.5]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig12.png}
 \end{center}
-\caption{Comparison of theoretical and measured results for the input admittance of the cylindrical monopole antenna. Results are shown for the two simplified FDTD models. (After Hertel and Smith \cite{Smith2003}, \copyright~2003 IEEE.)}
+\caption[Simplified model admittance comparison]{Comparison of theoretical and measured results for the input admittance of the cylindrical monopole antenna. Results are shown for the two simplified FDTD models. (After Hertel and Smith \cite{Smith2003}, \copyright~2003 IEEE.)}
 \label{fig:ACF12}
 \end{figure}
 
@@ -351,7 +351,7 @@ Figure~\ref{fig:ACF13}(a) illustrates the more general case.  It shows the cross
 \begin{center}
 \includegraphics[angle=0,scale=0.8]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig13.png}
 \end{center}
-\caption{(a) Rectangular FDTD lattice superimposed on the cross section of an object that is a perfect electric conductor (PEC). (b) The surface of the object has been deformed to conform to the rectangular lattice; the surface of the object has been replaced by a stair-stepped approximation.}
+\caption[Stair-stepped PEC approximation on FDTD lattice]{(a) Rectangular FDTD lattice superimposed on the cross section of an object that is a perfect electric conductor (PEC). (b) The surface of the object has been deformed to conform to the rectangular lattice; the surface of the object has been replaced by a stair-stepped approximation.}
 \label{fig:ACF13}
 \end{figure}
 
@@ -359,7 +359,7 @@ We now consider two practical antennas for which the stair-stepped approximation
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig14.png}
-\caption{Schematic drawing for the pyramidal horn antenna. The inset shows the FDTD cells used to model the bottom of the horn.}
+\caption[Pyramidal horn antenna FDTD model geometry]{Schematic drawing for the pyramidal horn antenna. The inset shows the FDTD cells used to model the bottom of the horn.}
 \label{fig:ACF14}
 \end{figure}
 
@@ -375,7 +375,7 @@ Figure~\ref{fig:ACF15} is a comparison of the FDTD results (solid line) for this
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig15.png}
-\caption{Comparison of theoretical and measured results for the pyramidal horn antenna. (a) E-plane pattern and (b) H-plane pattern at 10~GHz. (c) Boresight gain versus frequency.}
+\caption[Horn antenna patterns and gain vs.\ frequency]{Comparison of theoretical and measured results for the pyramidal horn antenna. (a) E-plane pattern and (b) H-plane pattern at 10~GHz. (c) Boresight gain versus frequency.}
 \label{fig:ACF15}
 \end{figure}
 
@@ -387,7 +387,7 @@ Figure~\ref{fig:ACF16} shows three gray-scale plots for the magnitude of the ele
 
 \begin{figure}\begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig16.png}
-\caption{Gray-scale plots for the magnitude of the electric field on the vertical symmetry plane of the transmitting horn antenna. The excitation is a sinusoid amplitude modulated by a Gaussian pulse.}
+\caption[Electric field snapshots in transmitting horn]{Gray-scale plots for the magnitude of the electric field on the vertical symmetry plane of the transmitting horn antenna. The excitation is a sinusoid amplitude modulated by a Gaussian pulse.}
 \label{fig:ACF16}
 \end{center}\end{figure}
 
@@ -395,7 +395,7 @@ The second example is the two-arm, conical spiral antenna shown in Figure~\ref{f
 
 \begin{figure}\begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig17.png}
-\caption{Geometry for the two-arm conical spiral antenna. (After Hertel and Smith \cite{Hertel02}, \copyright~2002 IEEE.)}
+\caption[Two-arm conical spiral antenna geometry]{Geometry for the two-arm conical spiral antenna. (After Hertel and Smith \cite{Hertel02}, \copyright~2002 IEEE.)}
 \label{fig:ACF17}
 \end{center}\end{figure}
 
@@ -403,7 +403,7 @@ In the FDTD model, the arms of the spiral are formed by making selected faces of
 
 \begin{figure}\begin{center}
 \includegraphics[angle=0,scale=0.75]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig18.png}
-\caption{Schematic drawing showing the arrangement of FDTD cells used to model the conical spiral antenna. For clarity, only the lower 10\% of the antenna is shown. (After Hertel and Smith \cite{Hertel02}, \copyright~2002 IEEE.)}
+\caption[FDTD cell arrangement for conical spiral model]{Schematic drawing showing the arrangement of FDTD cells used to model the conical spiral antenna. For clarity, only the lower 10\% of the antenna is shown. (After Hertel and Smith \cite{Hertel02}, \copyright~2002 IEEE.)}
 \label{fig:ACF18}
 \end{center}\end{figure}
 
@@ -413,7 +413,7 @@ Figure~\ref{fig:ACF19} is a comparison of the FDTD results (solid line) for this
 
 \begin{figure}\begin{center}
 \includegraphics[angle=0,scale=0.8]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig19.png}
-\caption{Comparison of theoretical and measured results for the conical spiral antenna. (a) Magnitude of reflection coefficient versus frequency. (b) Realized gain in the boresight direction versus frequency. (After Hertel and Smith \cite{Hertel02}, \copyright~2002 IEEE.)}
+\caption[Conical spiral reflection coefficient and gain]{Comparison of theoretical and measured results for the conical spiral antenna. (a) Magnitude of reflection coefficient versus frequency. (b) Realized gain in the boresight direction versus frequency. (After Hertel and Smith \cite{Hertel02}, \copyright~2002 IEEE.)}
 \label{fig:ACF19}
 \end{center}\end{figure}
 
@@ -421,7 +421,7 @@ The FDTD method provides detailed information about the electromagnetic field su
 
 \begin{figure}\begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig20.png}
-\caption{Gray-scale plots for the magnitude of the electric field near the conical spiral antenna for three instants in time: (a) $t/\tau_L=0.1$, (b) $t/\tau_L=0.6$, and (c) $t/\tau_L=1.1$, where $\tau_L$ is the time for light to travel the length of the spiral arm. (After Hertel and Smith \cite{Hertel03}, \copyright~2003 IEEE.)}
+\caption[Electric field snapshots near conical spiral]{Gray-scale plots for the magnitude of the electric field near the conical spiral antenna for three instants in time: (a) $t/\tau_L=0.1$, (b) $t/\tau_L=0.6$, and (c) $t/\tau_L=1.1$, where $\tau_L$ is the time for light to travel the length of the spiral arm. (After Hertel and Smith \cite{Hertel03}, \copyright~2003 IEEE.)}
 \label{fig:ACF20}
 \end{center}\end{figure}
 
@@ -433,7 +433,7 @@ The plate for this antenna is stair stepped in the FDTD model in the manner show
 
 \begin{figure}\begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig21.png}
-\caption{(a) Schematic drawing for the TEM horn antenna (monopole configuration). (b) Cross sections showing the stair-stepped approximation to the plate for two different cases, A and B.}
+\caption[TEM horn geometry and stair-step approximations]{(a) Schematic drawing for the TEM horn antenna (monopole configuration). (b) Cross sections showing the stair-stepped approximation to the plate for two different cases, A and B.}
 \label{fig:ACF21}
 \end{center}\end{figure}
 
@@ -441,7 +441,7 @@ Figure~\ref{fig:ACF22}(a) shows the reflected voltage, $V^\text{-}_t(t)$, in the
 
 \begin{figure}\begin{center}
 \includegraphics[angle=0,scale=0.7]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig22.png}
-\caption{Results for two different stair-stepped approximations (A and B) applied to the TEM horn antenna. (a) The reflected voltage in the feeding transmission line; the reflection from the open end of the horn has been windowed out. (b) The magnitude of the Fourier transform of the reflection coefficient for the antenna.}
+\caption[TEM horn stair-step approximation comparison]{Results for two different stair-stepped approximations (A and B) applied to the TEM horn antenna. (a) The reflected voltage in the feeding transmission line; the reflection from the open end of the horn has been windowed out. (b) The magnitude of the Fourier transform of the reflection coefficient for the antenna.}
 \label{fig:ACF22}
 \end{center}\end{figure}
 
@@ -455,7 +455,7 @@ The antennas we examined in the previous section, a conical spiral and horns, ar
 
 \begin{figure}\begin{center}
 \includegraphics[angle=0,scale=0.7]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig23.png}
-\caption{Rectangular microstrip patch antenna fed by a coaxial line probe.}
+\caption[Coaxial-fed rectangular microstrip patch geometry]{Rectangular microstrip patch antenna fed by a coaxial line probe.}
 \label{fig:ACF23}
 \end{center}\end{figure}
 
@@ -465,7 +465,7 @@ The dimensions of the FDTD rectangular cells ($\Delta x=0.529$~mm, $\Delta y=0.5
 
 \begin{figure}\begin{center}
 \includegraphics[angle=0,scale=0.7]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig24.png}
-\caption{The magnitude of the reflected voltage in the feeding coaxial line versus the normalized time. (a) Rectangular microstrip patch. (b) Narrow-band, rectangular microstrip patch.}
+\caption[Reflected voltage for microstrip patch antennas]{The magnitude of the reflected voltage in the feeding coaxial line versus the normalized time. (a) Rectangular microstrip patch. (b) Narrow-band, rectangular microstrip patch.}
 \label{fig:ACF24}
 \end{center}\end{figure}
 
@@ -473,7 +473,7 @@ Figure~\ref{fig:ACF25} is a comparison of the FDTD theoretical results with the 
 
 \begin{figure}\begin{center}
 \includegraphics[angle=0,scale=0.7]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig25.png}
-\caption{Comparison of theoretical and measured results for the rectangular microstrip patch antenna. (a) Magnitude of reflection coefficient versus frequency. (b) Field patterns for E and H planes at the frequency $f = 6.8$~GHz. Measured results from \cite{Change}.}
+\caption[Microstrip patch reflection coefficient and patterns]{Comparison of theoretical and measured results for the rectangular microstrip patch antenna. (a) Magnitude of reflection coefficient versus frequency. (b) Field patterns for E and H planes at the frequency $f = 6.8$~GHz. Measured results from \cite{Change}.}
 \label{fig:ACF25}
 \end{center}\end{figure}
 
@@ -489,7 +489,7 @@ In some cases, special techniques can be applied to shorten the computation for 
 
 \begin{figure}\begin{center}
 \includegraphics[angle=0,scale=1.0]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig26.png}
-\caption{Narrow-band, rectangular microstrip patch antenna. Magnitude of reflection coefficient versus frequency for three different numbers of time steps.}
+\caption[Narrow-band patch convergence with time steps]{Narrow-band, rectangular microstrip patch antenna. Magnitude of reflection coefficient versus frequency for three different numbers of time steps.}
 \label{fig:ACF26}
 \end{center}\end{figure}
 
@@ -552,7 +552,7 @@ To assess the popularity of the FDTD method, a search was done with INSPEC for d
 
 \begin{figure}\begin{center}
 \includegraphics[angle=0,scale=1.0]{/Users/jim.maloney/Book/images/appendixA/AntChapOrigFig27.png}
-\caption{Number of documents published over a twenty-year span that include the words ``finite-difference time-domain'' or ``FDTD'' in the title. Each bar shows the total number of documents published during a five-year period.}
+\caption[FDTD publication growth over twenty years]{Number of documents published over a twenty-year span that include the words ``finite-difference time-domain'' or ``FDTD'' in the title. Each bar shows the total number of documents published during a five-year period.}
 \label{fig:ACF27}
 \end{center}\end{figure}
 

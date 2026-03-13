@@ -66,7 +66,7 @@ A multi-stage optimization procedure was also demonstrated, in which a coarse P-
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/saadfalcon/SaadFalcon2024_Fig1_BinaryVsPLSF.png}
-\caption{Comparison of the fragmented (binary) and periodic level set function (P-LSF) parameterizations for topology optimization of a metasurface bandpass filter (15--30~GHz).  (a) The fragmented parameterization uses binary-valued design variables on a pixel grid.  (b) The P-LSF parameterization uses real-valued design variables in a continuous search space.  The P-LSF design achieves improved bandpass performance \cite{SaadFalcon2024LevelSet}.}
+\caption[Fragmented vs.\ P-LSF parameterizations for metasurface optimization]{Comparison of the fragmented (binary) and periodic level set function (P-LSF) parameterizations for topology optimization of a metasurface bandpass filter (15--30~GHz).  (a) The fragmented parameterization uses binary-valued design variables on a pixel grid.  (b) The P-LSF parameterization uses real-valued design variables in a continuous search space.  The P-LSF design achieves improved bandpass performance \cite{SaadFalcon2024LevelSet}.}
 \label{fig:RI_PLSF1}
 \end{center}
 \end{figure}
@@ -74,7 +74,7 @@ A multi-stage optimization procedure was also demonstrated, in which a coarse P-
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/saadfalcon/SaadFalcon2024_Fig5_Convergence.png}
-\caption{Convergence comparison for the broadband bandpass design objective.  (a) The P-LSF methods (multi-stage GA and CMA-ES) converge more quickly and to a higher cost function value than the fragmented GA.  (b) The resulting best mask from each optimization method.  (c) Reflection coefficient comparison showing that the P-LSF designs achieve better passband performance \cite{SaadFalcon2024LevelSet}.}
+\caption[P-LSF convergence and bandpass performance comparison]{Convergence comparison for the broadband bandpass design objective.  (a) The P-LSF methods (multi-stage GA and CMA-ES) converge more quickly and to a higher cost function value than the fragmented GA.  (b) The resulting best mask from each optimization method.  (c) Reflection coefficient comparison showing that the P-LSF designs achieve better passband performance \cite{SaadFalcon2024LevelSet}.}
 \label{fig:RI_PLSF5}
 \end{center}
 \end{figure}
@@ -82,7 +82,7 @@ A multi-stage optimization procedure was also demonstrated, in which a coarse P-
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/saadfalcon/SaadFalcon2024_Fig6_Fabricated.png}
-\caption{Fabricated broadband 2:1 bandpass metasurface.  (a) FDTD-computed electric and magnetic field maps at six frequencies across the passband.  (b) Measured vs.\ simulated S-parameters showing close agreement; the shaded region indicates the 15--30~GHz design passband.  (c) Photograph of the fabricated metasurface on Rogers RO3003 substrate \cite{SaadFalcon2024LevelSet}.}
+\caption[Fabricated broadband 2:1 bandpass metasurface]{Fabricated broadband 2:1 bandpass metasurface.  (a) FDTD-computed electric and magnetic field maps at six frequencies across the passband.  (b) Measured vs.\ simulated S-parameters showing close agreement; the shaded region indicates the 15--30~GHz design passband.  (c) Photograph of the fabricated metasurface on Rogers RO3003 substrate \cite{SaadFalcon2024LevelSet}.}
 \label{fig:RI_PLSF6}
 \end{center}
 \end{figure}
@@ -92,7 +92,7 @@ Howard et al.\ \cite{Howard2024Topology} subsequently applied the P-LSF methodol
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/howard/Howard2024_Fig1_LSFFlowchart.png}
-\caption{Topology optimization flowchart using a level set function.  (a) The LSF produces a smooth topography of hills and valleys.  (b) Metal is placed where the LSF exceeds the threshold.  (c) The material distribution is discretized onto a simulation grid.  (d) Full-wave electromagnetic simulation.  (e) The simulated response is compared to the desired response.  (f) The optimizer updates the LSF coefficients \cite{Howard2024Topology}.}
+\caption[Level set topology optimization flowchart]{Topology optimization flowchart using a level set function.  (a) The LSF produces a smooth topography of hills and valleys.  (b) Metal is placed where the LSF exceeds the threshold.  (c) The material distribution is discretized onto a simulation grid.  (d) Full-wave electromagnetic simulation.  (e) The simulated response is compared to the desired response.  (f) The optimizer updates the LSF coefficients \cite{Howard2024Topology}.}
 \label{fig:RI_HowardFlow}
 \end{center}
 \end{figure}
@@ -102,7 +102,7 @@ Figure~\ref{fig:RI_HowardComp} compares the convergence rate and realized gain o
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/howard/Howard2024_Fig6_7_LSFvsFragmented.png}
-\caption{Comparison of LSF and fragmented aperture optimization for a connected array element.  Left: convergence of normalized fitness---the LSF parameterization converges faster and to higher values.  Right: broadside realized gain of the 18$\times$18 LSF-designed array, showing 70--100\% aperture efficiency across a 4.35:1 bandwidth \cite{Howard2024Topology}.}
+\caption[LSF vs.\ fragmented aperture optimization for connected array]{Comparison of LSF and fragmented aperture optimization for a connected array element.  Left: convergence of normalized fitness---the LSF parameterization converges faster and to higher values.  Right: broadside realized gain of the 18$\times$18 LSF-designed array, showing 70--100\% aperture efficiency across a 4.35:1 bandwidth \cite{Howard2024Topology}.}
 \label{fig:RI_HowardComp}
 \end{center}
 \end{figure}
@@ -132,23 +132,23 @@ Barani, Harvey, and Sarabandi \cite{Barani2018Fragmented} proposed an elegant so
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig1_UAVConcept.png}
-\caption{Proposed distributed fragmented antenna concept for bandwidth enhancement of miniaturized antenna elements mounted on robotic flyers.  Three UAVs in formation carry inductively end-loaded folded dipole antennas; near-field coupling between adjacent elements creates a larger effective radiating aperture.  Only the center antenna (driver) is actively excited; the two assistive antennas are terminated with optimized loads \cite{Barani2018Fragmented}.}
+\caption[Distributed fragmented antenna concept for UAV swarms]{Proposed distributed fragmented antenna concept for bandwidth enhancement of miniaturized antenna elements mounted on robotic flyers.  Three UAVs in formation carry inductively end-loaded folded dipole antennas; near-field coupling between adjacent elements creates a larger effective radiating aperture.  Only the center antenna (driver) is actively excited; the two assistive antennas are terminated with optimized loads \cite{Barani2018Fragmented}.}
 \label{fig:RI_UAVconcept}
 \end{center}
 \end{figure}
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.55\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig2_ElementGeometry.png}
-\caption{Configuration of a single inductively end-loaded folded dipole antenna element.  The element is confined to a volume of $\lambda/12 \times \lambda/10$ at the operating frequency of 240~MHz.  The inductive end loads (wire loops) increase the electrical length and produce strong near-field coupling to adjacent elements \cite{Barani2018Fragmented}.}
+\includegraphics[angle=0,width=0.95\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig2_ElementGeometry.png}
+\caption[Inductively end-loaded folded dipole element configuration]{Configuration of a single inductively end-loaded folded dipole antenna element.  The element is confined to a volume of $\lambda/12 \times \lambda/10$ at the operating frequency of 240~MHz.  The inductive end loads (wire loops) increase the electrical length and produce strong near-field coupling to adjacent elements \cite{Barani2018Fragmented}.}
 \label{fig:RI_UAVelement}
 \end{center}
 \end{figure}
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.55\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig5_CouplingMechanisms.png}
-\caption{Three coupling mechanisms between adjacent antennas in the distributed fragmented configuration: magnetic (inductive) coupling between end loads via their normal magnetic fields (dominant mechanism), electric (capacitive) coupling between dipole arms, and capacitive coupling between end loops and dipole arms \cite{Barani2018Fragmented}.}
+\includegraphics[angle=0,width=0.95\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig5_CouplingMechanisms.png}
+\caption[Coupling mechanisms in distributed fragmented configuration]{Three coupling mechanisms between adjacent antennas in the distributed fragmented configuration: magnetic (inductive) coupling between end loads via their normal magnetic fields (dominant mechanism), electric (capacitive) coupling between dipole arms, and capacitive coupling between end loops and dipole arms \cite{Barani2018Fragmented}.}
 \label{fig:RI_UAVcoupling}
 \end{center}
 \end{figure}
@@ -210,16 +210,16 @@ The three-element coupled antenna array was fabricated and measured in the anech
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig16_FabricatedPhotos.png}
-\caption{Fabricated distributed fragmented antenna.  (a) Three coupled inductively end-loaded folded dipole antennas inside the anechoic chamber at the University of Michigan.  (b) Close-up of the fabricated tunable matching circuit integrated with the driver antenna, showing the varactor diode, balun transformer, series LC, and DC block capacitor \cite{Barani2018Fragmented}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig16_FabricatedPhotos.png}
+\caption[Fabricated distributed fragmented antenna in anechoic chamber]{Fabricated distributed fragmented antenna.  (a) Three coupled inductively end-loaded folded dipole antennas inside the anechoic chamber at the University of Michigan.  (b) Close-up of the fabricated tunable matching circuit integrated with the driver antenna, showing the varactor diode, balun transformer, series LC, and DC block capacitor \cite{Barani2018Fragmented}.}
 \label{fig:RI_UAVfab}
 \end{center}
 \end{figure}
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig17_MeasuredReturnLoss.png}
-\caption{Measured and simulated return loss for the distributed fragmented antenna at three separation distances ($d = 12$, 14, and 16~cm) compared to the isolated single antenna.  The coupled configuration achieves a measured $-10$~dB bandwidth of 18.4~MHz at $d = 12$~cm, compared to only 2.4~MHz for the single element---a 7.7-fold improvement \cite{Barani2018Fragmented}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/barani/Barani2018_Fig17_MeasuredReturnLoss.png}
+\caption[Return loss vs.\ separation distance for distributed antenna]{Measured and simulated return loss for the distributed fragmented antenna at three separation distances ($d = 12$, 14, and 16~cm) compared to the isolated single antenna.  The coupled configuration achieves a measured $-10$~dB bandwidth of 18.4~MHz at $d = 12$~cm, compared to only 2.4~MHz for the single element---a 7.7-fold improvement \cite{Barani2018Fragmented}.}
 \label{fig:RI_UAVmeas}
 \end{center}
 \end{figure}
@@ -243,8 +243,8 @@ The most straightforward application of machine learning to antenna design is th
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch9/wu/Wu2024_Fig3_MLAOFlowchart.png}
-\caption{Flowchart of the machine-learning-assisted optimization for antenna geometry design (MLAO-AGD) algorithm.  The process iterates between geometry generation, full-wave simulation, ML model building, and optimization, with the ML surrogate model accelerating the search by reducing the number of expensive electromagnetic simulations required \cite{Wu2024MLGeometry}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/wu/Wu2024_Fig3_MLAOFlowchart.png}
+\caption[MLAO-AGD algorithm flowchart]{Flowchart of the machine-learning-assisted optimization for antenna geometry design (MLAO-AGD) algorithm.  The process iterates between geometry generation, full-wave simulation, ML model building, and optimization, with the ML surrogate model accelerating the search by reducing the number of expensive electromagnetic simulations required \cite{Wu2024MLGeometry}.}
 \label{fig:RI_MLflow}
 \end{center}
 \end{figure}
@@ -254,7 +254,7 @@ Wu et al.\ \cite{Wu2024MLGeometry} demonstrated a machine-learning-assisted opti
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/jacobs/Jacobs2021_Fig1_NNvsCNN.png}
-\caption{Comparison of neural network architectures for pixelated antenna modeling.  (a) A standard feedforward network takes the pixel pattern as a flattened vector, losing spatial information.  (b) A convolutional neural network (CNN) takes the 2D pixel grid directly as an image input, preserving the spatial relationships between pixels that determine the antenna's electromagnetic behavior \cite{Jacobs2021CNN}.}
+\caption[Feedforward vs.\ CNN architectures for pixelated antennas]{Comparison of neural network architectures for pixelated antenna modeling.  (a) A standard feedforward network takes the pixel pattern as a flattened vector, losing spatial information.  (b) A convolutional neural network (CNN) takes the 2D pixel grid directly as an image input, preserving the spatial relationships between pixels that determine the antenna's electromagnetic behavior \cite{Jacobs2021CNN}.}
 \label{fig:RI_CNNarch}
 \end{center}
 \end{figure}
@@ -269,8 +269,8 @@ Chen, Sun, and Wang \cite{Chen2025InverseDesignDL} demonstrated a complete inver
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch9/dou2024/Dou2024_Fig1_SDSIAGAFlowchart.png}
-\caption{Two-stage simulation-driven surrogate optimization (SDS-IAGA) for automated pixelated antenna topology design.  Stage~1 (left) screens the initial population using a current-driven search on a low-fidelity EM model.  Stage~2 (right) uses frequency scaling to correct the low-fidelity surrogate during the improved adaptive genetic algorithm (IAGA) optimization loop, reducing the number of expensive high-fidelity simulations required \cite{Dou2024SurrogateAGA}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/dou2024/Dou2024_Fig1_SDSIAGAFlowchart.png}
+\caption[Two-stage surrogate optimization for pixelated antennas]{Two-stage simulation-driven surrogate optimization (SDS-IAGA) for automated pixelated antenna topology design.  Stage~1 (left) screens the initial population using a current-driven search on a low-fidelity EM model.  Stage~2 (right) uses frequency scaling to correct the low-fidelity surrogate during the improved adaptive genetic algorithm (IAGA) optimization loop, reducing the number of expensive high-fidelity simulations required \cite{Dou2024SurrogateAGA}.}
 \label{fig:RI_SDSIAGA}
 \end{center}
 \end{figure}
@@ -284,7 +284,7 @@ Surrogate-based optimization still requires an explicit optimization loop, even 
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/gupta/Gupta2023_Fig2_TandemNN.png}
-\caption{Tandem neural network architecture for inverse design of multiband pixelated antennas.  The inverse network takes a desired $S_{11}$ spectrum as input and produces a binary antenna design at an intermediate layer.  This design is then evaluated by a pre-trained (frozen) forward CNN to predict the resulting spectrum.  The tandem architecture avoids the one-to-many problem of direct inverse design \cite{Gupta2023Tandem}.}
+\caption[Tandem neural network for inverse antenna design]{Tandem neural network architecture for inverse design of multiband pixelated antennas.  The inverse network takes a desired $S_{11}$ spectrum as input and produces a binary antenna design at an intermediate layer.  This design is then evaluated by a pre-trained (frozen) forward CNN to predict the resulting spectrum.  The tandem architecture avoids the one-to-many problem of direct inverse design \cite{Gupta2023Tandem}.}
 \label{fig:RI_tandem}
 \end{center}
 \end{figure}
@@ -297,8 +297,8 @@ Karahan, Gupta, Khankhoje, and Sengupta \cite{Karahan2022InverseRFmmWave} demons
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch9/li2025/Li2025_Fig1_InverseFramework.png}
-\caption{ResNet-based inverse design framework for pixelated antennas.  The inverse model (ResNet) maps a desired $S_{11}$ response to a binary pixel configuration; the result is validated by a pre-trained forward model (CNN, weights frozen) that predicts $S_{11}$ from the structure.  The total loss combines a structure loss with a weighted $S_{11}$ loss \cite{Li2025Inverse}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/li2025/Li2025_Fig1_InverseFramework.png}
+\caption[ResNet-based inverse design framework]{ResNet-based inverse design framework for pixelated antennas.  The inverse model (ResNet) maps a desired $S_{11}$ response to a binary pixel configuration; the result is validated by a pre-trained forward model (CNN, weights frozen) that predicts $S_{11}$ from the structure.  The total loss combines a structure loss with a weighted $S_{11}$ loss \cite{Li2025Inverse}.}
 \label{fig:RI_ResNetInverse}
 \end{center}
 \end{figure}
@@ -311,8 +311,8 @@ Generative models---neural networks that learn to produce new samples from a tra
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.45\linewidth]{/Users/jim.maloney/Book/images/ch9/noakoasteen/Noakoasteen2022_Fig1_ConvVsGAN.png}
-\caption{Comparison of antenna design approaches: (a) conventional design using analytical equations and parametric optimization, (b) conditional GAN (CGAN) approach where a trained generator produces structural parameters from noise and class labels, and (c) library of label-switched vanilla GANs for different design classes \cite{Noakoasteen2022GAN}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/noakoasteen/Noakoasteen2022_Fig1_ConvVsGAN.png}
+\caption[Conventional, CGAN, and vanilla GAN design approaches]{Comparison of antenna design approaches: (a) conventional design using analytical equations and parametric optimization, (b) conditional GAN (CGAN) approach where a trained generator produces structural parameters from noise and class labels, and (c) library of label-switched vanilla GANs for different design classes \cite{Noakoasteen2022GAN}.}
 \label{fig:RI_GAN}
 \end{center}
 \end{figure}
@@ -339,8 +339,8 @@ Ehrenborg and Gustafsson \cite{Ehrenborg2016PhysicalBounds} took a different app
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch9/wang2024_rl/Wang2024_Fig2_RLFramework.png}
-\caption{Localized reinforcement learning (LRL) framework for pixelated antenna bandwidth optimization.  The agent performs pixel flip operations on an $8 \times 8$ action space, with CST EM simulation providing the environment (state space: $|S_{11}|$).  A Deep Q-Network (DQN) is trained within each episode from an experience pool of (configuration, reward) pairs, with a rollback mechanism to prevent entrapment in local optima \cite{Wang2024Bandwidth}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/wang2024_rl/Wang2024_Fig2_RLFramework.png}
+\caption[Reinforcement learning framework for bandwidth optimization]{Localized reinforcement learning (LRL) framework for pixelated antenna bandwidth optimization.  The agent performs pixel flip operations on an $8 \times 8$ action space, with CST EM simulation providing the environment (state space: $|S_{11}|$).  A Deep Q-Network (DQN) is trained within each episode from an experience pool of (configuration, reward) pairs, with a rollback mechanism to prevent entrapment in local optima \cite{Wang2024Bandwidth}.}
 \label{fig:RI_RLframework}
 \end{center}
 \end{figure}
@@ -349,8 +349,8 @@ An alternative to evolutionary optimization is reinforcement learning (RL), in w
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.65\linewidth]{/Users/jim.maloney/Book/images/ch9/zeghdoud2025/Zeghdoud2025_Fig6_S11Comparison.png}
-\caption{Return loss comparison for three GA mutation probability strategies applied to a $10 \times 10$ pixelated patch antenna: fixed probability (dashed), fuzzy logic adaptive (solid), and AI-driven regression tree adaptive (dash-dot).  The AI-adaptive approach achieves the deepest $S_{11}$ match at 2.16~GHz \cite{Zeghdoud2025Accelerated}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/zeghdoud2025/Zeghdoud2025_Fig6_S11Comparison.png}
+\caption[GA mutation strategy comparison for pixelated patch antenna]{Return loss comparison for three GA mutation probability strategies applied to a $10 \times 10$ pixelated patch antenna: fixed probability (dashed), fuzzy logic adaptive (solid), and AI-driven regression tree adaptive (dash-dot).  The AI-adaptive approach achieves the deepest $S_{11}$ match at 2.16~GHz \cite{Zeghdoud2025Accelerated}.}
 \label{fig:RI_FuzzyML}
 \end{center}
 \end{figure}
@@ -377,26 +377,26 @@ Kiesel et al.\ \cite{Kiesel2018Conex} at GTRI designed and built a ten-element V
 The antenna occupies one full sidewall of the Conex container, with a fiberglass radome replacing the corrugated steel panel.  The design comprises fragmented driven and parasitic layers with a resistive layer for bandwidth, backed by a mesh ground plane that also serves as a Faraday cage for the electronics lab housed inside the container.  A semi-infinite periodic model was used for the initial FDTD/GA optimization (approximately $20\times$ faster than the full finite model), followed by a finite model constrained by the actual Conex geometry.  Figure~\ref{fig:RI_CARAMEL1} shows an annotated rendering of the complete system.
 
 \begin{figure}\begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch9/kiesel2018/Kiesel2018_Fig4_SystemRendering.png}
-\caption{Annotated 3D rendering of the CARAMEL system: a ten-element VHF fragmented aperture array built into a 20-foot Conex shipping container.  The antenna occupies one full sidewall, with HVAC, rack space, and storage accommodated within the container \cite{Kiesel2018Conex}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/kiesel2018/Kiesel2018_Fig4_SystemRendering.png}
+\caption[CARAMEL system 3D rendering]{Annotated 3D rendering of the CARAMEL system: a ten-element VHF fragmented aperture array built into a 20-foot Conex shipping container.  The antenna occupies one full sidewall, with HVAC, rack space, and storage accommodated within the container \cite{Kiesel2018Conex}.}
 \label{fig:RI_CARAMEL1}
 \end{center}\end{figure}
 
 \begin{figure}\begin{center}
-\includegraphics[angle=0,width=0.65\linewidth]{/Users/jim.maloney/Book/images/ch9/kiesel2018/Kiesel2018_Fig13b_CompletedConex.png}
-\caption{The completed CARAMEL system ready for shipment from Atlanta to White Sands Missile Range.  The white fiberglass radome panel (right side) replaces the original steel sidewall and houses the antenna array \cite{Kiesel2018Conex}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/kiesel2018/Kiesel2018_Fig13b_CompletedConex.png}
+\caption[CARAMEL system ready for shipment]{The completed CARAMEL system ready for shipment from Atlanta to White Sands Missile Range.  The white fiberglass radome panel (right side) replaces the original steel sidewall and houses the antenna array \cite{Kiesel2018Conex}.}
 \label{fig:RI_CARAMEL2}
 \end{center}\end{figure}
 
 \begin{figure}\begin{center}
-\includegraphics[angle=0,width=0.65\linewidth]{/Users/jim.maloney/Book/images/ch9/kiesel2018/Kiesel2018_Fig15a_AntennaInterior.png}
-\caption{Interior view of the CARAMEL antenna cavity, showing the fragmented aperture elements, expanded metal mesh ground plane, and fiberglass structural members \cite{Kiesel2018Conex}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/kiesel2018/Kiesel2018_Fig15a_AntennaInterior.png}
+\caption[CARAMEL antenna cavity interior]{Interior view of the CARAMEL antenna cavity, showing the fragmented aperture elements, expanded metal mesh ground plane, and fiberglass structural members \cite{Kiesel2018Conex}.}
 \label{fig:RI_CARAMEL3}
 \end{center}\end{figure}
 
 \begin{figure}\begin{center}
-\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch9/kiesel2018/Kiesel2018_Fig17_ReturnLoss.png}
-\caption{Measured versus modeled return loss for the complete CARAMEL system, including combiners and T/R modules.  The close agreement between model and measurement across the 30--120~MHz band validates the FDTD design methodology for this electrically small, mechanically constrained antenna \cite{Kiesel2018Conex}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch9/kiesel2018/Kiesel2018_Fig17_ReturnLoss.png}
+\caption[CARAMEL measured vs.\ modeled return loss]{Measured versus modeled return loss for the complete CARAMEL system, including combiners and T/R modules.  The close agreement between model and measurement across the 30--120~MHz band validates the FDTD design methodology for this electrically small, mechanically constrained antenna \cite{Kiesel2018Conex}.}
 \label{fig:RI_CARAMEL4}
 \end{center}\end{figure}
 

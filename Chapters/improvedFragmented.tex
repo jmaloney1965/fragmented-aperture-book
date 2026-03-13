@@ -17,7 +17,7 @@ Originally, fragmented aperture antennas were envisioned as a planar surface par
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig1.png}
-\caption{Original fragmented aperture approach based on a lattice of rectangular pixels.  An example of diagonal touching is shown in the top right of the figure.}
+\caption[Original rectangular pixel lattice approach]{Original fragmented aperture approach based on a lattice of rectangular pixels.  An example of diagonal touching is shown in the top right of the figure.}
 \label{fig:IFAF1}
 \end{figure}
 
@@ -25,7 +25,7 @@ As discussed in Chapter~2, the rectangular pixel approach was very successfully 
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig2.png}
-\caption{Generalized fragmented aperture approach based on parallelogram-shaped pixels.  Again, an example of diagonal touching is shown in the top right of the figure.}
+\caption[Generalized parallelogram pixel approach]{Generalized fragmented aperture approach based on parallelogram-shaped pixels.  Again, an example of diagonal touching is shown in the top right of the figure.}
 \label{fig:IFAF2}
 \end{figure}
 
@@ -33,7 +33,7 @@ Diagonal touching is not a problem during the design phase because in the FDTD n
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig3.png}
-\caption{(a) Over-etching causing diagonal elements not to touch, as shown in the top center. (b) Close-up photograph of an etched copper fragmented antenna showing over-etch disconnecting diagonal fragments.}
+\caption[Over-etching effects on diagonal pixel contacts]{(a) Over-etching causing diagonal elements not to touch, as shown in the top center. (b) Close-up photograph of an etched copper fragmented antenna showing over-etch disconnecting diagonal fragments.}
 \label{fig:IFAF3}
 \end{figure}
 
@@ -43,7 +43,7 @@ In fact, nearly every antenna design included in the original fragmented apertur
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig4.png}
-\caption{Two sample designs from the original fragmented aperture patent exhibiting diagonal touching \cite{MaloneyFragPatent}.  The most troublesome examples of diagonal touching near the antenna feed are circled.}
+\caption[Patent designs exhibiting diagonal touching]{Two sample designs from the original fragmented aperture patent exhibiting diagonal touching \cite{MaloneyFragPatent}.  The most troublesome examples of diagonal touching near the antenna feed are circled.}
 \label{fig:IFAF4}
 \end{figure}
 
@@ -56,7 +56,7 @@ Before presenting the improved pixel geometries, it is instructive to review sev
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig5.png}
-\caption{Four approaches to mitigating diagonal touching: (a) super-cell approach using $3\times 3$ plus signs, (b) fabricating each pixel approximately 10\% larger than designed, (c) placing a small metal square at diagonal contact points to ensure connection, and (d) random coin-flip approach to resolve diagonal ambiguity.}
+\caption[Four approaches to mitigating diagonal touching]{Four approaches to mitigating diagonal touching: (a) super-cell approach using $3\times 3$ plus signs, (b) fabricating each pixel approximately 10\% larger than designed, (c) placing a small metal square at diagonal contact points to ensure connection, and (d) random coin-flip approach to resolve diagonal ambiguity.}
 \label{fig:IFAF5}
 \end{figure}
 
@@ -89,7 +89,7 @@ In the first approach, the individual conducting/non-conducting elements are def
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig6.png}
-\caption{First approach to improved fragmented aperture antennas: square elements on a skewed lattice.  Skewing the lattice vector $\vec{V}_2$ eliminates the possibility of diagonal touching.}
+\caption[Square elements on a skewed lattice]{First approach to improved fragmented aperture antennas: square elements on a skewed lattice.  Skewing the lattice vector $\vec{V}_2$ eliminates the possibility of diagonal touching.}
 \label{fig:IFAF6}
 \end{figure}
 
@@ -101,7 +101,7 @@ In the second approach, two complementary pixel shapes are used that alternate a
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig7.png}
-\caption{Second approach to improved fragmented aperture antennas: alternating pixel shapes that tessellate the plane while ensuring definite edge contact between adjacent pixels.}
+\caption[Alternating tessellating pixel shapes]{Second approach to improved fragmented aperture antennas: alternating pixel shapes that tessellate the plane while ensuring definite edge contact between adjacent pixels.}
 \label{fig:IFAF7}
 \end{figure}
 
@@ -113,7 +113,7 @@ In the third approach, a single pixel shape is chosen that tessellates the plane
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig8.png}
-\caption{Third approach to improved fragmented aperture antennas: a single self-tessellating pixel shape that tiles the aperture surface while ensuring definite edge contact between all adjacent pixels.}
+\caption[Self-tessellating pixel shape]{Third approach to improved fragmented aperture antennas: a single self-tessellating pixel shape that tiles the aperture surface while ensuring definite edge contact between all adjacent pixels.}
 \label{fig:IFAF8}
 \end{figure}
 
@@ -129,8 +129,8 @@ Figure~\ref{fig:IFAF16} shows the switched aperture concept from the original pa
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig21_SwitchedConcept.png}
-\caption{The switched aperture antenna concept: metal patches (145) connected by switchable links (147).  Closed switches (147b) create conducting paths; open switches (147a) create gaps.  This structure inherently avoids diagonal touching because every connection is an explicit edge-shared link \cite{MaloneyFragPatent}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig21_SwitchedConcept.png}
+\caption[Switched aperture antenna concept]{The switched aperture antenna concept: metal patches (145) connected by switchable links (147).  Closed switches (147b) create conducting paths; open switches (147a) create gaps.  This structure inherently avoids diagonal touching because every connection is an explicit edge-shared link \cite{MaloneyFragPatent}.}
 \label{fig:IFAF16}
 \end{center}
 \end{figure}
@@ -141,8 +141,8 @@ Figure~\ref{fig:IFAF17} shows a broadside design optimized for 1.4--1.8~GHz usin
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig22_BroadsideSwitched.png}
-\caption{A 1.4--1.8~GHz broadside fragmented aperture antenna designed using the metal patch and link approach (Fourth Approach).  The maze-like conducting pattern (152) has much finer spatial detail than the original rectangular pixel designs and inherently avoids diagonal touching.  The feed is at location 155 \cite{MaloneyFragPatent}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig22_BroadsideSwitched.png}
+\caption[Broadside patch-and-link antenna design]{A 1.4--1.8~GHz broadside fragmented aperture antenna designed using the metal patch and link approach (Fourth Approach).  The maze-like conducting pattern (152) has much finer spatial detail than the original rectangular pixel designs and inherently avoids diagonal touching.  The feed is at location 155 \cite{MaloneyFragPatent}.}
 \label{fig:IFAF17}
 \end{center}
 \end{figure}
@@ -151,8 +151,8 @@ Figure~\ref{fig:IFAF18} shows the predicted and measured performance of this bro
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig23_BroadsidePerf.png}
-\caption{Performance of the 1.4--1.8~GHz broadside switched aperture design: predicted gain (166), measured system gain (162), and uniform aperture gain limit (164).  The measured results confirm that the design approaches the aperture limit within the optimization range \cite{MaloneyFragPatent}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig23_BroadsidePerf.png}
+\caption[Broadside switched aperture gain performance]{Performance of the 1.4--1.8~GHz broadside switched aperture design: predicted gain (166), measured system gain (162), and uniform aperture gain limit (164).  The measured results confirm that the design approaches the aperture limit within the optimization range \cite{MaloneyFragPatent}.}
 \label{fig:IFAF18}
 \end{center}
 \end{figure}
@@ -161,8 +161,8 @@ Figure~\ref{fig:IFAF19} shows the H-plane radiation pattern at 1.8~GHz, comparin
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig24_BroadsidePattern.png}
-\caption{H-plane radiation pattern at 1.8~GHz for the broadside switched aperture design: FDTD model (174) and measured (172).  The close agreement confirms that the patch-and-link metal structure is accurately modeled and reliably fabricated \cite{MaloneyFragPatent}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig24_BroadsidePattern.png}
+\caption[H-plane pattern for broadside switched aperture]{H-plane radiation pattern at 1.8~GHz for the broadside switched aperture design: FDTD model (174) and measured (172).  The close agreement confirms that the patch-and-link metal structure is accurately modeled and reliably fabricated \cite{MaloneyFragPatent}.}
 \label{fig:IFAF19}
 \end{center}
 \end{figure}
@@ -171,8 +171,8 @@ The same aperture hardware can produce different antenna designs simply by chang
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig25_SteeredSwitched.png}
-\caption{A 1.4--1.8~GHz switched aperture antenna optimized for $30^\circ$ beam steering.  The asymmetric conducting pattern (181, 183) breaks the left-right symmetry of the broadside design to create the phase gradient for off-broadside radiation \cite{MaloneyFragPatent}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig25_SteeredSwitched.png}
+\caption[Switched aperture with 30-degree beam steering]{A 1.4--1.8~GHz switched aperture antenna optimized for $30^\circ$ beam steering.  The asymmetric conducting pattern (181, 183) breaks the left-right symmetry of the broadside design to create the phase gradient for off-broadside radiation \cite{MaloneyFragPatent}.}
 \label{fig:IFAF20}
 \end{center}
 \end{figure}
@@ -181,8 +181,8 @@ Figure~\ref{fig:IFAF21} shows the performance of the $30^\circ$-steered design. 
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig26_SteeredPerf.png}
-\caption{Performance of the $30^\circ$-steered switched aperture design: predicted gain (192), measured system gain (190), and uniform aperture gain limit (188) \cite{MaloneyFragPatent}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig26_SteeredPerf.png}
+\caption[Gain of 30-degree-steered switched aperture]{Performance of the $30^\circ$-steered switched aperture design: predicted gain (192), measured system gain (190), and uniform aperture gain limit (188) \cite{MaloneyFragPatent}.}
 \label{fig:IFAF21}
 \end{center}
 \end{figure}
@@ -191,8 +191,8 @@ The H-plane radiation pattern at 1.8~GHz for the steered design is shown in Figu
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig27_SteeredPattern.png}
-\caption{H-plane radiation pattern at 1.8~GHz for the $30^\circ$-steered design: measured (197) and FDTD model (198).  The beam is steered $30^\circ$ from broadside with good model-measurement agreement \cite{MaloneyFragPatent}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig27_SteeredPattern.png}
+\caption[H-plane pattern for 30-degree-steered design]{H-plane radiation pattern at 1.8~GHz for the $30^\circ$-steered design: measured (197) and FDTD model (198).  The beam is steered $30^\circ$ from broadside with good model-measurement agreement \cite{MaloneyFragPatent}.}
 \label{fig:IFAF22}
 \end{center}
 \end{figure}
@@ -201,8 +201,8 @@ Figure~\ref{fig:IFAF23} summarizes the system gain for three different switch co
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig28_SummaryPerf.png}
-\caption{Summary of system gain for three switched aperture configurations on the same hardware: 1.4--1.8~GHz broadside (202), 1.4--1.8~GHz $30^\circ$ steered (206), and 2.4--3.0~GHz broadside (208).  The uniform aperture gain limit is shown as curve 204.  All configurations approach the aperture limit within their design bands \cite{MaloneyFragPatent}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/PatentFig28_SummaryPerf.png}
+\caption[System gain for three switched aperture configurations]{Summary of system gain for three switched aperture configurations on the same hardware: 1.4--1.8~GHz broadside (202), 1.4--1.8~GHz $30^\circ$ steered (206), and 2.4--3.0~GHz broadside (208).  The uniform aperture gain limit is shown as curve 204.  All configurations approach the aperture limit within their design bands \cite{MaloneyFragPatent}.}
 \label{fig:IFAF23}
 \end{center}
 \end{figure}
@@ -220,8 +220,8 @@ Mair et al.\ \cite{Mair2022Evolutionary} introduced \emph{cross-shaped pixels} a
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2022/Mair2022_Fig1_CrossVsRect.png}
-\caption{Cross-shaped pixels compared to rectangular pixels: (a)~rectangular pixels create singularities where four corners meet at a point; (b)~cross-shaped pixels eliminate these singularities; (c)--(d)~decomposition into simulation cells at two resolutions \cite{Mair2022Evolutionary}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2022/Mair2022_Fig1_CrossVsRect.png}
+\caption[Cross-shaped vs.\ rectangular pixel comparison]{Cross-shaped pixels compared to rectangular pixels: (a)~rectangular pixels create singularities where four corners meet at a point; (b)~cross-shaped pixels eliminate these singularities; (c)--(d)~decomposition into simulation cells at two resolutions \cite{Mair2022Evolutionary}.}
 \label{fig:MairCrossPixels}
 \end{center}
 \end{figure}
@@ -230,8 +230,8 @@ Using this cross-pixel geometry, Mair et al.\ conducted a large-scale study of 4
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2022/Mair2022_Fig3_BWScaling.png}
-\caption{Bandwidth scaling law from a 400-antenna study at 868~MHz using cross-shaped pixels.  The $-10$~dB bandwidth increases roughly linearly with antenna diagonal (as a percentage of wavelength).  Solid line: median; dashed lines: upper and lower bounds \cite{Mair2022Evolutionary}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2022/Mair2022_Fig3_BWScaling.png}
+\caption[Bandwidth scaling law for cross-shaped pixels]{Bandwidth scaling law from a 400-antenna study at 868~MHz using cross-shaped pixels.  The $-10$~dB bandwidth increases roughly linearly with antenna diagonal (as a percentage of wavelength).  Solid line: median; dashed lines: upper and lower bounds \cite{Mair2022Evolutionary}.}
 \label{fig:MairBWScaling}
 \end{center}
 \end{figure}
@@ -243,7 +243,7 @@ The cross-pixel approach was applied to design a compact 5G IoT antenna for the 
 \includegraphics[angle=0,width=0.48\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2022/Mair2022_Fig4_OptimizedDesign.png}
 \hfill
 \includegraphics[angle=0,width=0.48\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2022/Mair2022_Fig5_S11.png}
-\caption{Left: optimized cross-pixel antenna layout ($13 \times 17$ pixels, $83.7 \times 80.6$~mm).  Right: $S_{11}$ comparison showing Sonnet simulation (dashed), ANSYS HFSS (dash-dot), and measurement (solid) with 0.6\% frequency error \cite{Mair2022Evolutionary}.}
+\caption[Cross-pixel antenna layout and measured S11]{Left: optimized cross-pixel antenna layout ($13 \times 17$ pixels, $83.7 \times 80.6$~mm).  Right: $S_{11}$ comparison showing Sonnet simulation (dashed), ANSYS HFSS (dash-dot), and measurement (solid) with 0.6\% frequency error \cite{Mair2022Evolutionary}.}
 \label{fig:MairDesignS11}
 \end{center}
 \end{figure}
@@ -256,8 +256,8 @@ Figure~\ref{fig:MairHatGeometry} illustrates the Hat tile geometry.  When two ne
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_hat/Mair2024_Fig1_HatTileGeometry.png}
-\caption{Einstein Hat tile geometry for pixelated antenna design: (a)~singularities at tile boundaries (red); (b)~outline extension applied; (c)~resolved geometry with no singularities; (d)~tile size $S_T$ defined as the enclosing circle diameter \cite{Mair2024IFA}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_hat/Mair2024_Fig1_HatTileGeometry.png}
+\caption[Einstein Hat tile geometry]{Einstein Hat tile geometry for pixelated antenna design: (a)~singularities at tile boundaries (red); (b)~outline extension applied; (c)~resolved geometry with no singularities; (d)~tile size $S_T$ defined as the enclosing circle diameter \cite{Mair2024IFA}.}
 \label{fig:MairHatGeometry}
 \end{center}
 \end{figure}
@@ -267,7 +267,7 @@ Using this aperiodic pixel geometry, the authors designed a 2.4~GHz WiFi antenna
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_hat/Mair2024_Fig6_DesignAndPrototype.png}
-\caption{Pixelated IFA using Einstein Hat tiles: (a)~optimized design in simulation; (b)~fabricated prototype on Rogers RO4350B; (c)~close-up showing the aperiodic Hat-tile conducting pattern.  Red circles mark vias connecting shorting elements to the ground plane \cite{Mair2024IFA}.}
+\caption[Einstein Hat tile IFA prototype]{Pixelated IFA using Einstein Hat tiles: (a)~optimized design in simulation; (b)~fabricated prototype on Rogers RO4350B; (c)~close-up showing the aperiodic Hat-tile conducting pattern.  Red circles mark vias connecting shorting elements to the ground plane \cite{Mair2024IFA}.}
 \label{fig:MairHatDesign}
 \end{center}
 \end{figure}
@@ -277,7 +277,7 @@ The measured results, shown in Figure~\ref{fig:MairHatResults}, demonstrate a $-
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_hat/Mair2024_Fig7_S11AndPatterns.png}
-\caption{Performance of the Einstein Hat tile IFA: (a)~$S_{11}$ comparison between CST (dotted), ANSYS HFSS (dashed), and measurement (solid), showing 308~MHz $-10$~dB bandwidth; (b)~3D gain pattern at 2.45~GHz \cite{Mair2024IFA}.}
+\caption[Einstein Hat tile IFA performance]{Performance of the Einstein Hat tile IFA: (a)~$S_{11}$ comparison between CST (dotted), ANSYS HFSS (dashed), and measurement (solid), showing 308~MHz $-10$~dB bandwidth; (b)~3D gain pattern at 2.45~GHz \cite{Mair2024IFA}.}
 \label{fig:MairHatResults}
 \end{center}
 \end{figure}
@@ -290,8 +290,8 @@ Figure~\ref{fig:MairPixelSize} shows the achievable antenna gain as a function o
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_pixelsize/Mair2024_Fig5_GainVsPixelSize.png}
-\caption{Antenna gain versus normalized pixel size for ten electrical sizes ($ka = 0.39$ to $2.21$).  For large antennas ($ka > 1$), pixel size has minimal impact; for small antennas ($ka < 0.6$), smaller pixels yield higher gain \cite{Mair2024Design}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_pixelsize/Mair2024_Fig5_GainVsPixelSize.png}
+\caption[Gain vs.\ pixel size for varying electrical sizes]{Antenna gain versus normalized pixel size for ten electrical sizes ($ka = 0.39$ to $2.21$).  For large antennas ($ka > 1$), pixel size has minimal impact; for small antennas ($ka < 0.6$), smaller pixels yield higher gain \cite{Mair2024Design}.}
 \label{fig:MairPixelSize}
 \end{center}
 \end{figure}
@@ -300,8 +300,8 @@ The study also compared asymmetrical designs against designs with various symmet
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_pixelsize/Mair2024_Fig8_SymmetryScatter.png}
-\caption{Gain versus $S_{11}$ for optimized pixelated antennas at $ka \approx 1.9$ with different symmetry constraints.  Asymmetrical designs (red) achieve the highest gain and best matching; only asymmetrical designs exceed the Chu--Harrington limit (shaded band) \cite{Mair2024Design}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/mair2024_pixelsize/Mair2024_Fig8_SymmetryScatter.png}
+\caption[Gain vs.\ S11 with symmetry constraints]{Gain versus $S_{11}$ for optimized pixelated antennas at $ka \approx 1.9$ with different symmetry constraints.  Asymmetrical designs (red) achieve the highest gain and best matching; only asymmetrical designs exceed the Chu--Harrington limit (shaded band) \cite{Mair2024Design}.}
 \label{fig:MairSymmetry}
 \end{center}
 \end{figure}
@@ -317,7 +317,7 @@ Two designs were demonstrated: a broadband omnidirectional antenna covering 1750
 \includegraphics[angle=0,width=0.48\linewidth]{/Users/jim.maloney/Book/images/ch3/merulla2008/Merulla2008_Fig5_WireOmniLayout.png}
 \hfill
 \includegraphics[angle=0,width=0.48\linewidth]{/Users/jim.maloney/Book/images/ch3/merulla2008/Merulla2008_Fig6_FabricatedPrototype.png}
-\caption{Wire-based fragmented aperture antenna: (left)~optimized wire layout for a 1750--3500~MHz omnidirectional design; (right)~fabricated prototype on Rogers RT-5880 \cite{Merulla2008FragmentedWire}.}
+\caption[Wire-based fragmented aperture antenna]{Wire-based fragmented aperture antenna: (left)~optimized wire layout for a 1750--3500~MHz omnidirectional design; (right)~fabricated prototype on Rogers RT-5880 \cite{Merulla2008FragmentedWire}.}
 \label{fig:MerullaWire}
 \end{center}
 \end{figure}
@@ -326,8 +326,8 @@ Figure~\ref{fig:MerullaVSWR} shows the simulated and measured VSWR for the omnid
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/merulla2008/Merulla2008_Fig10_VSWR.png}
-\caption{VSWR of the wire-based fragmented omnidirectional antenna: simulated (solid) and measured (squares), 1750--3500~MHz.  VSWR remains below 2.8:1 across the band \cite{Merulla2008FragmentedWire}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/merulla2008/Merulla2008_Fig10_VSWR.png}
+\caption[VSWR of wire-based fragmented antenna]{VSWR of the wire-based fragmented omnidirectional antenna: simulated (solid) and measured (squares), 1750--3500~MHz.  VSWR remains below 2.8:1 across the band \cite{Merulla2008FragmentedWire}.}
 \label{fig:MerullaVSWR}
 \end{center}
 \end{figure}
@@ -345,14 +345,14 @@ To demonstrate the effectiveness of this adjacency-based mutation strategy, thre
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig9.png}
-\caption{Convergence comparison between the traditional mutation algorithm (blue) and the improved adjacency-based mutation algorithm (green), averaged over three independent design trials.  The improved algorithm converges to a better fitness score in fewer generations.}
+\caption[Convergence of traditional vs.\ adjacency-based mutation]{Convergence comparison between the traditional mutation algorithm (blue) and the improved adjacency-based mutation algorithm (green), averaged over three independent design trials.  The improved algorithm converges to a better fitness score in fewer generations.}
 \label{fig:IFAF9}
 \end{figure}
 
 As shown in Table~\ref{tab:IFAT1}, the improved mutation algorithm produced a better result than the traditional algorithm in every one of the three trials.  The best trial with the improved algorithm achieved a fitness score of $-1.684$, compared to $-2.238$ for the best trial with the traditional algorithm---an improvement of more than 0.5~dB.
 
 \begin{table}
-\caption{Fitness score comparison across three convergence trials for the traditional and improved mutation algorithms (higher score is better).}
+\caption[Fitness score comparison for mutation algorithms]{Fitness score comparison across three convergence trials for the traditional and improved mutation algorithms (higher score is better).}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig16.png}
 \label{tab:IFAT1}
 \end{table}
@@ -373,7 +373,7 @@ Four representative aperture designs are shown in Figure~\ref{fig:IFAF10}.  The 
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig10.png}
-\caption{Four sample fragmented aperture designs produced using the skewed-lattice (First Approach) pixel geometry.  None of the designs exhibit diagonal touching.}
+\caption[Sample skewed-lattice fragmented aperture designs]{Four sample fragmented aperture designs produced using the skewed-lattice (First Approach) pixel geometry.  None of the designs exhibit diagonal touching.}
 \label{fig:IFAF10}
 \end{figure}
 
@@ -381,7 +381,7 @@ Figure~\ref{fig:IFAF11} shows the broadside realized gain of each design as a fu
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig11.png}
-\caption{Broadside realized gain for the four skewed-lattice designs shown in Figure~\ref{fig:IFAF10}.  The black line indicates the aperture gain limit $2\pi A/\lambda^2$.}
+\caption[Gain for skewed-lattice designs]{Broadside realized gain for the four skewed-lattice designs shown in Figure~\ref{fig:IFAF10}.  The black line indicates the aperture gain limit $2\pi A/\lambda^2$.}
 \label{fig:IFAF11}
 \end{figure}
 
@@ -389,7 +389,7 @@ Figure~\ref{fig:IFAF12} shows the VSWR of each design.  The VSWR remains below 1
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig12.png}
-\caption{VSWR for the four skewed-lattice designs shown in Figure~\ref{fig:IFAF10}.}
+\caption[VSWR for skewed-lattice designs]{VSWR for the four skewed-lattice designs shown in Figure~\ref{fig:IFAF10}.}
 \label{fig:IFAF12}
 \end{figure}
 
@@ -403,7 +403,7 @@ Figure~\ref{fig:IFAF13} shows two sample designs for the 0.5--0.8~GHz and 0.8--1
 
 \begin{figure}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig13.png}
-\caption{Two sample fragmented aperture designs produced using the alternating-shape (Second Approach) pixel geometry for the 0.5--0.8~GHz and 0.8--1.2~GHz bands.}
+\caption[Alternating-shape pixel designs]{Two sample fragmented aperture designs produced using the alternating-shape (Second Approach) pixel geometry for the 0.5--0.8~GHz and 0.8--1.2~GHz bands.}
 \label{fig:IFAF13}
 \end{figure}
 
@@ -412,7 +412,7 @@ Figures~\ref{fig:IFAF14} and~\ref{fig:IFAF15} summarize the broadside gain and V
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,scale=0.2]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig14.png}
-\caption{Broadside realized gain for the two alternating-shape designs shown in Figure~\ref{fig:IFAF13}.}
+\caption[Gain for alternating-shape designs]{Broadside realized gain for the two alternating-shape designs shown in Figure~\ref{fig:IFAF13}.}
 \label{fig:IFAF14}
 \end{center}
 \end{figure}
@@ -420,7 +420,7 @@ Figures~\ref{fig:IFAF14} and~\ref{fig:IFAF15} summarize the broadside gain and V
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,scale=0.2]{/Users/jim.maloney/Book/images/ch3/improvedPatentFig15.png}
-\caption{VSWR for the two alternating-shape designs shown in Figure~\ref{fig:IFAF13}.}
+\caption[VSWR for alternating-shape designs]{VSWR for the two alternating-shape designs shown in Figure~\ref{fig:IFAF13}.}
 \label{fig:IFAF15}
 \end{center}
 \end{figure}
@@ -432,8 +432,8 @@ A natural question about any optimization-driven design process is: does the gen
 Maloney, Lee, and Landgren \cite{Maloney2013Genetic} performed this exercise for a 24-bit fragmented aperture design, in which 23 bits controlled the conducting/non-conducting state of pixel regions and a 24th bit selected between two feed configurations.  The complete design space of $2^{24} = 16{,}777{,}216$ antennas was exhaustively evaluated on a large computer cluster over the course of nearly a month, producing gigabytes of simulation results.  Figure~\ref{fig:IFA_24bit} shows the 24-bit encoding scheme that maps binary design variables to physical pixel regions on the aperture.
 
 \begin{figure}\begin{center}
-\includegraphics[angle=0,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch3/maloney2013/Maloney2013_Fig1_24bitEncoding.png}
-\caption{The 24-bit fragmented aperture encoding, showing how binary design variables map to conducting and non-conducting regions on the aperture.  The two images correspond to the two feed configurations selected by the 24th bit.  By evaluating all $2^{24}$ possible designs, the performance of any search algorithm can be benchmarked against the known global optimum \cite{Maloney2013Genetic}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/maloney2013/Maloney2013_Fig1_24bitEncoding.png}
+\caption[24-bit fragmented aperture encoding]{The 24-bit fragmented aperture encoding, showing how binary design variables map to conducting and non-conducting regions on the aperture.  The two images correspond to the two feed configurations selected by the 24th bit.  By evaluating all $2^{24}$ possible designs, the performance of any search algorithm can be benchmarked against the known global optimum \cite{Maloney2013Genetic}.}
 \label{fig:IFA_24bit}
 \end{center}\end{figure}
 
@@ -447,8 +447,8 @@ In their work, an $8 \times 7$ grid of rectangular pixels (56 binary design vari
 
 \begin{figure}
 \begin{center}
-\includegraphics[angle=0,width=0.75\linewidth]{/Users/jim.maloney/Book/images/ch3/li2019/Li2019_Fig4_ParetoFront.png}
-\caption{Pareto front from multi-objective binary particle swarm optimization (MOBPSO) of a dual-band pixelated antenna.  Each diamond represents a distinct Pareto-optimal topology offering a different trade-off between mean in-band $S_{11}$ ($F_1$) and mean gain ($F_2$) \cite{Li2019Automated}.}
+\includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch3/li2019/Li2019_Fig4_ParetoFront.png}
+\caption[MOBPSO Pareto front for dual-band antenna]{Pareto front from multi-objective binary particle swarm optimization (MOBPSO) of a dual-band pixelated antenna.  Each diamond represents a distinct Pareto-optimal topology offering a different trade-off between mean in-band $S_{11}$ ($F_1$) and mean gain ($F_2$) \cite{Li2019Automated}.}
 \label{fig:Li2019Pareto}
 \end{center}
 \end{figure}
