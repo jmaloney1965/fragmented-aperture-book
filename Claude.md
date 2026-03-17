@@ -26,3 +26,11 @@ Memory files live at: `/Users/jim.maloney/.claude/projects/-Users-jim-maloney-Bo
 - Don't wait to be asked — update proactively
 - If the session produced commits, list them
 - **If you skip this, the next session starts blind. Don't skip it.**
+
+## Building the PDF
+
+After building `topLevel.pdf` with pdflatex, always copy it to Google Drive:
+
+```bash
+cp /Users/jim.maloney/Book/Chapters/topLevel.pdf ~/Library/CloudStorage/GoogleDrive-jmaloney65@gmail.com/My\ Drive/Book/topLevel.pdf
+```
