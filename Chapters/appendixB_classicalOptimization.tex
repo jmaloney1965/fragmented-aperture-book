@@ -1,0 +1,1240 @@
+\chapter{Classical Optimization Strategies for Fragmented Aperture Antennas}
+\label{app:classical}
+
+\section{Why Classical Methods Still Matter}
+\label{app:why}
+
+This appendix is the methodology home for the optimizer-comparison
+material referenced in Chapter~2.5 (\emph{How Good Is the Genetic
+Algorithm?}) and Chapter~M (\emph{AI-Accelerated Fragmented Antenna
+Design}). The story-level treatment in those chapters tells the
+reader \emph{what we learned about classical optimizers when ground
+truth was available}; this appendix tells the reader \emph{how to
+reproduce, tune, or extend the methods themselves}. The split is
+deliberate. Most antenna designers reaching this volume want the
+qualitative results --- ``which optimizer should I reach for at my
+bit count?'' --- without the bootstrap derivations or hyperparameter
+sweep tables; for them, Chapter~2.5 suffices. Researchers who want
+to challenge a result, port a method to a different aperture, or
+understand why a published GA speedup may not be what it seems
+need the methodology depth; this appendix is written for them.
+
+Three classes of reader are anticipated. The first is the
+\emph{practical antenna designer} who has $N \!\lesssim\! 30$ free
+bits and a working metaheuristic and wants confirmation that her
+existing pipeline is competitive --- Sec.~\ref{app:practitioner}
+addresses this case directly. The second is the
+\emph{research-grade benchmark consumer} who is building a method
+of their own and needs an apples-to-apples baseline --- the
+methodology of Secs.~\ref{app:criteria}--\ref{app:bootstrap} is
+written so that any reasonable implementation can reproduce our
+numbers within seed-to-seed variance. The third is the
+\emph{algorithm developer} considering a new variant; here
+Sec.~\ref{app:results} reports what worked and what did not at
+20~bits and 24~bits, and Sec.~\ref{app:scaling} reports how those
+findings transfer to 168~bits.
+
+The methodology has matured considerably over the three exhaustive
+campaigns that produced it. The earliest study \cite{Maloney1999URSI}
+used an 18-bit database to compare three GA configurations; the
+24-bit follow-up \cite{Maloney2013Genetic24bit} added a steady-state
+variant and re-validated. The present material absorbs both earlier
+studies and adds the 20-bit campaign reported in
+\cite{Maloney2026Paper1}, the 24-bit campaign reported in
+\cite{Maloney2026Paper2}, the 168-bit follow-up reported in
+\cite{Maloney2026Paper3}, the cache-corrected accounting that has
+not previously appeared in this literature, and the strict-vs-good-enough
+dual-criterion framing the exhaustive ground truth uniquely enables.
+The cluster-cost analysis (Sec.~\ref{app:cluster}) and the
+golf-course-landscape analysis (Sec.~\ref{app:landscape}) are new
+to this appendix; neither appeared in any of the three companion
+papers.
+
+\section{The Exhaustive Ground-Truth Datasets}
+\label{app:datasets}
+
+This appendix draws on three databases that have been built
+specifically for the present line of work. They differ in bit count
+and in whether exhaustive enumeration was possible.
+
+\subsection{The 20-Bit Dataset (1.05~M designs)}
+
+The 20-bit database is built on a $250 \times 250$~mm fragmented
+aperture, $30 \times 30$ binary cells under two planes of symmetry
+(horizontal and vertical bisectors through the feed gap), yielding
+$2^{20} = 1{,}048{,}576$ free designs. Each design is simulated via
+the openTDA finite-difference time-domain
+solver~\cite{Yee1966FDTD,Taflove2005CompEM} at 351~frequency points
+spanning 0.5--4.0~GHz, capturing the full $|S_{11}|$ and boresight-gain
+spectra. The campaign was distributed across 200 AWS Graviton
+\texttt{c7g.medium} spot instances and completed in a single
+afternoon, producing a 4.4~GB on-disk database. The eight reference
+frequency bands used throughout this book --- 0.5--0.8, 0.8--1.2,
+1.2--1.6, 1.6--2.0, 2.0--2.5, 2.5--3.0, 3.0--3.5, and 3.5--4.0~GHz ---
+were chosen to expose the three regimes described in
+Sec.~\ref{app:results}: the easy upper bands where the
+$|S_{11}| \!\le\! -10$~dB specification is met by a large fraction
+of designs, the frustrated mid-bands where the basin-of-attraction
+for the global optimum is small, and the balanced lower bands.
+
+\subsection{The 24-Bit Dataset (16.8~M designs)}
+
+The 24-bit database is built on the same physical aperture with a
+finer fragment grouping under the same two planes of symmetry,
+yielding $2^{24} = 16{,}777{,}216$ free designs. The frequency grid
+is identical to the 20-bit dataset (351 points across 0.5--4.0~GHz)
+and the eight reference bands are the same, so 20-bit and 24-bit
+results are directly comparable. The 24-bit campaign was carried
+out on a larger AWS fleet over roughly six elapsed hours and is
+documented in \cite{Maloney2026Paper2}. At this scale the database
+file is roughly 75~GB; published analyses typically work on
+per-band sub-tensors to keep working-set sizes manageable.
+
+\subsection{The 168-Bit Production Case}
+
+At 168~bits ($25 \times 25$ quad-symmetric, 168 free bits) the
+design space is $2^{168}$ and exhaustive enumeration is no longer
+available. Instead the reference data takes the form of a large
+multi-seed hill-climbing pool, augmented with steady-state and
+memetic runs from selected reference bands. The single best fitness
+discovered over the pool serves as a \emph{best-found proxy} in
+place of the brute-force optimum used at 20 and 24~bits. This
+substitution has consequences for both criteria: at 168~bits the
+strict 0.01~dB criterion cannot be defined operationally (there is
+no ``true'' fitness to be 0.01~dB away from), so we report only
+Good Enough numbers measured against the best-found proxy. The
+1.53$\times$ over-count factor calibrated at 20~bits
+(Sec.~\ref{app:criteria}) gives a principled basis for interpreting
+those numbers in context. The 168-bit dataset and the production
+optimization campaign that built it are reported in
+\cite{Maloney2026Paper3}.
+
+\noindent\textit{[Placeholder, pending 168-bit follow-up paper:
+detailed dataset description, HC-pool size, best-found-proxy
+methodology, pool composition by method, and the cross-validation
+sub-experiments that anchor the calibration.]}
+
+\section{Two Evaluation Criteria from Exhaustive Ground Truth}
+\label{app:criteria}
+
+The exhaustive 20-bit and 24-bit databases enable two complementary
+criteria for evaluating optimizer performance, each answering a
+different question. The dual reporting is not optional: each
+criterion is the right answer to a question the other cannot answer,
+and the gap between them is itself the calibration we need to
+interpret 168-bit results where only one of the two is measurable.
+
+\subsection{Strict Basin Recovery (0.01\,dB)}
+
+The \emph{strict} criterion declares an optimizer trial successful
+if its terminal fitness lies within 0.01~dB of the brute-force
+optimum on the band in question. The 0.01~dB tolerance is
+deliberately tight --- below the typical FDTD-replication scatter
+the database was constructed to suppress --- so that ``within 0.01~dB''
+is essentially equivalent to ``in the same fitness-degeneracy
+class as the global optimum.'' Note this is a fitness criterion,
+not a Hamming-distance criterion: it admits fitness-degenerate
+alternative designs whose bit patterns differ from the brute-force
+best but whose fitness scores match within the tolerance.
+
+The strict criterion answers the \emph{research} question, \emph{did
+the algorithm recover the global basin?} It is the only criterion
+that survives a hypothesis test against ``the optimizer might have
+landed at a separate, lower-fitness near-optimum that the cold-start
+HC also reaches by accident.'' For benchmarks intended to argue
+that an optimizer reaches global optima reliably, the strict
+criterion is the bar to clear.
+
+\subsection{Good Enough Proximity (0.5\,dB)}
+
+The \emph{Good Enough} criterion declares an optimizer trial
+successful if its terminal fitness lies within 0.5~dB of the
+brute-force optimum, regardless of whether the trial occupies the
+brute-force basin. A design satisfying Good Enough may inhabit a
+Hamming-distant near-equivalent basin --- a separate local optimum
+whose fitness happens to be within 0.5~dB of the global. Good
+Enough therefore answers the \emph{engineering} question, \emph{did
+the algorithm deliver a design within engineering-acceptable
+tolerance of the theoretical maximum?} Designs satisfying Good
+Enough are deployable; designs failing it generally are not.
+
+The 0.5~dB threshold is chosen to match published return-loss
+manufacturing tolerances for the fragmented-aperture coupon: 0.5~dB
+on the band-objective is, on this aperture, the difference between
+``meets spec'' and ``does not.'' Other values can be used and the
+analysis is straightforward to redo; the qualitative findings
+reported in this appendix (HC dominates easy bands, memetic
+dominates frustrated bands, pure GA never wins) are robust to
+threshold choices in the 0.3--1.0~dB range.
+
+\subsection{The 1.53$\times$ Over-Count Factor and Why Both Are Needed}
+
+The two criteria are not redundant. An algorithm that always reaches
+strict basin recovery trivially satisfies Good Enough; the converse
+is generally false. At 20~bits over the 188-band procedural sweep
+used in \cite{Maloney2026Paper1}, the inverse-network warm-start
+reaches Good Enough on 113.2/188 bands and strict on 73.9/188 ---
+a ratio of $113.2 / 73.9 \approx 1.53$. This $1.53\times$ factor
+quantifies how much Good Enough \emph{over-counts} strict basin
+recovery at 20~bits, and provides the bridge to the 168-bit
+production case.
+
+At 168~bits exhaustive ground truth does not exist; the strict
+criterion is therefore not measurable. Only Good Enough can be
+reported against a best-found proxy. The 20-bit calibration
+($1.53\times$ over-count) gives a principled scaling: a Good Enough
+headline at 168~bits should be interpreted as approximately
+$1/1.53 \approx 65\%$ of its face value if the reader's question
+is ``did this algorithm find the true optimum.'' If the reader's
+question is ``did this algorithm deliver a deployable design,'' the
+face-value Good Enough number is the right answer directly. Both
+questions are legitimate, and the 20-bit data is what makes the
+difference legible. This is the principal scientific value of
+running the 20-bit benchmark in the AI-accelerated-design era:
+without it, Good Enough numbers at 168~bits would not have an
+anchored interpretation.
+
+\section{Cache-Corrected Evaluation Counting}
+\label{app:cache}
+
+The published GA-vs-HC literature in pixelated antenna design has a
+recurring methodological problem: the number of unique FDTD
+evaluations performed by an optimizer is not the same as the number
+of fitness-function calls the optimizer made. The discrepancy ---
+caused by the GA's tendency to revisit previously evaluated designs
+--- inflates the apparent eval count of cache-using implementations
+and deflates the eval count of memory-using implementations of the
+same method.
+
+\subsection{The Seen-Set: Why Naive Eval Counts Mislead}
+
+For an exhaustive ground-truth comparison the natural cost metric
+is the number of \emph{distinct} FDTD evaluations performed by the
+optimizer per trial. Naive accounting --- incrementing a counter on
+every fitness call --- is distorted by the cache hit rate: in any
+working implementation that wraps the FDTD solver in a
+$2^{N}$-element hash table, revisiting a previously seen design
+costs essentially nothing (the hash lookup returns the stored
+fitness). An optimizer with high cache reuse therefore reports a
+larger naive eval count than the smaller number of unique designs
+it actually simulated. Unsupervised use of cache hits has been
+observed in the antenna literature to inflate apparent GA speedups
+when in fact the GA is benefiting from a much larger seen-set than
+HC. We therefore maintain an explicit \texttt{seen} set per trial
+and count only \emph{first-time} evaluations toward the optimizer's
+eval budget. Cache hits cost zero in our accounting.
+
+\subsection{Cache Hit Rates by Method}
+
+At 20~bits the cache hit rate is approximately 15\% for HC (the
+single-bit-flip neighborhood revisits a previously seen design
+roughly one in seven times once a few bits have been explored).
+The hit rate is substantially lower for SS-GA (typical 4--8\%
+depending on recipe) because its uniform mutation tends to produce
+genuinely novel offspring, and substantially higher for the
+generational GA at low mutation rates (15--25\%) because crossover
+on a converged population produces many near-duplicate children.
+
+Cache hit rate alone does not determine the rank order of
+methods --- but it does determine which recipes win the
+hyperparameter sweep, and that ranking inversion is dramatic
+enough to be worth its own subsection.
+
+\subsection{Cache Sensitivity of Recommended Hyperparameters}
+
+A parallel hyperparameter sweep without the seen-set cache (every
+fitness call counts, including duplicates) produces \emph{the
+opposite} recommended recipe in both GA families:
+\begin{itemize}
+\item Generational GA, cached best: $\mathrm{cxpb} = 0.2$,
+      $\mathrm{mutpb} = 0.3$. Uncached best:
+      $\mathrm{cxpb} = 0.3$, $\mathrm{mutpb} = 0.7$.
+\item Steady-state GA, cached best: $\mathrm{cxpb} = 0.7$,
+      $\mathrm{mutpb} = 0.1$. Uncached best:
+      $\mathrm{cxpb} = 0.2$, $\mathrm{mutpb} = 1.0$.
+\end{itemize}
+The mechanism is straightforward: without a cache, the optimizer
+pays full cost for every fitness call, so high-mutation recipes
+that generate novel designs win. With a cache, low-mutation
+recipes win because most ``new'' designs are already seen and cost
+nothing. This is not a small effect: the GA at the uncached-best
+recipe is more than $2\times$ slower than at the cached-best recipe
+when both are run on the cached evaluator.
+
+Reports of GA-found designs in the literature should therefore be
+read in light of whether the authors maintained a seen-set cache:
+the same method run with or without caching is effectively a
+different algorithm, and a fair comparison requires the cached
+accounting we use throughout this appendix.
+
+\section{Bootstrap Methodology and Geometric Restart Model}
+\label{app:bootstrap}
+
+The natural metric for evaluating an optimizer pool against a
+target is the number of evaluations consumed before the first trial
+crosses the threshold. We report bootstrap-resampled distributions
+of this quantity throughout. The methodology has three components:
+the 10K-permutation bootstrap, the geometric-restart 1.4$\times$
+multiplier for trials that terminate short, and the universal
+confidence-scaling validated empirically across 42 band-method
+combinations.
+
+\subsection{The 10K-Permutation Bootstrap}
+
+For each (method, band) pair we record the FDTD-equivalent
+unique-eval count consumed by every trial and the best fitness it
+reached. The bootstrap procedure resamples the trial pool 10{,}000
+times, each time generating a uniformly random permutation of the
+trials. In each ordering we accumulate per-trial eval counts until
+the first trial reaches the chosen threshold (Good Enough or strict)
+and record the cumulative cost. The bootstrap distribution of those
+cumulative costs is the optimizer's \emph{evals-to-first-hit}
+distribution; we report its median and the 5/95 percentile range.
+
+Because every method receives the same total compute (typically
+$\sim\!100{,}000$ unique-design FDTD-equivalents per band), this
+normalization makes across-method comparisons fair regardless of
+per-trial cost differences. HC trials cost $\sim\!60$ evals each,
+so a 100K budget yields $\sim\!5{,}000$ HC trials per band; memetic
+trials cost $\sim\!1{,}830$ evals each, yielding $\sim\!50$ memetic
+trials per band; bootstrap places both pools on the same
+evals-to-first-hit axis.
+
+\subsection{Geometric Restart 1.4$\times$ Multiplier Validation}
+
+Trials that terminate before crossing the threshold (a local
+optimum at fitness more than 0.5~dB from the brute-force optimum,
+which is most trials on the frustrated bands) are extended via
+\emph{geometric restart}: the budget for the next-trial extension
+is $1.4\times$ the budget consumed by the previous attempt. This
+multiplier was validated empirically to give 90\% confidence at the
+1~dB threshold across the 40 method-band combinations of the 20-bit
+benchmark. It expresses the empirical observation that on the
+frustrated bands, each successive restart of a previously failed
+trial costs roughly $40\%$ more than the prior restart before the
+next basin is reached.
+
+The geometric-restart extension is required for fair accounting:
+otherwise an optimizer that produces many cheap-but-unsuccessful
+trials would appear to have a small evals-to-first-hit number
+(because each individual trial is cheap) when in fact the cumulative
+cost across the trials is large. Bootstrap with the geometric
+restart adjustment treats each method's pool as a single source of
+budget rather than as a sequence of independent attempts.
+
+\subsection{Universal Confidence Scaling}
+
+Across 42 band-method combinations spanning the 20-bit and 24-bit
+campaigns, the bootstrap distributions of evals-to-first-hit are
+well approximated by a geometric distribution. This gives a simple
+budget rule:
+\begin{itemize}
+\item 90\% confidence: $3.3\times$ median evals
+\item 95\% confidence: $4.3\times$ median evals
+\item 99\% confidence: $6.6\times$ median evals
+\end{itemize}
+These multipliers can be applied to any reported bootstrap median
+to translate it into a confidence-interval budget. The fit is
+notably tighter for HC (which is closer to a true geometric process
+because each trial is genuinely independent) and looser for memetic
+(which has a strong band-dependent variance because the within-trial
+HC polish is itself a partially deterministic procedure).
+
+\subsection{When Restart-Budget Extension Is the Only Fair Eval}
+
+For the strict criterion (0.01~dB) on the hardest bands, the 100K
+per-band budget is insufficient to obtain a non-trivial
+bootstrap-median: a substantial fraction of trials do not reach
+strict and the geometric restart cannot extrapolate from a pool of
+non-successes. In these cases the right metric is the
+\emph{cumulative cold multistart} eval count --- the integer number
+of evaluations consumed from cold start until the first trial in a
+freshly initialized pool crosses the strict threshold. On the
+hardest 20-bit bands this can reach 1--3 million evaluations.
+
+The cumulative-cold-multistart procedure is what we use for the
+cold-start reference in the warm-start speedup numbers reported in
+\cite{Maloney2026Paper1}: per-band cumulative cost from cold-start
+HC until the strict basin is first reached, capped at $10^7$
+evaluations (a cap large enough that all eight 20-bit reference
+bands resolve, the hardest being 1.6--2.0~GHz at $\sim\!3 \times
+10^6$ evaluations).
+
+\section{The Five Optimizer Families}
+\label{app:methods}
+
+We compare five optimizer families throughout. Within each family
+the same hyperparameter settings are used for every band so that
+comparisons reflect optimizer character rather than per-band
+tuning effort. The settings themselves are the best universal
+recipes from the cache-corrected sweep documented in
+Sec.~\ref{app:recipes}.
+
+\subsection{Hill Climbing (HC)}
+
+First-improvement HC over the single-bit-flip neighborhood, started
+from a uniform random bit string. On each pass, the bits are
+shuffled to a random order; the algorithm flips the first bit whose
+flip improves fitness, then restarts the pass from the new design.
+A trial terminates when a full pass produces no improving flip
+(i.e., the design is a local optimum in the $N$-bit-flip
+neighborhood) and we record the best fitness and the number of
+unique-design evaluations consumed. Trials are independent.
+
+We deliberately use \emph{first-improvement} rather than
+\emph{steepest-ascent} HC. First-improvement makes more passes
+through the bit-shuffle order, explores more broadly, and is less
+prone to early plateau lock than steepest-ascent variants on
+non-convex fitness landscapes. The choice can matter by a factor
+of 2--3 in evals-to-first-hit on the frustrated bands.
+
+The single-bit-flip neighborhood is the natural choice for a binary
+design space; multi-bit-flip neighborhoods (commonly used in some
+combinatorial-optimization literatures) we do not benchmark here.
+They would expand the neighborhood-search radius at the cost of
+per-pass cost scaling with $\binom{N}{k}$ for $k$-bit flips;
+preliminary results suggest the optimal radius is $k = 1$ at all
+three bit counts studied.
+
+\subsection{Generational Genetic Algorithm}
+
+Tournament-selection GA with two-point crossover, population~32,
+100 generations, tournament size~2, $\mathrm{cxpb} = 0.2$,
+$\mathrm{mutpb} = 0.3$, and per-bit mutation rate
+$\mathrm{indpb} = 0.5 / N_{\rm bits} = 0.025$ at 20~bits. The
+hyperparameters are explained in detail in Sec.~\ref{app:recipes};
+the population size $32$ is a deliberate choice (small enough to
+keep cluster overhead modest, large enough to maintain diversity at
+20--24 bits).
+
+Hall-of-fame elitism keeps the best individual across generations.
+This is not the DEAP default and is essential: without it, high
+$\mathrm{mutpb}$ destroys the best individual every generation
+(see Sec.~\ref{app:methods:deap_bug} below).
+
+\subsection{Steady-State GA (SS-GA)}
+
+Population~32, tournament size~3, $\mathrm{cxpb} = 0.7$,
+$\mathrm{mutpb} = 0.1$, $\mathrm{indpb} = 0.025$ at 20~bits,
+two-point crossover. One offspring per iteration replaces the
+worst surviving individual if better. The per-trial step budget is
+$\mathrm{POP} \times \mathrm{NGEN} = 3{,}200$ steady-state steps,
+matched to the generational GA's per-trial evaluation budget.
+
+SS-GA has structural advantages over the generational GA: there
+are no idle nodes (one offspring per step), no straggler effect
+(the next step is the next offspring, not a generation barrier),
+and the population evolves gradually rather than in synchronous
+generations. These advantages are documented in detail in
+Sec.~\ref{app:cluster}.
+
+Carroll's original Fortran GA driver \cite{CarrollGA} pioneered the
+steady-state approach with the philosophical claim that
+$\mathrm{cxpb} = \mathrm{mutpb} = 1.0$ should be the default: every
+individual should get both crossover and mutation dice rolls. The
+DEAP \cite{DEAP} gate convention (probabilistic gates on whether to
+attempt crossover and mutation at all) is therefore extra
+conservatism Carroll never used. The cached best recipe we report
+above ($\mathrm{cxpb} = 0.7$, $\mathrm{mutpb} = 0.1$) sits between
+the two extremes and is consistent with Carroll's spirit at the
+unique-eval-cost optimum.
+
+\subsection{SS+HC: Post-Hoc Local Polish}
+
+SS-GA with the same settings runs to completion; the final best
+individual is then locally polished by HC. The GA portion is
+identical to plain SS-GA --- the HC pass is a one-time post-process
+applied only to the surviving champion. This is the simplest hybrid
+in the family and is interesting because the HC polish costs only
+$\sim\!60$ additional evaluations and never hurts, so SS+HC is
+weakly dominant over SS-GA at both 20 and 24~bits.
+
+\subsection{Memetic: HC on Every Modified Offspring}
+
+The memetic algorithm \cite{Moscato1989Memetic} applies HC to
+\emph{every} modified offspring before tournament replacement,
+throughout the run; the initial population is also HC-polished
+before any GA steps execute. Mutated or crossed-over offspring
+that have not been touched by any GA operator in a given step are
+not re-HC-polished (they have not changed).
+
+Memetic is the most expensive method per generation, with a
+per-trial unique-eval cost of $\sim\!1{,}830$ at 20~bits (roughly
+$30\times$ the HC per-trial cost). It is also the most aggressive
+at exploiting basin structure: every offspring is immediately
+walked to its local optimum, so the GA's population is at all
+times a population of local optima, and crossover acts as a
+basin-bridging operator on already-converged points. The strict
+basin-recovery rates of memetic (Sec.~\ref{app:results}) reflect
+this: memetic is the only one of the five families that reliably
+reaches the strict 0.01~dB basin under a 5{,}000-eval per-trial
+budget.
+
+\subsection{The DEAP Elitism Bug}
+\label{app:methods:deap_bug}
+
+DEAP's HallOfFame mechanism only \emph{records} the best individual
+seen across generations. It does not inject that best individual
+back into the population. Combined with a non-zero $\mathrm{mutpb}$
+that can mutate the current best to a worse state, the consequence
+is that the best individual can be lost across a generation
+transition --- a phenomenon we observed in early sweeps that
+produced large negative outliers in the per-trial fitness
+distribution. The fix is to explicitly replace the worst
+individual with \texttt{hof[0]} after each generation's
+\texttt{pop[:] = offspring} assignment. Without this fix, none of
+the recipes reported in Sec.~\ref{app:recipes} produce the win
+counts we report; with it, all results in this appendix are
+reproducible from the published code.
+
+\subsection{Spatial Crossover: Tested, No Significant Benefit at Small Pop}
+
+We benchmarked a custom \texttt{cx\_portfolio} operator that
+performs line, block, or disk cuts in the 2D antenna space rather
+than the uniform two-point cut of the DEAP default
+\texttt{cxTwoPoint}. The spatial cuts preserve adjacent-pixel
+correlations through crossover, which has theoretical appeal for a
+problem in which adjacent bits are physically adjacent fragments.
+
+Empirically at population $32$, the difference between
+\texttt{cxTwoPoint} and \texttt{cx\_portfolio} is not statistically
+significant: 7 seeds each across 6 bands, Wilcoxon signed-rank
+test, $p = 0.30$. The mechanism for the null result is that at
+pop~$32$ the population converges to dominant haplotypes within
+$\sim\!30$ generations and crossover mate-pairs are effectively
+identical thereafter. Crossover type does not matter when both
+parents are clones.
+
+Whether spatial crossover earns its place at larger populations
+(say pop~$256$ or more) is an open question; the answer almost
+certainly depends on the diversity-maintenance regime and not on
+the spatial cut policy per se.
+
+\section{Hyperparameter Recipes --- How to Tune Each Method}
+\label{app:recipes}
+
+The recipes used in Sec.~\ref{app:methods} were determined by a
+cache-corrected hyperparameter sweep over the same $2^{20}$
+ground-truth database. We document the sweep here so the
+universal-recipe choices are reproducible and the reader can judge
+whether they bias the per-band ranking.
+
+\subsection{The 20-Bit Sweep Grid (1024 Combinations $\times$ 100 Seeds)}
+
+For each of the generational GA and the steady-state GA, we swept
+four hyperparameters jointly:
+\begin{itemize}
+\item $\mathrm{cxpb} \in \{0.0, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9, 1.0\}$
+\item $\mathrm{mutpb} \in \{0.0, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9, 1.0\}$
+\item $\mathrm{indpb} \in \{0.5, 1, 1.5, 2, 2.5, 3, 4, 6\}$ bits / $N_{\rm bits}$
+\item $\mathrm{tournsize} \in \{2, 3\}$
+\end{itemize}
+This produces $8 \times 8 \times 8 \times 2 = 1{,}024$ combinations
+per method. Each combination was evaluated with 100~random seeds to
+a 0.5~dB Good Enough target on each of the eight reference bands,
+with the same cache-corrected unique-eval accounting used in
+Sec.~\ref{app:methods}. Total: $1{,}024 \times 100 \times 8 \approx
+8.2 \times 10^5$ runs per method.
+
+\subsection{Best Universal Recipes}
+
+We rank recipes by the geometric mean of the bootstrap-median
+unique-eval count across all eight bands, normalized to HC's
+per-band median. The geometric mean rewards recipes that are
+competent everywhere over recipes that are excellent on one band
+and poor on another.
+
+\begin{table}[h]
+\centering
+\caption{Best universal recipes from the cache-corrected
+hyperparameter sweep, 20-bit fragmented aperture. The ratio is the
+geometric mean of (method evals)/(HC evals) across all eight
+reference bands.}
+\label{tab:best_recipes}
+\small
+\begin{tabular}{lcccccc}
+\hline
+Method & cxpb & mutpb & indpb & tourn & pop & geo\,mean / HC \\
+\hline
+GA gen.   & 0.2 & 0.3 & $0.5/N$ & 2 & 32 & 0.91$\times$ \\
+SS-GA     & 0.7 & 0.1 & $0.5/N$ & 3 & 32 & 0.87$\times$ \\
+\hline
+\end{tabular}
+\end{table}
+
+The two recipes are stark in their divergence. The generational GA
+prefers \emph{low} crossover and \emph{moderate} mutation; the
+steady-state GA prefers the opposite, \emph{high} crossover and
+\emph{low} mutation. The asymmetry has a mechanistic explanation
+already given in Sec.~\ref{app:cache} above: with
+the cache active, low-mutation steady-state recipes win because
+their offspring are mostly novel (the population turns over slowly
+enough that crossover acts on diverse parents), while generational
+GAs prefer modest mutation to keep generations producing distinct
+candidates.
+
+\subsection{Tournament Size and Mutation Rate Observations}
+
+Two further observations from the full sweep are worth recording:
+\begin{itemize}
+\item Tournament size~3 dominates tournament size~2 for the SS-GA
+      (reverse for the generational GA). The smaller pop in SS-GA
+      benefits from increased selection pressure; the generational
+      GA already has more selection pressure than it can usefully
+      apply.
+\item Setting $\mathrm{mutpb} = 0$ is catastrophic for both methods
+      regardless of crossover --- the GA can only explore via
+      mutation; pure crossover restricts the search to subspaces
+      spanned by the initial population, which is not enough to
+      escape early lock.
+\item Tournament size~3 on pop~$32$ crushes population diversity
+      within $\sim\!30$ generations. By that point most offspring
+      are clones of the current best; crossover then mates
+      identical parents and produces no new information. Larger
+      populations defer this collapse proportionally.
+\end{itemize}
+
+\subsection{The 168-Bit Recipe: Why 20-Bit Recipes Don't Transfer}
+
+At 168~bits, the 20-bit cached recipe ($\mathrm{indpb} = 0.5/N = 0.025$)
+remains the per-bit mutation rate. Naive transfer of the 20-bit
+\emph{recipe} (the absolute $\mathrm{indpb}$ value $0.025$ ported
+verbatim) is catastrophic: it flips $0.025 \times 168 \approx 4.2$
+bits per mutation, well above the basin-bridging optimum for the
+168-bit landscape. A 2D sweep over $\mathrm{mutpb}$ and
+$\mathrm{indpb}$ at 168~bits identifies the best combination as
+$\mathrm{mutpb} = 0.40$ with $\mathrm{indpb}$ scaled to flip
+$\sim\!2$ bits per mutation event (i.e., $\mathrm{indpb} = 2/168
+\approx 0.012$). $\mathrm{mutpb} = 0.30$ is uniformly mediocre at
+168~bits and $\mathrm{mutpb} = 0.40$--$0.50$ is the practical
+window.
+
+The general lesson: at higher bit counts the optimal
+\emph{per-mutation-event bit count} stays small (1--2 bits) while
+the \emph{per-individual mutation probability} stays moderate
+(30--50\%); the two cannot be transferred independently. Recipes
+quoted as $(cxpb, mutpb, indpb)$ triples without an explicit bit
+count are ambiguous.
+
+\subsection{Recommended Starting Recipes Per Bit Count}
+
+\begin{table}[h]
+\centering
+\caption{Recommended starting recipes for the three bit counts
+studied. ``Bits/mut'' is the expected number of bits flipped per
+mutation event when $\mathrm{mutpb}$ fires. Tournament size 2
+unless otherwise noted.}
+\label{tab:recipes_summary}
+\small
+\begin{tabular}{lcccccc}
+\hline
+Bits & Method & cxpb & mutpb & indpb & bits/mut & pop \\
+\hline
+20  & GA gen. & 0.2 & 0.3 & $0.5/N$    & 0.5 & 32 \\
+20  & SS-GA   & 0.7 & 0.1 & $0.5/N$    & 0.5 & 32 (t=3) \\
+24  & GA gen. & 0.2 & 0.3 & $0.5/N$    & 0.5 & 32 \\
+24  & SS-GA   & 0.7 & 0.1 & $0.5/N$    & 0.5 & 32 (t=3) \\
+168 & GA gen. & 0.5 & 0.4 & $2.0/N$    & 2   & 32 \\
+168 & SS-GA   & 0.7 & 0.4 & $2.0/N$    & 2   & 32 (t=3) \\
+\hline
+\end{tabular}
+\end{table}
+
+The recipes for memetic and SS+HC are inherited from SS-GA (both
+hybrids wrap the SS-GA core); HC has no recipe to tune. The 168-bit
+entries are populated from the 2D sweep referenced in
+\cite{Maloney2026Paper3}.
+
+\section{Per-Band Optimizer Comparison Results}
+\label{app:results}
+
+The per-band optimizer comparison is the central empirical result
+of this appendix. We report it at both criteria with full per-band
+tables; the compressed versions appearing in
+\cite{Maloney2026Paper1}~\S5 and \cite{Maloney2026Paper2}~\S3 are
+extracted from the data here.
+
+\subsection{The Master Comparison at 20~Bits --- Good Enough and Strict}
+
+Under the Good Enough criterion (0.5~dB target), the win-count
+summary across the eight reference bands is:
+\begin{itemize}
+\item HC: 3/8 (the easy bands 2.5--3.0, 3.0--3.5, 3.5--4.0~GHz)
+\item SS-GA: 2/8 (the balanced lower band and one mid-band crossover)
+\item Memetic: 2/8 (the frustrated mid-bands 1.2--1.6, 1.6--2.0~GHz)
+\item SS+HC: 1/8 (a narrow margin)
+\item Pure GA: 0/8
+\end{itemize}
+Under the strict criterion (0.01~dB target), the win-count summary
+inverts dramatically:
+\begin{itemize}
+\item Memetic: 5.85/8 (a fractional count reflecting partial wins on
+      shared bands; effectively dominant on every band)
+\item HC: 0.18/8
+\item SS-GA: 0.31/8
+\item SS+HC: 0.33/8
+\item Pure GA: 0/8
+\end{itemize}
+Memetic is the only method reaching strict basin recovery on more
+than 5\% of trials on 7 of 8 bands and more than 87\% on 6 of 8;
+HC, SS-GA, and SS+HC reach strict on $\leq\!5\%$ on 7 of 8 bands.
+
+The full per-band reach-rate table is reproduced in
+Table~\ref{tab:strict_reach_20bit}. The corresponding
+\texttt{master\_comparison} figure (deferred to this appendix from
+\cite{Maloney2026Paper1} where it is the load-bearing figure of
+\S5) shows the two panels side-by-side: Panel~A is the bootstrap-median
+evals-to-Good-Enough by method and band, Panel~B is the per-band
+strict reach rate.
+
+\begin{table}[h]
+\centering
+\caption{Per-band reach rate (\% of trials) at strict (0.01\,dB)
+vs Good Enough (0.5\,dB) thresholds, across HC, SS-GA, SS+HC, and
+memetic at the 5{,}000-eval per-trial budget. 20-bit data, HC pool
+of 5{,}000 trials/band, others 500 trials/band. The mean row is
+the per-method average across bands.}
+\label{tab:strict_reach_20bit}
+\small
+\begin{tabular}{lrrrrrrrr}
+\hline
+       & \multicolumn{2}{c}{HC} & \multicolumn{2}{c}{SS} & \multicolumn{2}{c}{SS+HC} & \multicolumn{2}{c}{Memetic} \\
+Band (GHz) & strict & good & strict & good & strict & good & strict & good \\
+\hline
+0.5--0.8   & 0.3  &  5.8 & 2.0  & 14.6 & 2.0  & 15.2 & \textbf{93.6} &  95.8 \\
+0.8--1.2   & 0.1  &  6.0 & 0.2  & 22.4 & 0.2  & 23.8 & \textbf{34.2} & 100.0 \\
+1.2--1.6   & 0.5  &  1.3 & 0.4  &  1.2 & 0.4  &  1.2 & \textbf{95.0} &  95.0 \\
+1.6--2.0   & 1.1  &  1.3 & 1.2  &  1.8 & 1.2  &  1.8 & \textbf{62.4} &  62.4 \\
+2.0--2.5   & 1.3  &  4.7 & 4.8  & 13.6 & 5.6  & 15.0 & \textbf{98.6} & 100.0 \\
+2.5--3.0   & 3.3  &  4.5 & 3.8  &  5.2 & 3.8  &  5.2 & \textbf{87.2} &  99.4 \\
+3.0--3.5   & 0.8  & 17.1 & 1.6  & 26.2 & 1.8  & 31.6 & \textbf{46.8} & 100.0 \\
+3.5--4.0   & 10.2 & 19.3 & 17.6 & 31.6 & 18.0 & 35.2 & \textbf{100.0} & 100.0 \\
+\hline
+mean       & 2.2  & 7.5  & 4.0  & 14.6 & 4.1  & 16.1 & \textbf{77.2} & 94.1 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{The Master Comparison at 24~Bits --- Regime Confirmation}
+
+The 24-bit campaign~\cite{Maloney2026Paper2} confirms the regime
+structure observed at 20~bits. The headline win counts at Good
+Enough are: HC 4/8, SS-GA 2/8, Memetic 1/8, SS+HC 1/8, Pure GA
+0/8. The single difference from 20~bits is that the frustrated
+mid-band region narrows to a single band (2.0--2.5~GHz at 24~bits
+rather than two bands at 20~bits) on which memetic dominates, and
+the corresponding HC win-count rises by one. Under strict, memetic
+again dominates: $\sim\!4.5/8$ at the strict threshold against the
+others $\leq\!0.7/8$. The full 24-bit master comparison figure
+mirrors the master comparison figure above and is
+deferred to a future revision of this appendix.
+
+\subsection{The Three Regimes: Easy, Frustrated, Balanced}
+
+Three mechanistically distinct regimes appear consistently across
+20-bit and 24-bit data:
+
+\textbf{Optimizer-easy bands (2.5--4.0~GHz).} HC dominates by
+$1.5\times$ to $3\times$ over the next-best method. At these
+frequencies the $|S_{11}| \le -10$~dB specification is met by a
+large fraction of the design space; basins are large and shallow,
+and HC's commitment to climb every uphill neighbor wins
+immediately. GA, SS-GA, and SS+HC pay tournament and crossover
+overhead they cannot recoup.
+
+\textbf{Frustrated mid-bands (1.2--2.0~GHz).} Memetic dominates by
+$1.6\times$ to $2\times$ over HC. The brute-force optima at these
+bands are only marginally below the $-10$~dB $|S_{11}|$ line, and
+the landscape is a ``golf course'' (Sec.~\ref{app:landscape}):
+basin enumeration finds 1{,}000 to 2{,}900 distinct local optima
+across the band's full landscape, of which only a small subset
+($\sim\!1\%$) lie within 1~dB of the global optimum. HC's pool of
+5{,}000 random starts saturates --- only 1--3\% of starts reach the
+target basin --- while memetic's habit of climbing every new GA
+offspring extracts work from every individual the GA samples.
+
+\textbf{Balanced bands (0.5--1.2, 2.0--2.5~GHz).} SS-GA and SS+HC
+win by narrow margins ($\leq\!10\%$ over HC). The basins are
+intermediate in size and number; the steady-state replacement
+policy avoids the generational GA's wasteful re-evaluation of
+pop-wide near-duplicates and matches HC's local efficiency once
+the GA has located a basin.
+
+The regime structure is robust to bit count: each regime exists at
+both 20 and 24~bits with the same per-band assignments. We expect
+it to persist at 168~bits, but the prediction is testable only
+indirectly because exhaustive ground truth is unavailable at that
+scale.
+
+\subsection{Win-Count Summaries --- Good Enough and Strict}
+
+The Good Enough criterion's win-count summary HC 3/8, SS-GA 2/8,
+Memetic 2/8, SS+HC 1/8, GA 0/8 (at 20~bits) and HC 4/8, SS-GA 2/8,
+Memetic 1/8, SS+HC 1/8, GA 0/8 (at 24~bits) is the result most
+practitioners want. Under Good Enough, no single method dominates,
+the per-band winner depends on the regime, and HC is a reasonable
+default.
+
+The strict criterion's win-count summary Memetic 5.85/8 (others
+$\leq\!0.33/8$) at 20~bits is qualitatively different. Under
+strict, memetic is the only reliable method --- the cost on its
+per-trial budget is $\sim\!30\times$ HC's, but the cost per
+\emph{recovered basin} is $313$ evals (vs HC's $333$), so memetic
+is within $5\%$ of HC on the strict-cost-per-basin metric. The
+practical distinction is that memetic converts trials into wins
+while HC, SS-GA, and SS+HC convert trials into ``close-but-not-in-basin''
+designs.
+
+\subsection{Per-Band Reach-Rate Tables --- Full Strict + Good Enough}
+
+The 20-bit per-band reach-rate table is reproduced as
+Table~\ref{tab:strict_reach_20bit} above. The 24-bit version is
+qualitatively identical; the principal numerical difference is
+that the dynamic range across bands narrows slightly (the easy
+bands are not quite as easy at 24~bits, the frustrated bands are
+slightly less frustrated). Memetic's dominance under strict
+remains at all eight bands.
+
+\noindent\textit{[Placeholder: the book-scale re-rendered
+\texttt{master\_comparison} figure at 20 bits (and its 24-bit
+sibling) will land here once the source
+\texttt{.npz} data is re-plotted at the 4.79-inch book column width.
+The PIERS column-width version exists at
+\texttt{exhaustive20/results/book\_figures/part4\_master\_20bit\_v4/master\_comparison.pdf}
+and is included verbatim in \cite{Maloney2026Paper1}.]}
+
+\section{Cluster-Cost Analysis}
+\label{app:cluster}
+
+The single-machine bootstrap-eval-count metric of
+Sec.~\ref{app:bootstrap} understates the cost of the generational
+GA on a real cluster. On a one-node-per-population-member
+deployment --- the natural cluster shape for an embarrassingly
+parallel GA --- the generational GA pays three additional costs
+that do not appear in the cached eval count.
+
+\subsection{The Three Strikes Against Generational GA on Clusters}
+
+\textbf{Strike one: idle nodes.} Within a generation, individuals
+that have not been touched by any GA operator (no crossover, no
+mutation) do not need new FDTD simulation; they are unchanged from
+the previous generation and their fitness is cached. On a cluster,
+those nodes sit idle while the others compute, but they still
+incur per-hour spot-instance cost. The fraction of idle nodes per
+generation is determined by the recipe: high-mutation,
+high-crossover recipes touch most individuals and have small idle
+fractions, low-rate recipes touch few and have large idle
+fractions.
+
+\textbf{Strike two: the straggler effect.} A generation barrier
+synchronizes the population: the next generation cannot begin until
+the slowest FDTD evaluation in the batch completes. On the
+fragmented aperture, FDTD evaluation cost varies by a factor of
+$\sim\!1.8$ across bands (high-Q designs at 0.5--0.8~GHz take
+$\sim\!6$~s per evaluation; broadband designs at 1.2--1.6~GHz take
+$\sim\!3.3$~s) due to early-termination cutoff differences.
+Generational GA pays the maximum per generation; HC and SS-GA pay
+the average per step. On a 32-node cluster this is a $\sim\!1.8\times$
+multiplier on the generational GA's wall time, with corresponding
+spot-cost inflation.
+
+\textbf{Strike three: FDTD cost is design-dependent.} Beyond the
+per-band variation, individual designs within a band can vary in
+FDTD cost by a similar factor depending on early-termination
+behavior. Generational GA pays the maximum within each batch; the
+straggler effect compounds with the cross-band variance.
+
+\subsection{Idle-Fraction by Recipe}
+
+At 24~bits across the eight reference bands, the per-recipe idle
+fractions are:
+\begin{itemize}
+\item Carroll-style ($\mathrm{cxpb} = \mathrm{mutpb} = 1.0$): 0\%.
+      Every individual is touched, no idle nodes.
+\item DEAP cached-best for generational ($\mathrm{cxpb} = 0.2$,
+      $\mathrm{mutpb} = 0.3$): 21\%. About one in five nodes is
+      idle each generation.
+\item Conservative ($\mathrm{cxpb} = 0.1$, $\mathrm{mutpb} = 0.1$):
+      89\%. The recipe minimizes seen-set churn but pays for it
+      in cluster idle.
+\end{itemize}
+The Carroll-style recipe was empirically derived for a different
+optimization objective (eval-cost minimization on a single
+machine), but it has the side benefit of zero cluster idle. This
+is a strong argument for the Carroll philosophy on clusters
+specifically.
+
+\subsection{The Straggler Effect: 1.8$\times$ FDTD Speed Spread by Band}
+
+The factor-1.8 cross-band FDTD speed spread is roughly stable across
+the 20-bit and 24-bit campaigns. The mechanism is the early-termination
+criterion of the FDTD solver: a design with a long ring-down (typically
+high-Q, low-band designs) needs more time steps before the time-domain
+signal has decayed below the early-termination threshold and the
+simulation can stop. Broadband mid-bands ring down quickly and
+terminate early.
+
+\subsection{Why Steady-State and HC Avoid These Problems}
+
+Steady-state GA produces one offspring per step; there is no
+generation barrier and therefore no straggler effect, and the
+single offspring is always touched by at least one operator so
+there are no idle nodes. The cluster shape is one node per
+``current offspring'' rather than one node per population member;
+the steady-state GA at pop~$32$ on a 32-node cluster uses 31 nodes
+to store the population (effectively free) and 1 node to compute
+the next offspring (busy).
+
+HC is sequential by nature and runs on a single node. The
+embarrassingly parallel deployment is one node per HC trial, not
+one node per HC step; the per-trial cost is independent of cluster
+size and the trial-pool is fully parallelizable across as many
+nodes as one has.
+
+The cluster reality is therefore that the generational GA is
+\emph{disqualified} for production FDTD-driven optimization at the
+scale of practical antenna design. Steady-state, HC, and memetic
+hybrids are the only viable choices when each fitness evaluation
+takes seconds to minutes.
+
+\section{The Fitness Landscape Is a Golf Course}
+\label{app:landscape}
+
+The per-band rankings of Sec.~\ref{app:results} have a single
+underlying cause: the fragmented-aperture fitness function as a
+function of the binary mask is best modeled not as a smoothly
+multimodal surface but as a ``golf course'' --- a small number of
+large basins surrounded by a sea of shallow local optima.
+
+\subsection{Steepest-Ascent Basin Mapping}
+
+The 24-bit database makes basin enumeration tractable. For each
+band we ran steepest-ascent HC from every one of the
+$2^{24} = 16{,}777{,}216$ designs and recorded the local optimum
+each starting point reached. The endpoints partition the design
+space into basins; the basin count and basin size distribution per
+band are the principal landscape diagnostics.
+
+Across the eight bands at 24~bits we find between 1{,}000 and
+2{,}900 distinct local optima per band. The largest basin holds only
+2--5\% of designs per band; there is no dominant funnel. The basin
+entropy is 8--10 bits (out of a maximum of 24, achieved if every
+design were its own basin), indicating moderate structure: good
+designs share roughly 14 of 24 bits, but past that point the
+landscape is highly multimodal.
+
+\subsection{The 90\% Elite Paradox}
+
+The high basin count is not the obstacle. Approximately 90\% of
+random starts reach a top-1\% peak (within the best $\sim\!170{,}000$
+designs by fitness across the database). The obstacle is the
+restricted reach: only 1--34\% of starts reach within 0.5~dB of the
+global best, depending on band. On the frustrated mid-bands the
+target-basin coverage is only 1--2\%, which is the lottery-ticket
+regime that makes HC restart-inefficient and memetic worthwhile.
+
+The paradox is that ``almost every start reaches a peak'' and
+``almost no start reaches the global'' coexist on the same
+landscape. The resolution is that there are many high-quality
+peaks (the top 1\% covers 90\% of basins by mass) but few
+\emph{globally best} peaks (the within-0.5-dB region covers
+1--34\% by mass, varying band by band).
+
+\subsection{Crossover Benefit Ratio}
+
+Crossover is sometimes argued to be destructive on fragmented-aperture
+landscapes (two near-optimum parents in different basins produce a
+child in neither basin). We measured this directly: across the 24-bit
+landscape, what fraction of offspring produced by two-point
+crossover beats both parents on fitness? The answer is 15--47\%
+depending on parent quality and band, with a typical value around
+25\%. Even among top 0.1\% designs (where one might expect
+diminishing returns), the crossover benefit ratio remains 15--37\%,
+well above the ``destructive'' threshold of 15\% (the rate at which
+random bit-flips of a near-optimum would beat that near-optimum).
+
+Crossover is therefore constructive, not destructive. The reason
+pure GA still loses is different: the GA pays $\sim\!32$ evaluations
+per generation for $\sim\!6$--$7$ crossover improvements (about
+$20\%$ of pop~$32$), while HC pays $24$ evaluations per pass for
+$\sim\!3$--$8$ steepest-direction improvements. Per evaluation
+spent, HC's improvements are larger and more reliable; the GA's
+population overhead exceeds the crossover benefit per evaluation.
+
+\subsection{HC vs SS Efficiency Decomposition}
+
+Learning curves at fixed evaluation budgets (25, 50, 100, 200, 500,
+1000, 2000, 5000 evals) show that HC and SS solve different
+problems on the golf-course landscape:
+\begin{itemize}
+\item At 25--50 evals, HC leads by 1.0--1.7 dB across the eight
+      24-bit bands. HC has completed 1--2 full passes and found a
+      local peak; SS has barely initialized its population.
+\item At $\sim\!100$ evals, the curves cross. SS catches up as
+      its population converges and crossover benefit kicks in;
+      HC is already plateaued at its local peak.
+\item At 200+ evals, SS leads by 0.3--1.6 dB. SS continues
+      improving via crossover and population diversity; HC is
+      flat (it converged at $\sim\!50$--$100$ evals).
+\end{itemize}
+This pattern is consistent on all 8 bands at 24~bits and on all 6
+bands at 20~bits. The cross-over point is universal: $\sim\!75$--$100$
+evals across the studied bit counts, slightly earlier at 20~bits
+because HC passes are shorter.
+
+The decomposition explains why HC wins the master comparison
+nevertheless. HC solves ``find a peak, fast,'' which is the right
+problem when restarts are cheap (random initial designs cost nothing
+to generate, and the per-trial cost is small). SS solves ``find a
+\emph{good} peak,'' which is the right problem when restarts are
+expensive. At 24~bits with $\sim\!5$~s FDTD per evaluation,
+restarts are cheap; HC wins. At 168~bits with $\sim\!15$~s FDTD per
+evaluation, restarts are expensive enough that SS's per-trial
+quality advantage may outweigh its startup cost.
+
+\subsection{Method-Selection Rule by Basin Coverage}
+
+The full per-band, per-method analysis suggests a simple selection
+rule based on the basin coverage of the target threshold:
+\begin{itemize}
+\item Less than 3\% target coverage $\to$ Memetic (the only method
+      that reliably finds the rare basin).
+\item 3--10\% coverage $\to$ HC or SS+HC (cheap restarts work; the
+      HC polish at the end of SS+HC adds insurance at small cost).
+\item Greater than 10\% coverage $\to$ SS (population diversity
+      helps cheaply; the per-trial quality advantage matters when
+      the target is a wide basin).
+\end{itemize}
+The rule is validated at both 20 and 24~bits with no exception. It
+should transfer to higher bit counts to the extent that the
+golf-course landscape character persists; preliminary 168-bit data
+suggests it does (see Sec.~\ref{app:scaling}).
+
+\section{Scaling 20 $\to$ 24 $\to$ 168 Bits}
+\label{app:scaling}
+
+The natural objection to a 20-bit benchmark is that practical
+fragmented apertures have many more free bits. We address the
+transfer of the 20-bit and 24-bit findings to 168~bits directly
+here.
+
+\subsection{What Stays the Same}
+
+The regime structure (easy / frustrated / balanced) persists at all
+three bit counts. The two-criteria utility is preserved (Good Enough
+and strict answer different questions, and the strict-vs-Good-Enough
+gap calibrates Good Enough numbers at production scale). The
+cache-correction mechanism is essential at all three bit counts
+because the cache hit rate is recipe-determined and recipe-dependent
+in the same way at every scale.
+
+\subsection{What Changes}
+
+HC's neighborhood size grows linearly with bit count: at 168~bits a
+single pass is 168~evaluations rather than 24 or 20. This makes
+random restarts more expensive in absolute terms. Steady-state and
+memetic startup costs also grow (population initialization at 168
+bits costs $32 \times 168 = 5{,}376$ evaluations, vs $32 \times 24 =
+768$ at 24~bits). The optimal $\mathrm{indpb}$ stays at $\sim\!0.5$
+bits per mutation event at 20~bits but rises to $\sim\!2$ bits per
+mutation event at 168~bits (Sec.~\ref{app:recipes}).
+
+\subsection{The 168-Bit Surprise: The Landscape Is EASIER, Not Harder}
+
+\noindent\textit{[Placeholder, pending 168-bit follow-up paper:
+insert detailed HC success rates (preliminary 8--15\% basin reach at
+168~bits vs 0.6--5.9\% at 24~bits on equivalent bands), per-band
+master comparison, regime confirmation, and the surprise itself ---
+that more bits at a fixed physical aperture means finer resolution,
+not more complexity, and the landscape becomes smoother as a
+result.]}
+
+The preliminary finding is that 168-bit fragmented aperture
+optimization is \emph{easier} than 24-bit optimization at the same
+physical aperture, not harder. The reason is that more bits at a
+fixed aperture means a finer pixelation of the same physical
+geometry, not a more complex problem. Single-bit flips at 168~bits
+are smaller perturbations than at 24~bits (a $\sim\!2.5$~cm patch
+vs $\sim\!5$~cm at the apertures studied). Smaller perturbations
+mean smoother landscape, more escape routes, and lower per-pass
+fitness improvement variance. The curse of dimensionality, in
+short, does not apply.
+
+\subsection{The Curse of Dimensionality Does Not Apply}
+
+The standard intuition about high-dimensional search --- that the
+problem becomes harder as dimension grows --- assumes that each
+additional dimension adds independent structure. For fragmented
+apertures at fixed physical aperture, each additional bit refines
+the resolution of an existing physical degree of freedom; the bit
+encodes spatial fidelity, not new variation. The landscape's
+intrinsic complexity is determined by the physics, not the bit
+count. Increasing bit count gives the optimizer finer-grained moves
+on the same underlying landscape.
+
+This is the same high-dimensional phenomenon that makes stochastic
+gradient descent practical in deep learning despite millions of
+parameters: true local minima are exponentially rare in high
+dimensions; most critical points are saddles with escape routes,
+and a sequential greedy method (SGD or HC) traverses the saddle
+structure without difficulty. The deep-learning analogy is
+informal here, but the underlying mechanism is the same: each
+additional dimension is more likely to be an escape route than a
+trap, so dimension is a friend not an enemy.
+
+\subsection{When the Classical-Method Comparison Matters in a Real Pipeline}
+
+The practical pipeline at production scale is: surrogate forward
+network for fitness prediction (Ch.~M), inverse network for
+warm-start design generation (Ch.~M), then classical HC refinement
+from the inverse-network seed to polish the design to a deployable
+local optimum. The classical-method comparison of this appendix
+matters for the third stage: HC is the right choice for refinement
+because it is sequential, deterministic, cheap, and well-understood.
+The two-criteria framework matters for evaluating whether the HC
+refinement has converged to a deployable design.
+
+At 168~bits and beyond, classical methods will rarely be used as
+the primary search; the pipeline above is the production path. But
+when the inverse network proposes a seed that misses the basin (the
+mid-band failure mode of \cite{Maloney2026Paper1}), the classical
+HC fallback is what catches the failure. Understanding the
+fallback's behavior --- including when to escalate to SS-GA or
+memetic on the surrogate (Ch.~M) --- is what this appendix
+provides.
+
+\section{What This Means for the Practicing Antenna Designer}
+\label{app:practitioner}
+
+\subsection{If You Have $<\!30$ Bits and One Band: Use HC, No Tuning Needed}
+
+HC has no recipe to tune (the only knobs are random seed and
+neighborhood size, and the default single-bit-flip neighborhood is
+the right choice). At $<\!30$~bits HC will reach a local optimum
+within $\sim\!60$--$300$ evaluations and the bootstrap-median
+evals-to-Good-Enough is competitive with the best-tuned GA. There
+is no reason to spend hyperparameter sweep budget unless the band
+is in the frustrated regime (1.2--2.0~GHz at the apertures studied),
+in which case see the next subsection.
+
+\subsection{If You Have $<\!30$ Bits and Frustrated Mid-Bands: Use Memetic}
+
+The frustrated mid-bands have target-basin coverage below 3\% and
+memetic is the only method that reliably finds the basin. The
+$\sim\!30\times$ per-trial cost over HC is worth it because the
+trial \emph{success rate} is 60--95\% rather than 1--5\%, and the
+cost-per-recovered-basin is essentially identical to HC's. Memetic
+also has no tuning to speak of: the SS-GA core uses the
+cached-best universal recipe of Sec.~\ref{app:recipes}, and the HC
+polish on every offspring has no parameters.
+
+\subsection{If You're Scaling to 100+ Bits Without Ground Truth: Use Surrogate Warm-Start}
+
+Above $\sim\!100$~bits the right pipeline is the surrogate-driven
+inverse-warm-start of Ch.~M, not classical methods at all. The
+classical methods discussed in this appendix are then the HC
+refinement step at the end of the pipeline (and the SS-GA or
+memetic fallback on the surrogate when the warm-start seed misses
+the basin). The cost balance has shifted at this scale: training a
+forward surrogate costs $\sim\!100{,}000$ FDTD evaluations
+(amortized across an entire program of design platforms); a single
+warm-start design then costs $\sim\!60$ FDTD evaluations for the
+HC polish. Classical-only methods at this scale would cost
+$\sim\!5{,}000$ to $\sim\!1{,}000{,}000$ evaluations per design
+(per Sec.~\ref{app:results} and \cite{Maloney2026Paper3}).
+
+\subsection{Reporting Checklist}
+
+For published optimizer comparisons in this literature, the
+checklist that this appendix's methodology suggests is the
+following. Without each item, comparisons are unreliable.
+\begin{enumerate}
+\item Cache accounting: state whether a seen-set is in use and what
+      the cache hit rate is for each method. Without this, reported
+      eval counts are ambiguous up to a factor of 2.
+\item Bootstrap CI: report the bootstrap median and 5/95 percentile
+      range, not just a point estimate. A single seed's
+      evals-to-first-hit is not the metric.
+\item Both criteria: report Good Enough and strict numbers
+      separately. They answer different questions and a single
+      headline number is not enough.
+\item Win-count summary: across some chosen reference-band set,
+      report which method wins each band. A single best-method
+      claim is not defensible across the natural band variation.
+\item Restart-budget extension: when the bootstrap-median is
+      undefined (most trials do not reach the target), state the
+      cumulative-cold-multistart cost instead. Reporting only the
+      successful trials is sample-selection bias.
+\end{enumerate}
+
+The 20-bit and 24-bit databases are publicly available and
+straightforward to use as a methodology check on any new classical
+optimizer claim in the fragmented-aperture literature; we encourage
+their use as a standard benchmark.
+
+% ─────────────────────────────────────────────────────────────────────
+\begin{thebibliography}{99}
+
+\bibitem{Maloney1999URSI}
+J.~G. Maloney, P.~H. Harms, M.~P. Kesler, T.~L. Fountain, and G.~S. Smith,
+``Novel, planar antennas designed using the genetic algorithm,'' in
+\emph{USNC/URSI National Radio Science Meeting}, Orlando, FL, 1999, p.~237.
+
+\bibitem{Maloney2013Genetic24bit}
+J.~G. Maloney, R.~T. Lee, and D.~W. Landgren,
+``Genetic algorithms for fragmented aperture antennas: a complete
+evaluation of a 24-bit design,'' in \emph{2013 USNC-URSI Radio Science
+Meeting}, 2013, pp.~115.
+
+\bibitem{Haupt1995Intro}
+R.~L. Haupt, ``An introduction to genetic algorithms for
+electromagnetics,'' \emph{IEEE Antennas and Propagation Magazine},
+vol.~37, no.~2, pp.~7--15, 1995.
+
+\bibitem{Haupt2007GA}
+R.~L. Haupt and D.~H. Werner, \emph{Genetic Algorithms in
+Electromagnetics}. Wiley-IEEE Press, 2007.
+
+\bibitem{Goldberg1989GA}
+D.~E. Goldberg, \emph{Genetic Algorithms in Search, Optimization, and
+Machine Learning}. Addison-Wesley, 1989.
+
+\bibitem{CarrollGA}
+D.~L. Carroll, ``FORTRAN Genetic Algorithm Driver,'' 2001,
+\url{http://www.cuaerospace.com/Technology/GeneticAlgorithm/}.
+
+\bibitem{Moscato1989Memetic}
+P.~Moscato, ``On evolution, search, optimization, genetic algorithms and
+martial arts: towards memetic algorithms,'' Caltech Concurrent Computation
+Program, Report 826, 1989.
+
+\bibitem{DEAP}
+F.-A. Fortin, F.-M. De~Rainville, M.-A. Gardner, M.~Parizeau, and C.~Gagn\'e,
+``DEAP: Evolutionary algorithms made easy,'' \emph{Journal of Machine
+Learning Research}, vol.~13, pp.~2171--2175, 2012.
+
+\bibitem{Yee1966FDTD}
+K.~S. Yee, ``Numerical solution of initial boundary value problems
+involving Maxwell's equations in isotropic media,'' \emph{IEEE Trans.
+Antennas Propag.}, vol.~14, no.~3, pp.~302--307, 1966.
+
+\bibitem{Taflove2005CompEM}
+A.~Taflove and S.~C. Hagness, \emph{Computational Electrodynamics: The
+Finite-Difference Time-Domain Method}, 3rd~ed. Artech House, 2005.
+
+\bibitem{Maloney2026Paper1}
+J.~G. Maloney and S.~F. Mercer, ``AI-Accelerated Design of Fragmented
+Aperture Antennas: Optimizer Benchmarks and Surrogate-Assisted Inverse
+Design from an Exhaustive Million-Design Ground-Truth Database,''
+\emph{Progress in Electromagnetics Research}, in submission, 2026.
+
+\bibitem{Maloney2026Paper2}
+J.~G. Maloney and S.~F. Mercer, ``AI-Accelerated Design of Fragmented
+Aperture Antennas: 24-Bit Exhaustive Study,'' \emph{Progress in
+Electromagnetics Research}, in submission, 2026.
+
+\bibitem{Maloney2026Paper3}
+J.~G. Maloney, ``168-bit fragmented aperture antenna design with
+AI-accelerated optimization,'' in preparation, 2026.
+
+\end{thebibliography}
