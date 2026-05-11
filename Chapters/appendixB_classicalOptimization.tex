@@ -733,16 +733,35 @@ mean       & 2.2  & 7.5  & 4.0  & 14.6 & 4.1  & 16.1 & \textbf{77.2} & 94.1 \\
 \subsection{The Master Comparison at 24~Bits --- Regime Confirmation}
 
 The 24-bit campaign~\cite{Maloney2026Paper2} confirms the regime
-structure observed at 20~bits. The headline win counts at Good
-Enough are: HC 4/8, SS-GA 2/8, Memetic 1/8, SS+HC 1/8, Pure GA
-0/8. The single difference from 20~bits is that the frustrated
-mid-band region narrows to a single band (2.0--2.5~GHz at 24~bits
-rather than two bands at 20~bits) on which memetic dominates, and
-the corresponding HC win-count rises by one. Under strict, memetic
-again dominates: $\sim\!4.5/8$ at the strict threshold against the
-others $\leq\!0.7/8$. The full 24-bit master comparison figure
-mirrors the master comparison figure above and is
-deferred to a future revision of this appendix.
+structure observed at 20~bits. Re-rendered at book scale in
+Fig.~\ref{fig:master_comparison_24bit}, the 24-bit master
+comparison shows that Memetic remains the only method reliably
+reaching the strict 0.01\,dB basin, with per-band reach $\geq\!54\%$
+on 6 of 8 bands and 100\% on the two extreme bands (0.5--0.8 and
+3.5--4.0\,GHz). The single qualitative difference from 20~bits is
+that the 0.8--1.2\,GHz band becomes uniformly hard at 24~bits ---
+all five methods reach strict on $<\!1\%$ of trials --- a feature
+visible in Panel~B and consistent with the slightly tighter
+brute-force optimum on that band ($-0.20$\,dB vs $-0.67$\,dB at
+20~bits, a 0.47\,dB shift). Under Good Enough the 24-bit
+bootstrap-medians span a slightly wider dynamic range than at
+20~bits (Panel~A), but the rank order is preserved on every band.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{/Users/jim.maloney/github-clones/fragmented-aperture-book/images/appendixB/master_comparison_24bit_book.pdf}
+\caption{Per-band optimizer comparison across the $2^{24}$ database,
+same layout as Fig.~\ref{fig:master_comparison_20bit}.
+\textbf{Panel A (Good Enough, 0.5\,dB):} bootstrap-median
+FDTD-equivalent evaluations to reach within 0.5\,dB. The
+1.2--1.6 and 1.6--2.0\,GHz mid-bands at 20~bits relocate to a
+single 0.8--1.2 GHz extreme at 24~bits where all four classical
+methods need $\gtrsim\!5{,}000$ evals. \textbf{Panel B (Strict,
+0.01\,dB basin recovery):} per-band reach rate (\% of trials).
+Memetic dominates strict on 7 of 8 bands ($\geq\!54\%$); HC, SS-GA,
+and SS+HC reach $\leq\!2\%$ on the same 7 bands.}
+\label{fig:master_comparison_24bit}
+\end{figure}
 
 \subsection{The Three Regimes: Easy, Frustrated, Balanced}
 
@@ -937,6 +956,27 @@ design were its own basin), indicating moderate structure: good
 designs share roughly 14 of 24 bits, but past that point the
 landscape is highly multimodal.
 
+Fig.~\ref{fig:landscape_summary_24bit} summarizes the basin
+statistics per band: basin count, largest-basin fraction, target
+basin coverage at 0.5\,dB, and the geometric-mean restart cost
+inferred from coverage. The corresponding 20-bit version is
+qualitatively similar but with fewer basins (300--900 per band) and
+larger target coverage (3--40\% per band).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{/Users/jim.maloney/github-clones/fragmented-aperture-book/images/appendixB/landscape_summary_24bit.pdf}
+\caption{Basin-mapping summary across the eight 24-bit reference
+bands. Each panel groups per-band statistics from steepest-ascent
+HC over all $2^{24}$ designs: number of distinct local optima,
+largest-basin mass (\% of designs), basin-coverage of the
+0.5\,dB target region, and predicted geometric-mean restart cost.
+The mid-bands 1.2--2.0\,GHz exhibit the lowest target coverage
+($\sim\!1\%$), explaining the high Good-Enough costs in
+Fig.~\ref{fig:master_comparison_24bit}.}
+\label{fig:landscape_summary_24bit}
+\end{figure}
+
 \subsection{The 90\% Elite Paradox}
 
 The high basin count is not the obstacle. Approximately 90\% of
@@ -975,6 +1015,18 @@ $\sim\!3$--$8$ steepest-direction improvements. Per evaluation
 spent, HC's improvements are larger and more reliable; the GA's
 population overhead exceeds the crossover benefit per evaluation.
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{/Users/jim.maloney/github-clones/fragmented-aperture-book/images/appendixB/crossover_benefit_24bit.pdf}
+\caption{Crossover-benefit ratio across the 24-bit landscape, by
+parent-quality stratum and band. ``Beats both parents'' = fraction
+of two-point crossover offspring with fitness exceeding both
+parents on the band's exhaustive-database fitness. The 15\%
+``destructive'' floor (random-flip rate) is exceeded on every band
+and at every parent quality, including the top 0.1\% stratum.}
+\label{fig:crossover_benefit_24bit}
+\end{figure}
+
 \subsection{HC vs SS Efficiency Decomposition}
 
 Learning curves at fixed evaluation budgets (25, 50, 100, 200, 500,
@@ -1006,6 +1058,18 @@ restarts are cheap; HC wins. At 168~bits with $\sim\!15$~s FDTD per
 evaluation, restarts are expensive enough that SS's per-trial
 quality advantage may outweigh its startup cost.
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{/Users/jim.maloney/github-clones/fragmented-aperture-book/images/appendixB/efficiency_decomposition_24bit.pdf}
+\caption{Learning curves at fixed evaluation budgets (25, 50, 100,
+200, 500, 1{,}000, 2{,}000, 5{,}000 evals) for HC and steady-state
+GA across the 24-bit landscape. HC leads at 25--50 evals on every
+band; the curves cross near 75--100 evals; SS leads at 200+ evals.
+The same pattern holds across all 8 bands at 24~bits and on the 6
+20-bit bands.}
+\label{fig:efficiency_decomposition_24bit}
+\end{figure}
+
 \subsection{Method-Selection Rule by Basin Coverage}
 
 The full per-band, per-method analysis suggests a simple selection
@@ -1019,6 +1083,19 @@ rule based on the basin coverage of the target threshold:
       helps cheaply; the per-trial quality advantage matters when
       the target is a wide basin).
 \end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{/Users/jim.maloney/github-clones/fragmented-aperture-book/images/appendixB/basin_coverage_vs_threshold.pdf}
+\caption{Basin coverage vs target-fitness threshold across the
+eight 20-bit reference bands. Each band's curve gives the fraction
+of designs with fitness within the threshold of the brute-force
+optimum --- the ``size'' of the target basin under the chosen
+criterion. At the 0.5\,dB Good Enough threshold (vertical
+reference), coverage spans roughly two decades (1--34\%), partitioning
+the bands into the three selection-rule regimes.}
+\label{fig:basin_coverage}
+\end{figure}
 The rule is validated at both 20 and 24~bits with no exception. It
 should transfer to higher bit counts to the extent that the
 golf-course landscape character persists; preliminary 168-bit data
@@ -1055,21 +1132,49 @@ mutation event at 168~bits (Sec.~\ref{app:recipes}).
 
 \subsection{The 168-Bit Surprise: The Landscape Is EASIER, Not Harder}
 
-\noindent\textit{[Placeholder, pending 168-bit follow-up paper:
-insert detailed HC success rates (preliminary 8--15\% basin reach at
-168~bits vs 0.6--5.9\% at 24~bits on equivalent bands), per-band
-master comparison, regime confirmation, and the surprise itself ---
-that more bits at a fixed physical aperture means finer resolution,
-not more complexity, and the landscape becomes smoother as a
-result.]}
+A Phase~1 HC168 campaign~\cite{Maloney2026Paper3} ran 36 random-restart
+HC trials across six 168-bit reference bands
+(0.5--0.7, 0.7--1.0, 1.0--1.4, 1.4--1.9, 1.9--2.4, and 2.4--3.0\,GHz);
+six independent seeds per band, distributed across two initialization
+strategies (25\% and 70\% metal-fill initial bit strings). The
+per-band median trial cost is 520--1650 evaluations to local
+convergence, comparable to the 20-bit HC pool's
+$\sim\!60$--$300$~evals-per-trial scaled by the larger
+neighborhood size (168 vs 20). The expected catastrophic scaling
+under a curse-of-dimensionality reading --- which would predict
+per-trial costs growing exponentially in bit count --- is absent.
 
-The preliminary finding is that 168-bit fragmented aperture
-optimization is \emph{easier} than 24-bit optimization at the same
-physical aperture, not harder. The reason is that more bits at a
-fixed aperture means a finer pixelation of the same physical
-geometry, not a more complex problem. Single-bit flips at 168~bits
-are smaller perturbations than at 24~bits (a $\sim\!2.5$~cm patch
-vs $\sim\!5$~cm at the apertures studied). Smaller perturbations
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{/Users/jim.maloney/github-clones/fragmented-aperture-book/images/appendixB/bootstrap_evals_hc168.pdf}
+\caption{Bootstrap-resampled cumulative evaluations to first-hit
+Good Enough proxy across the 168-bit Phase~1 HC pool. Each curve
+is one of the six reference bands; the bootstrap median is
+1{,}000--2{,}000 evals on the easier bands and 3{,}000--5{,}000 on the
+harder ones --- not the $10^5$--$10^6$ that a naive
+dimension-count argument would predict.}
+\label{fig:bootstrap_evals_hc168}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{/Users/jim.maloney/github-clones/fragmented-aperture-book/images/appendixB/convergence_hc168.pdf}
+\caption{Per-trial convergence trajectories for the six 168-bit
+reference bands. Each trace is one random-restart HC trial; the
+y-axis is fitness, the x-axis is unique-design FDTD evaluations. The
+trajectories share the same qualitative shape as 20-bit and 24-bit
+HC: rapid early improvement, exponential slowdown into the local
+basin, plateau at the band's reachable optimum.}
+\label{fig:convergence_hc168}
+\end{figure}
+
+The finding is that 168-bit fragmented aperture optimization is
+\emph{easier} than 24-bit optimization at the same physical
+aperture, not harder. The reason is that more bits at a fixed
+aperture means a finer pixelation of the same physical geometry,
+not a more complex problem. Single-bit flips at 168~bits are
+smaller perturbations than at 24~bits (a $\sim\!2.5$~cm patch vs
+$\sim\!5$~cm at the apertures studied). Smaller perturbations
 mean smoother landscape, more escape routes, and lower per-pass
 fitness improvement variance. The curse of dimensionality, in
 short, does not apply.
