@@ -680,12 +680,27 @@ than 5\% of trials on 7 of 8 bands and more than 87\% on 6 of 8;
 HC, SS-GA, and SS+HC reach strict on $\leq\!5\%$ on 7 of 8 bands.
 
 The full per-band reach-rate table is reproduced in
-Table~\ref{tab:strict_reach_20bit}. The corresponding
-\texttt{master\_comparison} figure (deferred to this appendix from
-\cite{Maloney2026Paper1} where it is the load-bearing figure of
-\S5) shows the two panels side-by-side: Panel~A is the bootstrap-median
-evals-to-Good-Enough by method and band, Panel~B is the per-band
-strict reach rate.
+Table~\ref{tab:strict_reach_20bit}, and the two-criteria visual
+summary in Fig.~\ref{fig:master_comparison_20bit}. Panel~A is the
+bootstrap-median evals-to-Good-Enough by method and band (note the
+log y-axis); Panel~B is the per-band strict reach rate.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{/Users/jim.maloney/github-clones/fragmented-aperture-book/images/appendixB/master_comparison_20bit_book.pdf}
+\caption{Per-band optimizer comparison across the $2^{20}$ database
+under both criteria. \textbf{Panel A (Good Enough, 0.5\,dB):}
+bootstrap-median FDTD-equivalent evaluations to reach within
+0.5\,dB of the brute-force optimum. Memetic costs $\sim\!30\times$
+HC per trial, visible as a roughly flat $\sim\!1{,}800$-eval bar
+across bands; HC, SS-GA, and SS+HC vary by band from $\sim\!200$ to
+$\sim\!5{,}000$ evals. \textbf{Panel B (Strict, 0.01\,dB):} per-band
+reach rate (\% of trials) recovering the brute-force basin within
+the same $\sim\!5{,}000$-eval per-trial budget. HC, SS-GA, and
+SS+HC reach strict on $\leq\!5\%$ on 7 of 8 bands; memetic reaches
+strict on $\geq\!46\%$ on 7 of 8 bands and $\geq\!87\%$ on 6 of 8.}
+\label{fig:master_comparison_20bit}
+\end{figure}
 
 \begin{table}[h]
 \centering
@@ -795,13 +810,12 @@ bands are not quite as easy at 24~bits, the frustrated bands are
 slightly less frustrated). Memetic's dominance under strict
 remains at all eight bands.
 
-\noindent\textit{[Placeholder: the book-scale re-rendered
-\texttt{master\_comparison} figure at 20 bits (and its 24-bit
-sibling) will land here once the source
-\texttt{.npz} data is re-plotted at the 4.79-inch book column width.
-The PIERS column-width version exists at
-\texttt{exhaustive20/results/book\_figures/part4\_master\_20bit\_v4/master\_comparison.pdf}
-and is included verbatim in \cite{Maloney2026Paper1}.]}
+The book-scale 20-bit master comparison figure is
+Fig.~\ref{fig:master_comparison_20bit} (above, in \S~B.8.1). The
+24-bit sibling figure (which renders qualitatively the same regime
+structure) is deferred pending re-render of the 24-bit
+\texttt{.npz} data from \cite{Maloney2026Paper2} at book column
+width.
 
 \section{Cluster-Cost Analysis}
 \label{app:cluster}
