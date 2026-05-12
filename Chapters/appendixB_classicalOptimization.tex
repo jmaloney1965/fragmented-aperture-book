@@ -546,7 +546,7 @@ and poor on another.
 
 \begin{table}[h]
 \centering
-\caption{Best universal recipes from the cache-corrected
+\caption[Best universal recipes from the 20-bit hyperparameter sweep]{Best universal recipes from the cache-corrected
 hyperparameter sweep, 20-bit fragmented aperture. The ratio is the
 geometric mean of (method evals)/(HC evals) across all eight
 reference bands.}
@@ -620,7 +620,7 @@ count are ambiguous.
 
 \begin{table}[h]
 \centering
-\caption{Recommended starting recipes for the three bit counts
+\caption[Recommended starting recipes by bit count]{Recommended starting recipes for the three bit counts
 studied. ``Bits/mut'' is the expected number of bits flipped per
 mutation event when $\mathrm{mutpb}$ fires. Tournament size 2
 unless otherwise noted.}
@@ -688,7 +688,7 @@ log y-axis); Panel~B is the per-band strict reach rate.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{appendixB/master_comparison_20bit_book.pdf}
-\caption{Per-band optimizer comparison across the $2^{20}$ database
+\caption[Per-band optimizer comparison, 20-bit database]{Per-band optimizer comparison across the $2^{20}$ database
 under both criteria. \textbf{Panel A (Good Enough, 0.5\,dB):}
 bootstrap-median FDTD-equivalent evaluations to reach within
 0.5\,dB of the brute-force optimum. Memetic costs $\sim\!30\times$
@@ -704,7 +704,7 @@ strict on $\geq\!46\%$ on 7 of 8 bands and $\geq\!87\%$ on 6 of 8.}
 
 \begin{table}[h]
 \centering
-\caption{Per-band reach rate (\% of trials) at strict (0.01\,dB)
+\caption[Per-band strict vs Good Enough reach rates (20-bit)]{Per-band reach rate (\% of trials) at strict (0.01\,dB)
 vs Good Enough (0.5\,dB) thresholds, across HC, SS-GA, SS+HC, and
 memetic at the 5{,}000-eval per-trial budget. 20-bit data, HC pool
 of 5{,}000 trials/band, others 500 trials/band. The mean row is
@@ -750,7 +750,7 @@ bootstrap-medians span a slightly wider dynamic range than at
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{appendixB/master_comparison_24bit_book.pdf}
-\caption{Per-band optimizer comparison across the $2^{24}$ database,
+\caption[Per-band optimizer comparison, 24-bit database]{Per-band optimizer comparison across the $2^{24}$ database,
 same layout as Fig.~\ref{fig:master_comparison_20bit}.
 \textbf{Panel A (Good Enough, 0.5\,dB):} bootstrap-median
 FDTD-equivalent evaluations to reach within 0.5\,dB. The
@@ -966,7 +966,7 @@ larger target coverage (3--40\% per band).
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{appendixB/landscape_summary_24bit.pdf}
-\caption{Basin-mapping summary across the eight 24-bit reference
+\caption[Basin-mapping summary across 24-bit reference bands]{Basin-mapping summary across the eight 24-bit reference
 bands. Each panel groups per-band statistics from steepest-ascent
 HC over all $2^{24}$ designs: number of distinct local optima,
 largest-basin mass (\% of designs), basin-coverage of the
@@ -1018,7 +1018,7 @@ population overhead exceeds the crossover benefit per evaluation.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{appendixB/crossover_benefit_24bit.pdf}
-\caption{Crossover-benefit ratio across the 24-bit landscape, by
+\caption[Crossover-benefit ratio by parent-quality stratum (24-bit)]{Crossover-benefit ratio across the 24-bit landscape, by
 parent-quality stratum and band. ``Beats both parents'' = fraction
 of two-point crossover offspring with fitness exceeding both
 parents on the band's exhaustive-database fitness. The 15\%
@@ -1061,7 +1061,7 @@ quality advantage may outweigh its startup cost.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{appendixB/efficiency_decomposition_24bit.pdf}
-\caption{Learning curves at fixed evaluation budgets (25, 50, 100,
+\caption[Learning curves: HC vs steady-state GA (24-bit)]{Learning curves at fixed evaluation budgets (25, 50, 100,
 200, 500, 1{,}000, 2{,}000, 5{,}000 evals) for HC and steady-state
 GA across the 24-bit landscape. HC leads at 25--50 evals on every
 band; the curves cross near 75--100 evals; SS leads at 200+ evals.
@@ -1087,7 +1087,7 @@ rule based on the basin coverage of the target threshold:
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{appendixB/basin_coverage_vs_threshold.pdf}
-\caption{Basin coverage vs target-fitness threshold across the
+\caption[Basin coverage vs target-fitness threshold (20-bit)]{Basin coverage vs target-fitness threshold across the
 eight 20-bit reference bands. Each band's curve gives the fraction
 of designs with fitness within the threshold of the brute-force
 optimum --- the ``size'' of the target basin under the chosen
@@ -1147,7 +1147,7 @@ per-trial costs growing exponentially in bit count --- is absent.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{appendixB/bootstrap_evals_hc168.pdf}
-\caption{Bootstrap-resampled cumulative evaluations to first-hit
+\caption[Bootstrap evaluations to first-hit Good Enough (168-bit)]{Bootstrap-resampled cumulative evaluations to first-hit
 Good Enough proxy across the 168-bit Phase~1 HC pool. Each curve
 is one of the six reference bands; the bootstrap median is
 1{,}000--2{,}000 evals on the easier bands and 3{,}000--5{,}000 on the
@@ -1159,7 +1159,7 @@ dimension-count argument would predict.}
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{appendixB/convergence_hc168.pdf}
-\caption{Per-trial convergence trajectories for the six 168-bit
+\caption[Per-trial HC convergence trajectories (168-bit)]{Per-trial convergence trajectories for the six 168-bit
 reference bands. Each trace is one random-restart HC trial; the
 y-axis is fitness, the x-axis is unique-design FDTD evaluations. The
 trajectories share the same qualitative shape as 20-bit and 24-bit
