@@ -12,11 +12,11 @@ The original fragmented aperture concept was motivated by a simple question: \em
 
 \subsection{Binary Encoding of Antenna Geometry}
 
-The fundamental idea behind the fragmented aperture antenna is to represent the antenna geometry as a binary string that can be manipulated by an evolutionary optimization algorithm.  The antenna surface is divided into a grid of sub-wavelength rectangular pixels, as illustrated in Figure~\ref{fig:OFA1}.  Each pixel is assigned a single binary value: 1 for conducting (metal present) and 0 for non-conducting (metal absent).  The collection of all pixel states defines the antenna geometry and constitutes the ``genetic code'' of the antenna.
+The fundamental idea behind the fragmented aperture antenna is to represent the antenna geometry as a binary string that can be manipulated by an evolutionary optimization algorithm.  The antenna surface is divided into a grid of sub-wavelength rectangular fragments, as illustrated in Figure~\ref{fig:OFA1}.  Each fragment is assigned a single binary value: 1 for conducting (metal present) and 0 for non-conducting (metal absent).  The collection of all fragment states defines the antenna geometry and constitutes the ``genetic code'' of the antenna.
 
 \begin{figure}
 \includegraphics[angle=0.5,trim={0 160bp 0 18bp},clip,width=\linewidth]{/Users/jim.maloney/Book/images/ch2/origPatentFig1.png}
-\caption[Pixelated aperture concept for fragmented antennas]{The fragmented aperture concept: a planar surface divided into a grid of sub-wavelength pixels, each either conducting (black) or non-conducting (white).  The pattern of conducting and non-conducting elements defines the antenna geometry \cite{MaloneyFragPatent}.}
+\caption[Fragmented aperture concept]{The fragmented aperture concept: a planar surface divided into a grid of sub-wavelength fragments, each either conducting (black) or non-conducting (white).  The pattern of conducting and non-conducting elements defines the antenna geometry \cite{MaloneyFragPatent}.}
 \label{fig:OFA1}
 \end{figure}
 
@@ -32,11 +32,11 @@ The original design process employed a two-stage optimization approach, as illus
 \label{fig:OFA4}
 \end{figure}
 
-In the second stage, the best design from the first stage is converted to the full pixel representation and the GA continues to optimize at the pixel level, refining the antenna geometry to improve performance.  The flowchart for this second stage is shown in Figure~\ref{fig:OFA5}.
+In the second stage, the best design from the first stage is converted to the full fragment representation and the GA continues to optimize at the fragment level, refining the antenna geometry to improve performance.  The flowchart for this second stage is shown in Figure~\ref{fig:OFA5}.
 
 \begin{figure}
 \includegraphics[angle=0.5,trim={0 400bp 0 0},clip,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch2/origPatentFig5.png}
-\caption[Genetic optimization flowchart for fragmented apertures]{Flowchart of the genetic optimization process for fragmented aperture design.  The algorithm iteratively toggles pixels between conducting and non-conducting states, evaluating the antenna performance at each step using full-wave electromagnetic simulation \cite{MaloneyFragPatent}.}
+\caption[Genetic optimization flowchart for fragmented apertures]{Flowchart of the genetic optimization process for fragmented aperture design.  The algorithm iteratively toggles fragments between conducting and non-conducting states, evaluating the antenna performance at each step using full-wave electromagnetic simulation \cite{MaloneyFragPatent}.}
 \label{fig:OFA5}
 \end{figure}
 
@@ -50,7 +50,7 @@ Even with the efficiency of the FDTD method, the computational cost of evaluatin
 
 \subsection{Symmetry Constraints}
 
-To reduce the size of the design space and to ensure that the resulting antenna designs had desirable radiation characteristics, symmetry constraints were typically imposed during the optimization.  For a vertically polarized broadside antenna, left-right and top-bottom symmetry were enforced, reducing the number of independent pixels (and hence the length of the binary string) by a factor of four.  For example, an aperture with 400 pixels and both symmetries enforced has only 100 independent degrees of freedom, corresponding to a design space of $2^{100}$ possible configurations---still enormous, but significantly more tractable for the GA.
+To reduce the size of the design space and to ensure that the resulting antenna designs had desirable radiation characteristics, symmetry constraints were typically imposed during the optimization.  For a vertically polarized broadside antenna, left-right and top-bottom symmetry were enforced, reducing the number of independent fragments (and hence the length of the binary string) by a factor of four.  For example, an aperture with 400 fragments and both symmetries enforced has only 100 independent degrees of freedom, corresponding to a design space of $2^{100}$ possible configurations---still enormous, but significantly more tractable for the GA.
 
 \section{First Success}
 \label{sec:origFirstSuccess}
@@ -103,11 +103,11 @@ For many applications, bidirectional radiation is undesirable---half of the radi
 
 \section{Fragmented Broadband Ground Planes}
 
-An interesting early application of the fragmented aperture concept was the design of broadband ground planes.  Just as the pixel pattern on the radiating aperture can be optimized to achieve desired antenna characteristics, the pixel pattern on a surface behind the aperture can be optimized to function as a broadband ground plane.
+An interesting early application of the fragmented aperture concept was the design of broadband ground planes.  Just as the fragment pattern on the radiating aperture can be optimized to achieve desired antenna characteristics, the fragment pattern on a surface behind the aperture can be optimized to function as a broadband ground plane.
 
 A conventional conducting ground plane placed a quarter wavelength behind a radiating aperture provides constructive interference at the design frequency: the backward-radiated wave reflects off the ground plane and, after traveling an additional half wavelength (round trip), arrives back at the aperture in phase with the forward-radiated wave.  However, this constructive interference is inherently narrowband.
 
-By replacing the solid conducting ground plane with a fragmented surface---a pixelated pattern of conducting and non-conducting regions---it is possible to design a reflector that provides a more uniform phase response over a wider bandwidth.  The original patent demonstrated this by measuring the transmission phase through a fragmented surface, showing that the fragmented pattern maintains a substantially flatter phase response than a solid conducting reference across a wide frequency range (see Chapter~10 for details and the transmission phase comparison figure).
+By replacing the solid conducting ground plane with a fragmented surface---a fragmented pattern of conducting and non-conducting regions---it is possible to design a reflector that provides a more uniform phase response over a wider bandwidth.  The original patent demonstrated this by measuring the transmission phase through a fragmented surface, showing that the fragmented pattern maintains a substantially flatter phase response than a solid conducting reference across a wide frequency range (see Chapter~10 for details and the transmission phase comparison figure).
 
 This early exploration of broadband fragmented surfaces was significant for two reasons.  First, it demonstrated that the fragmented aperture concept extends beyond antenna design to the engineering of electromagnetic surfaces with tailored properties---a theme developed further in Chapter~10.  Second, it laid the groundwork for the broadband screen backplane designs described in Chapter~6, which use fragmented conducting layers in combination with resistive card (r-card) layers to achieve ultra-wideband ground plane performance for phased array antennas.
 
@@ -125,9 +125,9 @@ The success of the original fragmented aperture antenna validated the fundamenta
 
 \begin{itemize}
 
-\item \textbf{Diagonal touching.}  The original rectangular pixel geometry led to situations where conducting pixels touched only at their corners.  In the FDTD simulation, these diagonally touching pixels are always electrically connected, but when fabricated (e.g., by printed circuit board etching), the connection is unreliable.  This issue, and the solutions to it, are the subject of Chapter~3.
+\item \textbf{Diagonal touching.}  The original rectangular fragment geometry led to situations where conducting fragments touched only at their corners.  In the FDTD simulation, these diagonally touching fragments are always electrically connected, but when fabricated (e.g., by printed circuit board etching), the connection is unreliable.  This issue, and the solutions to it, are the subject of Chapter~3.
 
-\item \textbf{Convergence for large pixel counts.}  As the number of pixels increased beyond approximately 100, the standard GA mutation operator became increasingly ineffective at exploring the design space.  An improved mutation strategy tailored for fragmented apertures is described in Chapter~3.
+\item \textbf{Convergence for large fragment counts.}  As the number of fragments increased beyond approximately 100, the standard GA mutation operator became increasingly ineffective at exploring the design space.  An improved mutation strategy tailored for fragmented apertures is described in Chapter~3.
 
 \item \textbf{Bidirectional radiation.}  Single-layer fragmented apertures without a ground plane radiate equally into both hemispheres, limiting the achievable gain to $2\pi A/\lambda^2$.  Addressing this limitation motivated the development of broadband backplanes (Chapter~6) and multi-layer radiating structures (Chapter~6).
 

@@ -4,7 +4,7 @@
 
 \section{Introduction}
 
-The preceding chapters have treated the fragmented aperture antenna as a fixed structure: once the genetic algorithm determines the optimal pixel configuration and the antenna is fabricated, the conducting pattern is permanent.  Chapter~5 demonstrated that reconfigurable single-element fragmented apertures can dynamically change their frequency, beam direction, and polarization by switching pixel connections.  Chapter~7 showed that fixed fragmented array elements, when designed using spectral-domain FDTD, can achieve scan volumes exceeding $\pm 60^{\circ}$ across the operating bandwidth.
+The preceding chapters have treated the fragmented aperture antenna as a fixed structure: once the genetic algorithm determines the optimal fragment configuration and the antenna is fabricated, the conducting pattern is permanent.  Chapter~5 demonstrated that reconfigurable single-element fragmented apertures can dynamically change their frequency, beam direction, and polarization by switching fragment connections.  Chapter~7 showed that fixed fragmented array elements, when designed using spectral-domain FDTD, can achieve scan volumes exceeding $\pm 60^{\circ}$ across the operating bandwidth.
 
 This chapter describes the convergence of these two ideas: a phased array in which the fragmented aperture element is electronically reconfigured as the beam is steered.  The motivation is to overcome a fundamental limitation of any phased array with fixed element geometry---the scan-dependent degradation of the embedded element pattern, which causes the array gain to fall off faster than the physical aperture projection as the beam is steered away from broadside.
 
@@ -68,9 +68,9 @@ The spectral-domain FDTD approach described in Chapter~7 mitigates this problem 
 
 \subsection{Concept}
 
-The solution suggested by this analysis is straightforward: do not require the element to be a single compromise design.  Instead, use a reconfigurable element---a fragmented aperture array element whose pixel configuration can be electronically changed---and re-optimize the configuration for each combination of operating frequency and beam steer direction.
+The solution suggested by this analysis is straightforward: do not require the element to be a single compromise design.  Instead, use a reconfigurable element---a fragmented aperture array element whose fragment configuration can be electronically changed---and re-optimize the configuration for each combination of operating frequency and beam steer direction.
 
-When the array is commanded to steer to angle $\theta_s$, the element is reconfigured to a pixel pattern that has been pre-optimized for that scan angle.  The embedded element pattern of the reconfigured element has its peak near $\theta_s$ rather than at broadside, so the element pattern does not fight the array factor.  The scan loss approaches the $\cos\theta$ projected-area limit because the only remaining loss mechanism is the geometric reduction of the effective aperture area.
+When the array is commanded to steer to angle $\theta_s$, the element is reconfigured to a fragment pattern that has been pre-optimized for that scan angle.  The embedded element pattern of the reconfigured element has its peak near $\theta_s$ rather than at broadside, so the element pattern does not fight the array factor.  The scan loss approaches the $\cos\theta$ projected-area limit because the only remaining loss mechanism is the geometric reduction of the effective aperture area.
 
 This concept can be understood by analogy with the Agile Aperture Antenna of Chapter~5.  In that chapter, different switch configurations were designed for different objectives: one for a broadside beam, another for an end-fire beam.  The reconfigurable array concept is the same principle applied to every element of a phased array, with the objective for each configuration being maximum embedded element gain in the commanded steer direction.
 
@@ -78,7 +78,7 @@ This concept can be understood by analogy with the Agile Aperture Antenna of Cha
 
 The design procedure for a reconfigurable array element follows naturally from the tools developed in earlier chapters.  For each desired scan angle $\theta_s$ (and, if needed, each frequency sub-band), the genetic algorithm is run in the infinite-array environment with periodic boundary conditions appropriate for that scan angle.  The fitness function rewards embedded element realized gain in the direction $\theta_s$, impedance match at the scanned active impedance, and bandwidth coverage.
 
-For a set of $M$ discrete scan angles $\{\theta_1, \theta_2, \ldots, \theta_M\}$, the design process produces $M$ corresponding pixel configurations $\{P_1, P_2, \ldots, P_M\}$.  These configurations are stored in a look-up table.  When the array controller commands a beam steer to angle $\theta_s$, the appropriate pixel configuration $P_s$ is loaded onto every element simultaneously with the phase weights that steer the array factor.
+For a set of $M$ discrete scan angles $\{\theta_1, \theta_2, \ldots, \theta_M\}$, the design process produces $M$ corresponding fragment configurations $\{P_1, P_2, \ldots, P_M\}$.  These configurations are stored in a look-up table.  When the array controller commands a beam steer to angle $\theta_s$, the appropriate fragment configuration $P_s$ is loaded onto every element simultaneously with the phase weights that steer the array factor.
 
 The spectral-domain FDTD approach of Chapter~7 is used for each design, but with an important distinction.  In Chapter~7, the optimizer sampled multiple scan angles simultaneously and sought a single design that performed acceptably across the full scan volume.  Here, each optimization focuses on a \emph{single} target scan angle (or a narrow range around it), freeing the optimizer to find the best possible design for that specific condition.  The result is a family of designs, each of which is individually superior at its target angle to any single fixed design.
 
@@ -86,9 +86,9 @@ The spectral-domain FDTD approach of Chapter~7 is used for each design, but with
 
 The practical implementation requires a library of pre-computed element configurations spanning the desired scan volume.  The library is indexed by scan angle (and possibly frequency), and the array controller selects the appropriate configuration in real time as the beam is steered.
 
-The number of entries in the library depends on the angular resolution required.  If the element performance varies slowly with scan angle---as is typical for electrically small pixels---then a coarse angular grid may suffice, with interpolation or nearest-neighbor selection for intermediate angles.  Preliminary design studies suggest that scan angle steps of $5^{\circ}$ to $10^{\circ}$ provide adequate coverage, resulting in a library of approximately 20--50 configurations for hemispherical scan coverage.
+The number of entries in the library depends on the angular resolution required.  If the element performance varies slowly with scan angle---as is typical for electrically small fragments---then a coarse angular grid may suffice, with interpolation or nearest-neighbor selection for intermediate angles.  Preliminary design studies suggest that scan angle steps of $5^{\circ}$ to $10^{\circ}$ provide adequate coverage, resulting in a library of approximately 20--50 configurations for hemispherical scan coverage.
 
-\textcolor{red}{\textbf{[INSERT FIGURE: Conceptual diagram showing a library of pre-computed pixel configurations indexed by scan angle, with the array controller selecting the appropriate configuration for the commanded steer direction.]}}
+\textcolor{red}{\textbf{[INSERT FIGURE: Conceptual diagram showing a library of pre-computed fragment configurations indexed by scan angle, with the array controller selecting the appropriate configuration for the commanded steer direction.]}}
 
 For a two-dimensional scan volume, the library must cover both azimuth and elevation, but the symmetry of a square lattice element reduces the required entries.  An element with four-fold symmetry requires configurations covering only one octant of the upper hemisphere; the remaining scan directions are obtained by $90^{\circ}$ rotations of the element pattern.
 
@@ -98,11 +98,11 @@ For a two-dimensional scan volume, the library must cover both azimuth and eleva
 
 \subsection{Frequency Reconfiguration}
 
-A first set of design examples demonstrated the ability of a reconfigurable fragmented array element to tune across multiple frequency bands.  The element geometry and lattice were held constant, and the pixel configuration was optimized separately for operation in several frequency bands spanning a wide range.  In each case, the optimizer was able to find a pixel configuration that produced a well-matched, broadside element with gain near the aperture area limit for the target band.
+A first set of design examples demonstrated the ability of a reconfigurable fragmented array element to tune across multiple frequency bands.  The element geometry and lattice were held constant, and the fragment configuration was optimized separately for operation in several frequency bands spanning a wide range.  In each case, the optimizer was able to find a fragment configuration that produced a well-matched, broadside element with gain near the aperture area limit for the target band.
 
-This result is not surprising given the experience from Chapter~5, where very different switch configurations produced antennas operating in different frequency ranges.  What is significant is that the same behavior extends to array elements operating in the infinite-array mutual-coupling environment.  The pixel configuration adjusts not only the resonant behavior of the individual element but also the inter-element coupling, effectively re-tuning the array's electromagnetic environment for each frequency band.
+This result is not surprising given the experience from Chapter~5, where very different switch configurations produced antennas operating in different frequency ranges.  What is significant is that the same behavior extends to array elements operating in the infinite-array mutual-coupling environment.  The fragment configuration adjusts not only the resonant behavior of the individual element but also the inter-element coupling, effectively re-tuning the array's electromagnetic environment for each frequency band.
 
-\textcolor{red}{\textbf{[INSERT FIGURE: Several pixel configurations for the same array element, each optimized for a different frequency band.  The designs should look visually distinct, illustrating that different frequencies require fundamentally different conducting patterns.]}}
+\textcolor{red}{\textbf{[INSERT FIGURE: Several fragment configurations for the same array element, each optimized for a different frequency band.  The designs should look visually distinct, illustrating that different frequencies require fundamentally different conducting patterns.]}}
 
 \textcolor{red}{\textbf{[INSERT FIGURE: Embedded element realized gain versus frequency for each configuration, showing that each design provides near-aperture-limited gain within its target band.]}}
 
@@ -110,11 +110,11 @@ This result is not surprising given the experience from Chapter~5, where very di
 
 The more compelling set of design examples demonstrated scan angle reconfiguration.  The element was optimized for a fixed frequency band at several discrete scan angles: broadside ($0^{\circ}$), $30^{\circ}$, $45^{\circ}$, $60^{\circ}$, and beyond.
 
-At each scan angle, the optimizer produced a pixel configuration that placed the embedded element pattern peak near the target angle.  Figure~\ref{fig:RCA_scanconfigs} illustrates the concept: the conducting pattern changes as the target scan angle increases, reflecting the need for different current distributions to radiate efficiently in different directions.
+At each scan angle, the optimizer produced a fragment configuration that placed the embedded element pattern peak near the target angle.  Figure~\ref{fig:RCA_scanconfigs} illustrates the concept: the conducting pattern changes as the target scan angle increases, reflecting the need for different current distributions to radiate efficiently in different directions.
 
-\textcolor{red}{\textbf{[INSERT FIGURE: Pixel configurations for $\theta = 0^{\circ}, 30^{\circ}, 45^{\circ}, 60^{\circ}$, showing the evolution of the conducting pattern with scan angle.]}}
+\textcolor{red}{\textbf{[INSERT FIGURE: Fragment configurations for $\theta = 0^{\circ}, 30^{\circ}, 45^{\circ}, 60^{\circ}$, showing the evolution of the conducting pattern with scan angle.]}}
 \begin{figure}
-\caption[Reconfigurable element pixel configurations at four scan angles]{Pixel configurations for the reconfigurable array element at four scan angles.  The conducting pattern changes significantly with scan angle, reflecting the different current distributions required to maximize radiation in the target direction.}
+\caption[Reconfigurable element fragment configurations at four scan angles]{Fragment configurations for the reconfigurable array element at four scan angles.  The conducting pattern changes significantly with scan angle, reflecting the different current distributions required to maximize radiation in the target direction.}
 \label{fig:RCA_scanconfigs}
 \end{figure}
 
@@ -124,7 +124,7 @@ The key result was that the embedded element pattern of each reconfigured design
 
 \textcolor{red}{\textbf{[INSERT FIGURE: Scan loss versus angle, comparing the reconfigurable element ($n \approx 1$) to a fixed element ($n \approx 1.5$--$2$) and the ideal $\cos\theta$ limit.  This is the central result of the chapter.]}}
 
-It was particularly noteworthy that the reconfigured elements maintained good performance at scan angles beyond $60^{\circ}$.  At these extreme angles, fixed elements typically exhibit severe pattern degradation and impedance mismatch.  The reconfigurable element avoids these problems because its pixel pattern is specifically tailored for the wide-angle electromagnetic environment, including the dramatically different mutual coupling that occurs at extreme scan angles.
+It was particularly noteworthy that the reconfigured elements maintained good performance at scan angles beyond $60^{\circ}$.  At these extreme angles, fixed elements typically exhibit severe pattern degradation and impedance mismatch.  The reconfigurable element avoids these problems because its fragment pattern is specifically tailored for the wide-angle electromagnetic environment, including the dramatically different mutual coupling that occurs at extreme scan angles.
 
 \section{Scan Loss Reduction: Physical Interpretation}
 
@@ -134,25 +134,25 @@ The improvement from reconfigurable scan management can be understood through se
 
 When a fixed-element array is scanned to a large angle, the current distribution on each element does not change---only the relative phases between elements change.  The element still supports the same modes it was designed for at broadside, and these modes do not radiate efficiently in the scanned direction.
 
-In the reconfigurable element, changing the pixel configuration changes the conducting pattern, which changes the allowed current modes.  The optimizer finds a pattern that supports current distributions that radiate efficiently toward the target angle.  In essence, the element is not merely being phased to a new direction; it is being \emph{redesigned} for that direction.
+In the reconfigurable element, changing the fragment configuration changes the conducting pattern, which changes the allowed current modes.  The optimizer finds a pattern that supports current distributions that radiate efficiently toward the target angle.  In essence, the element is not merely being phased to a new direction; it is being \emph{redesigned} for that direction.
 
 \subsection{Impedance Perspective}
 
 As a phased array is scanned, the active impedance at each element port changes due to the angle-dependent mutual coupling between elements.  For fixed elements, this impedance change is an uncontrollable consequence of the element geometry and the scan angle.  At certain combinations of frequency and scan angle, the active impedance can deviate dramatically from the matched condition, causing significant mismatch loss.
 
-Reconfiguring the element pixel pattern changes the mutual coupling between elements, because the electromagnetic fields in the inter-element region depend on the conducting pattern.  The optimizer can therefore adjust the pixel pattern to maintain a good impedance match at each scan angle, compensating for the scan-dependent impedance variation that afflicts fixed designs.
+Reconfiguring the element fragment pattern changes the mutual coupling between elements, because the electromagnetic fields in the inter-element region depend on the conducting pattern.  The optimizer can therefore adjust the fragment pattern to maintain a good impedance match at each scan angle, compensating for the scan-dependent impedance variation that afflicts fixed designs.
 
 \subsection{Scan Blindness Avoidance}
 
 Scan blindness occurs when the active impedance of the array element becomes purely reactive at a specific combination of frequency and scan angle, typically due to the excitation of a surface wave on the array aperture.  For fixed-geometry elements, scan blindness can be avoided through careful design (as discussed in Chapter~7), but the available design space is limited by the requirement that the single fixed geometry must also perform well at all other scan angles.
 
-Reconfigurable elements provide additional degrees of freedom to avoid scan blindness.  If a particular pixel configuration excites a surface wave at the current operating frequency and scan angle, the configuration can be changed to one that does not.  The pixel pattern optimized for each scan angle is inherently free of scan blindness at that angle, because the optimizer would reject any configuration that exhibited it.
+Reconfigurable elements provide additional degrees of freedom to avoid scan blindness.  If a particular fragment configuration excites a surface wave at the current operating frequency and scan angle, the configuration can be changed to one that does not.  The fragment pattern optimized for each scan angle is inherently free of scan blindness at that angle, because the optimizer would reject any configuration that exhibited it.
 
 \section{System Considerations}
 
 \subsection{Switching Speed}
 
-The practical utility of reconfigurable scan management depends on the switching speed of the pixel reconfiguration mechanism.  For electronically steered arrays that change beam direction on a pulse-to-pulse basis (as in modern radar systems), the pixel configuration must be updated within the beam dwell time---typically on the order of microseconds.
+The practical utility of reconfigurable scan management depends on the switching speed of the fragment reconfiguration mechanism.  For electronically steered arrays that change beam direction on a pulse-to-pulse basis (as in modern radar systems), the fragment configuration must be updated within the beam dwell time---typically on the order of microseconds.
 
 The MEMS-based switches discussed in Chapter~5 have switching times of 1--10~$\mu$s, which is marginal for pulse-to-pulse beam steering.  Solid-state switches (PIN diodes, FETs) are significantly faster, with switching times in the nanosecond range, but they introduce higher insertion loss and nonlinearity.  Phase-change materials such as VO2 offer a potential path to fast, low-loss switching, as discussed in Chapter~5.
 
@@ -160,7 +160,7 @@ For applications that do not require pulse-to-pulse agility---for example, commu
 
 \subsection{Calibration}
 
-In a conventional phased array, calibration accounts for element-to-element variations in gain and phase.  In a reconfigurable array, the calibration must also account for variations between pixel configurations.  Each entry in the design library corresponds to a different electromagnetic state of the array, and the calibration coefficients may differ for each state.
+In a conventional phased array, calibration accounts for element-to-element variations in gain and phase.  In a reconfigurable array, the calibration must also account for variations between fragment configurations.  Each entry in the design library corresponds to a different electromagnetic state of the array, and the calibration coefficients may differ for each state.
 
 A practical calibration approach would characterize the array at each configuration in the design library, storing a separate set of calibration weights for each entry.  When the array switches configurations, the corresponding calibration weights are applied.
 
@@ -170,7 +170,7 @@ The computational cost of generating the design library is a one-time expense.  
 
 This amounts to a total computational investment of $M$ times the cost of a single fixed design.  For $M = 50$ (hemispherical coverage at $5^{\circ}$ steps, exploiting symmetry), this is a factor of 50 increase---substantial but well within the capabilities of modern computing clusters, particularly since the optimizations for different scan angles are completely independent and can be run in parallel.
 
-The machine learning methods discussed in Chapter~9 offer a path to dramatically reducing this computational cost.  A surrogate model trained on the initial designs could predict the performance of candidate pixel configurations without running full FDTD simulations, accelerating the optimization by orders of magnitude.
+The machine learning methods discussed in Chapter~9 offer a path to dramatically reducing this computational cost.  A surrogate model trained on the initial designs could predict the performance of candidate fragment configurations without running full FDTD simulations, accelerating the optimization by orders of magnitude.
 
 \section{The DARPA ACT Program}
 
@@ -187,7 +187,7 @@ The ACT program was organized around three technical areas:
 \begin{enumerate}
 \item \textbf{Common building block for RF arrays:} A standardized digital module comprising 80 to 90 percent of an array's core functionality, designed for insertion into a wide range of applications.  By leveraging commercial off-the-shelf (COTS) components and commercial CMOS semiconductor technology, this common module would dramatically reduce both development time and per-unit manufacturing cost.  Northrop Grumman developed the Integrated Multi-use Phased Array Common Tile (IMPACT) under this thrust.
 
-\item \textbf{Reconfigurable electromagnetic interface:} Aperture technology connecting the digital electronics to the radiated signals, capable of spanning S-band to X-band frequencies (and points between) for a wide variety of antenna characteristics.  This area aligns directly with the reconfigurable fragmented aperture concept described in this chapter: a pixel-based aperture that can be electronically reconfigured for different frequency bands, scan angles, and operating modes.
+\item \textbf{Reconfigurable electromagnetic interface:} Aperture technology connecting the digital electronics to the radiated signals, capable of spanning S-band to X-band frequencies (and points between) for a wide variety of antenna characteristics.  This area aligns directly with the reconfigurable fragmented aperture concept described in this chapter: a fragment-based aperture that can be electronically reconfigured for different frequency bands, scan angles, and operating modes.
 
 \item \textbf{Over-the-air coherent array aggregation:} Technology enabling distributed arrays across multiple platforms to function as a single, coherent phased array system.  This capability, which extended earlier work from DARPA's Precision Electronic Warfare (PREW) program, would allow, for example, individual radar systems on the ships of a carrier group to coordinate as an integrated distributed array.
 \end{enumerate}
@@ -206,9 +206,9 @@ GTRI's work also contributed to the broader effort in 3D heterogeneous integrati
 
 \subsection{Connection to Reconfigurable Fragmented Apertures}
 
-The reconfigurable fragmented aperture array concept was proposed as the radiating element technology for the ACT architecture.  The combination of a reconfigurable pixel aperture (providing scan-optimized embedded element patterns) with element-level digital processing (providing arbitrary amplitude and phase control) would yield a phased array with performance that cannot be achieved by either technology alone: $\cos\theta$ scan loss across the full scan volume, multi-octave bandwidth, and real-time multifunctional capability.
+The reconfigurable fragmented aperture array concept was proposed as the radiating element technology for the ACT architecture.  The combination of a reconfigurable fragmented aperture (providing scan-optimized embedded element patterns) with element-level digital processing (providing arbitrary amplitude and phase control) would yield a phased array with performance that cannot be achieved by either technology alone: $\cos\theta$ scan loss across the full scan volume, multi-octave bandwidth, and real-time multifunctional capability.
 
-The ACT program's second technical area---reconfigurable electromagnetic interfaces spanning S-band to X-band---is precisely the application for which the fragmented aperture approach is designed.  A single fragmented aperture element, with sufficient pixel resolution and switching capability, can be reconfigured to operate across this entire frequency range.  Combined with the common-module digital architecture, this provides the flexible, upgradable RF system that the DoD seeks: one that can be updated as quickly as commercial electronics evolve.
+The ACT program's second technical area---reconfigurable electromagnetic interfaces spanning S-band to X-band---is precisely the application for which the fragmented aperture approach is designed.  A single fragmented aperture element, with sufficient fragment resolution and switching capability, can be reconfigured to operate across this entire frequency range.  Combined with the common-module digital architecture, this provides the flexible, upgradable RF system that the DoD seeks: one that can be updated as quickly as commercial electronics evolve.
 
 \textcolor{red}{\textbf{[PLACEHOLDER: Specific design results from the ACT proposal---including element configurations optimized for multiple frequency bands and scan angles, demonstrating scan beyond $60^{\circ}$---will be included when the original data is located or the designs are regenerated.]}}
 
@@ -220,11 +220,11 @@ This chapter has described a reconfigurable fragmented aperture array concept th
 
 \item \textbf{Scan loss in fixed-element arrays exceeds the projected-area limit.}  The embedded element pattern of a fixed-geometry element rolls off faster than $\cos\theta$, resulting in scan loss that is well modeled by $\cos^n\theta$ with $n = 1.3$--$2.5$.  At $60^{\circ}$, this represents 2--6~dB of excess loss beyond the unavoidable $3$~dB of projected-area loss.
 
-\item \textbf{Reconfigurable elements reduce the scan loss exponent to near unity.}  By re-optimizing the pixel configuration for each scan angle, the embedded element pattern peak is made to track the beam steer direction, and the scan loss approaches the $\cos\theta$ projected-area limit ($n \approx 1$).
+\item \textbf{Reconfigurable elements reduce the scan loss exponent to near unity.}  By re-optimizing the fragment configuration for each scan angle, the embedded element pattern peak is made to track the beam steer direction, and the scan loss approaches the $\cos\theta$ projected-area limit ($n \approx 1$).
 
 \item \textbf{Reconfigurable elements provide wide-angle scanning beyond $60^{\circ}$.}  Fixed elements typically exhibit severe performance degradation at extreme scan angles.  Reconfigurable elements, optimized specifically for each angle, maintain good impedance match and pattern quality to $60^{\circ}$ and beyond.
 
-\item \textbf{Reconfigurable elements naturally avoid scan blindness.}  The pixel configuration optimized for each scan angle is inherently free of scan blindness at that angle, providing additional robustness compared to fixed designs that must avoid scan blindness across the entire scan volume simultaneously.
+\item \textbf{Reconfigurable elements naturally avoid scan blindness.}  The fragment configuration optimized for each scan angle is inherently free of scan blindness at that angle, providing additional robustness compared to fixed designs that must avoid scan blindness across the entire scan volume simultaneously.
 
 \item \textbf{A pre-computed design library makes the concept practical.}  The computational cost of optimizing a library of 20--50 scan-angle configurations is a one-time investment that scales linearly with the number of configurations and can be parallelized.
 

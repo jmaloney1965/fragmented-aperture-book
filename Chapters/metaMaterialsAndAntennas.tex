@@ -111,7 +111,7 @@ The design begins by selecting the array lattice constant to prevent grating lob
 \end{equation}
 where $s$ is the element spacing and $\lambda_{\text{high}}$ is the free-space wavelength at the highest operating frequency (12~GHz).
 
-Next, the number of fragmented pixels across the unit cell is selected using the rules of thumb described in Chapter~3: typically 20--30 pixels across the unique quadrant of the element (as illustrated in Figure~\ref{fig:WSA3}).  The element is then designed using the genetic algorithm approach with the spectral-domain FDTD providing the fitness evaluation at the normalized $K_z$ and $K_y$ values shown in Figure~\ref{fig:WSA4}.
+Next, the number of fragments across the unit cell is selected using the rules of thumb described in Chapter~3: typically 20--30 fragments across the unique quadrant of the element (as illustrated in Figure~\ref{fig:WSA3}).  The element is then designed using the genetic algorithm approach with the spectral-domain FDTD providing the fitness evaluation at the normalized $K_z$ and $K_y$ values shown in Figure~\ref{fig:WSA4}.
 
 \subsection{Broadside Performance}
 
@@ -194,14 +194,14 @@ where $\lambda_0$ is the free-space wavelength at the lowest operating frequency
 
 \subsection{Independent Validation by Other Research Groups}
 
-The wide-scan fragmented aperture array concept has been independently investigated by researchers outside of GTRI.  Ellgardt and Persson at the Royal Institute of Technology (KTH) in Sweden \cite{Ellgardt2006Wide} designed and analyzed wide-scan fragmented aperture elements for operation in the 1.5--4.5~GHz range with scan volumes up to $60^{\circ}$.  Their work addressed two practical challenges: restricting dielectric materials to commercially available substrates (rather than allowing arbitrary permittivity values during optimization), and resolving the diagonal pixel contact problem discussed in Chapter~3.
+The wide-scan fragmented aperture array concept has been independently investigated by researchers outside of GTRI.  Ellgardt and Persson at the Royal Institute of Technology (KTH) in Sweden \cite{Ellgardt2006Wide} designed and analyzed wide-scan fragmented aperture elements for operation in the 1.5--4.5~GHz range with scan volumes up to $60^{\circ}$.  Their work addressed two practical challenges: restricting dielectric materials to commercially available substrates (rather than allowing arbitrary permittivity values during optimization), and resolving the diagonal fragment contact problem discussed in Chapter~3.
 
-Figure~\ref{fig:EllgardtNoSup} shows a design without a superstrate, using a $20 \times 20$ pixel grid on a substrate with $\epsilon_r = 2.2$ and thickness $d_1 = 10$~mm.  This element achieves VSWR~$\leq 2$ over a 1.94:1 bandwidth for $45^{\circ}$ scan in all planes, but does not meet the VSWR~$\leq 2$ criterion for $60^{\circ}$ scan.  The H-plane is consistently the limiting factor for wide-scan performance.
+Figure~\ref{fig:EllgardtNoSup} shows a design without a superstrate, using a $20 \times 20$ fragment grid on a substrate with $\epsilon_r = 2.2$ and thickness $d_1 = 10$~mm.  This element achieves VSWR~$\leq 2$ over a 1.94:1 bandwidth for $45^{\circ}$ scan in all planes, but does not meet the VSWR~$\leq 2$ criterion for $60^{\circ}$ scan.  The H-plane is consistently the limiting factor for wide-scan performance.
 
 \begin{figure}
 \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/Users/jim.maloney/Book/images/ch7/ellgardt2006/Ellgardt2006_Fig6_NoSuperstrate.png}
-\caption[Ellgardt wide-scan element without superstrate]{Wide-scan fragmented array element without superstrate: (a)~reflection coefficient at broadside and E/H-plane scan to $45^{\circ}$ and $60^{\circ}$; (b)~$20 \times 20$ pixel unit cell geometry ($d_1 = 10$~mm, $\epsilon_{r1} = 2.2$, $Z_c = 171~\Omega$).  The element achieves VSWR~$\leq 2$ over 1.94:1 bandwidth for $45^{\circ}$ scan \cite{Ellgardt2006Wide}.}
+\caption[Ellgardt wide-scan element without superstrate]{Wide-scan fragmented array element without superstrate: (a)~reflection coefficient at broadside and E/H-plane scan to $45^{\circ}$ and $60^{\circ}$; (b)~$20 \times 20$ fragment unit cell geometry ($d_1 = 10$~mm, $\epsilon_{r1} = 2.2$, $Z_c = 171~\Omega$).  The element achieves VSWR~$\leq 2$ over 1.94:1 bandwidth for $45^{\circ}$ scan \cite{Ellgardt2006Wide}.}
 \label{fig:EllgardtNoSup}
 \end{center}
 \end{figure}

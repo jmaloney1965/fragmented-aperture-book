@@ -35,7 +35,7 @@ This paper will discuss progress made recently at overcoming these often-cited r
 
 \section{Printed Circuit Board (PCB) Fabrication}
 
-Early fragmented aperture designs were constructed using a method depicted in Fig. 3. This design consists of an array of elements printed on circuit board material, suspended over a ground plane by feed towers. The feed towers and ground plane are usually machined from aluminum, and can be quite lightweight as long as they are kept to a minimum thickness, e.g. one 0.6m×0.6m array constructed in this manner weighed only 4 kg for the entire antenna assembly. The machined towers enclose differential coaxial lines that feed the dual polarized antenna elements, and combining networks can be connected to these coaxial lines in the space behind the ground plane. 
+Early fragmented aperture designs were constructed using a method depicted in Fig. 3. This design consists of an array of elements printed on circuit board material, suspended over a ground plane by feed towers. The feed towers and ground plane are usually machined from aluminum, and can be quite lightweight as long as they are kept to a minimum thickness, e.g. one 0.6mï¿½0.6m array constructed in this manner weighed only 4 kg for the entire antenna assembly. The machined towers enclose differential coaxial lines that feed the dual polarized antenna elements, and combining networks can be connected to these coaxial lines in the space behind the ground plane. 
 
 The basic fragmented aperture shown in Fig. 3 has produced many successful wideband designs over the last decade (see Fig. 11 for a partial summary). However, if one wants a more easily mass-produced, integrated aperture, one can exploit PCB fabrication as shown in Fig. 4. In this case, the entire antenna is built up out of laminated dielectric layers, producing a thinner, more integrated antenna. Feed networks in this design can be implemented as layers as well, producing a highly integrated antenna panel. 
 
@@ -80,7 +80,7 @@ The design starts by choosing the array lattice constant such that no grating lo
 {s \over \lambda_{\rm h}} = {1 \over 1 + \sin(\theta_{\max}}) = 0.536\ {\rm for}\ 60\ {\rm deg}.
 \end{equation}
 
-We next choose the number of fragmented pixels across the unit cell using our traditional rules-of-thumb [4], i.e. typically 20-30 pixels across the unique quadrant of the element as shown in Fig. 4. The element is designed using the genetic algorithm approach described in [4] modified to use the spectral FDTD as discussed above in Section III for the normalized Kz \& Ky values shown in Fig. 5.
+We next choose the number of fragments across the unit cell using our traditional rules-of-thumb [4], i.e. typically 20-30 fragments across the unique quadrant of the element as shown in Fig. 4. The element is designed using the genetic algorithm approach described in [4] modified to use the spectral FDTD as discussed above in Section III for the normalized Kz \& Ky values shown in Fig. 5.
 
 After the design is complete, we evaluate the performance of an embedded element by simulating a large finite array, e.g. 21 by 21 elements. Fig. 6 shows the realized gain for the central element when the other elements are terminated. This embedded element gain (blue line) is seen to be within at worst 0.2 dB from the uniform-aperture gain limit (red dots) across the design band. 
 
@@ -100,7 +100,7 @@ Fig. 7 shows a comparison of the VSWR for the embedded element with the VSWR for
 \end{center}
 \end{figure}
 
-Finally, Figs. 8-10 show the embedded element, realized gain patterns at the bottom, middle and top of the X-band as a function of both azimuth and elevation scan. The scan volume is seen to exceed 60° across the band. There is some slight degradation in the scan in the azimuth direction at 12 GHz. But overall, the scan volume of this example element is considerably better than the scan volume of the 33:1 array element shown in Fig. 2. 
+Finally, Figs. 8-10 show the embedded element, realized gain patterns at the bottom, middle and top of the X-band as a function of both azimuth and elevation scan. The scan volume is seen to exceed 60ï¿½ across the band. There is some slight degradation in the scan in the azimuth direction at 12 GHz. But overall, the scan volume of this example element is considerably better than the scan volume of the 33:1 array element shown in Fig. 2. 
 
 \begin{figure}
 \begin{center}

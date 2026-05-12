@@ -4,7 +4,7 @@
 The finite-difference time-domain (FDTD) method is a computational procedure for solving Maxwell's equations that is based on a clever algorithm first proposed by Kane S. Yee in 1966 \cite{Yee66}. The first comprehensive analyses of practical antennas using this method were performed on main-frame computers during the early 1990's; today such computations are routinely performed on personal computers. The full details for the method are presented in a number of textbooks \cite{Taf2005}-\cite{Gedney2011}.
 
 \section{The Basic FDTD Algorithm}
-In the Yee algorithm, both space and time are discretized, with the increments in space for rectangular coordinates being $\Delta x, \Delta y, \Delta z$  and the increment in time being $\Delta t$ [8], [9]. Figure \ref{fig:IAM1} is a schematic drawing showing a typical volume in which Maxwell's equations are to be solved. The volume is divided into $N=N_x N _y N_z$ unit cells each of volume $\Delta V=\Delta x\Delta y\Delta_z$. The electromagnetic constitutive parameters ($\epsilon=\epsilon_r\epsilon_o$, $\mu=\mu_r\mu_o$, $\sigma$) can vary from cell to cell, and they are used to define different objects within the volume. Here we mention only simple materials with constant permittivity, permeability, and electrical conductivity. In the FDTD method there are techniques to handle more complicated materials, such as those with dispersive and anisotropic properties. Notice that the representation of material regions in the FDTD method by electrically-small unit cells in space is ideally suited to the design of fragmented aperture antennas. Each unit cell or a group of unit cells can represent a pixel in the fragmented aperture structure with specified electrical properties representing a conductor, a dielectric, or a magnetic material.
+In the Yee algorithm, both space and time are discretized, with the increments in space for rectangular coordinates being $\Delta x, \Delta y, \Delta z$  and the increment in time being $\Delta t$ [8], [9]. Figure \ref{fig:IAM1} is a schematic drawing showing a typical volume in which Maxwell's equations are to be solved. The volume is divided into $N=N_x N _y N_z$ unit cells each of volume $\Delta V=\Delta x\Delta y\Delta_z$. The electromagnetic constitutive parameters ($\epsilon=\epsilon_r\epsilon_o$, $\mu=\mu_r\mu_o$, $\sigma$) can vary from cell to cell, and they are used to define different objects within the volume. Here we mention only simple materials with constant permittivity, permeability, and electrical conductivity. In the FDTD method there are techniques to handle more complicated materials, such as those with dispersive and anisotropic properties. Notice that the representation of material regions in the FDTD method by electrically-small unit cells in space is ideally suited to the design of fragmented aperture antennas. Each unit cell or a group of unit cells can represent a fragment in the fragmented aperture structure with specified electrical properties representing a conductor, a dielectric, or a magnetic material.
 
 \begin{figure} \begin{center}
 \includegraphics[angle=0,width=\linewidth]{/users/jim.maloney/Book/images/IAM1.pdf}
@@ -142,7 +142,7 @@ A typical
 
 Does modeling recommendations:
 \begin{itemize}
-\item{a minimum of 2x2 yell cells to model each pixel in the fragmented aperture.}
+\item{a minimum of 2x2 yell cells to model each fragment in the fragmented aperture.}
 \item{a minimum of 20 cells between the antenna perimeter and the start of the PML}
 \item{a 10 cell PML}
 \item{exploit all symetry for speed}
