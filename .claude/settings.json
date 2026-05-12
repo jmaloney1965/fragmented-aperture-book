@@ -1,10 +1,20 @@
 {
   "permissions": {
+    "defaultMode": "bypassPermissions",
     "allow": [
       "Bash(**)",
       "Write(**)",
       "Read(**)",
       "WebFetch(domain:*)"
     ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "filesystem": {
+      "allowWrite": [
+        "/Users/jim.maloney/Book",
+        "/Users/jim.maloney/Library/CloudStorage/GoogleDrive-jmaloney65@gmail.com/My Drive/Book"
+      ]
+    }
   }
 }

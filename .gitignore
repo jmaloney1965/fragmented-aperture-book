@@ -28,3 +28,6 @@ texput.log
 
 # Binaries
 openTDA
+
+# Source material archives (large, not part of the book)
+presentations/
