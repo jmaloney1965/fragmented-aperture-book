@@ -17,7 +17,7 @@ Classic FDTD/CEM references, mostly from the Taflove/Smith era:
 - [x] **Cangellaris** — A. C. Cangellaris & D. B. Wright, "Analysis of Numerical Error…" → `Cangellaris1991_Staircase_Numerical_Error.pdf`
 - [x] **DeyMittra** — S. Dey & R. Mittra, "Locally Conformal FDTD…" → `DeyMittra1997_Conformal_FDTD.pdf`
 - [x] **Holland** — R. Holland, "Pitfalls of Staircase Meshing" → `Holland1993_Pitfalls_Staircase_Meshing.pdf`
-- [x] **Schneider99** — J. B. Schneider & C. L. Wagner, "FDTD Dispersion Revisited…" — opened but PDF not confirmed in Downloads
+- [x] **Schneider99** — J. B. Schneider & C. L. Wagner, "FDTD Dispersion Revisited…" → `Schneider1999_FDTD_Dispersion_FTL.pdf`
 - [ ] **King56** — R. W. P. King, *Theory of Linear Antennas* (textbook, 1956) — not on IEEE
 - [x] **Jackson** — D. R. Jackson & N. G. Alexopoulos, "Simple Approximate Formulas…" → `Jackson1991_Rectangular_Patch_Formulas.pdf`
 - [x] **LuebbersGain** — R. J. Luebbers & J. Beggs, "FDTD Calculation of Wide-Band Antenna Gain" → `Luebbers1992_FDTD_Wideband_Gain.pdf`
@@ -30,9 +30,9 @@ Classic FDTD/CEM references, mostly from the Taflove/Smith era:
 - [x] **Smith2001** — G. S. Smith & T. W. Hertel, "On the Transient Radiation of Energy…" → `SmithHertel2001_Transient_Radiation.pdf`
 - [x] **Smith2003** — T. W. Hertel & G. S. Smith, "Convergence of Common FDTD Feed Models" → `HertelSmith2003_FDTD_Feed_Models.pdf`
 - [x] **Smith2004** — G. S. Smith, "A Direct Derivation of Single-Antenna Reciprocity…" → `Smith2004_Antenna_Reciprocity.pdf`
-- [ ] **Hertel02** — T. W. Hertel & G. S. Smith, "Analysis and Design of Two-Arm Conical Spiral" — opened but PDF not confirmed in Downloads
+- [x] **Hertel02** — T. W. Hertel & G. S. Smith, "Analysis and Design of Two-Arm Conical Spiral" → `Hertel2002_TwoArm_Conical_Spiral.pdf`
 - [x] **Hertel03** — T. W. Hertel & G. S. Smith, "Dispersive Properties of the Conical Spiral…" → `HertelSmith2003_Dispersive_Conical_Spiral.pdf`
-- [ ] **Abdallah** — H. Abdallah et al., "Comparison of…" — not found on IEEE
+- [x] **Abdallah** — H. Abdallah et al., "Comparison of Return Loss…" → `Abdallah2004_ReturnLoss_Microstrip.pdf`
 - [x] **Change** — E. Chang, S. A. Long, W. F. Richards, "Experimental Investigation…" → `Chang1986_Thick_Microstrip.pdf`
 - [ ] **Chebolu** — S. Chebolu, R. Mittra, W. D. Becker, "Analysis of Microwave…" — opened but PDF not confirmed in Downloads
 - [x] **Aminian** — A. Aminian & Y. Rahmat-Samii, "Spectral FDTD…" *(also Ch 7)* → `Aminian2006_Spectral_FDTD.pdf`
@@ -75,18 +75,18 @@ Classic FDTD/CEM references, mostly from the Taflove/Smith era:
 - [x] **Altshuler2002SmallGA** — E. E. Altshuler, "Electrically Small Self-Resonant Wire Antennas…" → `Altshuler2002_Small_GA_Antenna.pdf`
 - [x] **Altshuler2011MultiFreqDielectric** — E. E. Altshuler & T. H. O'Donnell, "Multi-Frequency Genetic Antenna…" → `Altshuler2011_MultiFreq_Dielectric.pdf`
 - [x] **ODonnell2003Representation** — T. H. O'Donnell & E. E. Altshuler, "Significance of Genetic Representation…" → `ODonnell2003_Genetic_Representation.pdf`
-- [ ] **Guirguis2016DerivativeFree** — D. Guirguis & M. F. Aly, "Derivative-free level-set topology optimization" — not on IEEE
-- [ ] **Guirguis2018HighResolution** — D. Guirguis, D. Melek, W. W. Aly, "High-resolution non-gradient topology optimization" — not on IEEE
+- [x] **Guirguis2016DerivativeFree** — D. Guirguis & M. F. Aly, "Derivative-free level-set topology optimization" → `Guirguis2016_DerivativeFree_LevelSet.pdf`
+- [x] **Guirguis2018HighResolution** — D. Guirguis, D. Melek, W. W. Aly, "High-resolution non-gradient topology optimization" → `Guirguis2018_HighRes_NonGradient_TO.pdf`
 - [x] **Howard2022LossTangent** — C. Howard et al., "Loss Tangent Measurement Surface…" *(also Ch 10)* → `Howard2022_Loss_Tangent_Surface.pdf`
-- [ ] **Jiang2025Multiband** — F. Jiang et al., "Multiband Antenna Design Using Predefined Shapes and Image Segmentation" — not on IEEE
-- [ ] **Ullah2022PixelatedIoT** — M. A. Ullah et al., "Low-Profile Dual-Band Pixelated DGS Antenna for IoT" — not on IEEE
+- [x] **Jiang2025Multiband** — F. Jiang et al., "Multiband Antenna Design Using Predefined Shapes and Image Segmentation" → `Jiang2025_Multiband_Predefined_Shapes.pdf`
+- [x] **Ullah2022PixelatedIoT** — M. A. Ullah et al., "Low-Profile Dual-Band Pixelated DGS Antenna for IoT" → `Ullah2022_Pixelated_DGS_IoT.pdf`
 
 ---
 
 ## Ch 10 — Other EM Structures
 
-- [ ] **Keshavarz2024PixelatedRectenna** — R. Keshavarz et al., "Efficient Pixelated Rectenna using Binary Optimization for WPT" — not on IEEE
-- [ ] **Pang2024Radome** — X. Pang et al., "Broadband low-scattering radome…" ⚠️ *awaiting library*
+- [x] **Keshavarz2024PixelatedRectenna** — R. Keshavarz et al., "Efficient Pixelated Rectenna using Binary Optimization for WPT" → `Keshavarz2024_Pixelated_Rectenna_WPT.pdf`
+- [x] **Pang2024Radome** — X. Pang et al., "Broadband low-scattering radome…" → `Pang2024_Broadband_Radome_PGM_FSS.pdf`
 
 ---
 
