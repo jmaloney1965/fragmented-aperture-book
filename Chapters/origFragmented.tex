@@ -15,7 +15,7 @@ The original fragmented aperture concept was motivated by a simple question: \em
 The fundamental idea behind the fragmented aperture antenna is to represent the antenna geometry as a binary string that can be manipulated by an evolutionary optimization algorithm.  The antenna surface is divided into a grid of sub-wavelength rectangular fragments, as illustrated in Figure~\ref{fig:OFA1}.  Each fragment is assigned a single binary value: 1 for conducting (metal present) and 0 for non-conducting (metal absent).  The collection of all fragment states defines the antenna geometry and constitutes the ``genetic code'' of the antenna.
 
 \begin{figure}
-\includegraphics[angle=0.5,trim={0 160bp 0 18bp},clip,width=\linewidth]{/Users/jim.maloney/Book/images/ch2/origPatentFig1.png}
+\includegraphics[angle=0.5,trim={0 160bp 0 18bp},clip,width=\linewidth]{ch2/origPatentFig1.png}
 \caption[Fragmented aperture concept]{The fragmented aperture concept: a planar surface divided into a grid of sub-wavelength fragments, each either conducting (black) or non-conducting (white).  The pattern of conducting and non-conducting elements defines the antenna geometry \cite{MaloneyFragPatent}.}
 \label{fig:OFA1}
 \end{figure}
@@ -27,7 +27,7 @@ This binary representation maps naturally onto a genetic algorithm (GA).  The GA
 The original design process employed a two-stage optimization approach, as illustrated in Figure~\ref{fig:OFA4}.  In the first stage, the aperture area is described using a relatively small number of trapezoidal conducting strips arranged symmetrically about a coaxial feed point.  Each strip has a variable length that is encoded in the binary representation.  This coarse description of the antenna geometry allows the GA to quickly explore the design space and identify promising regions.
 
 \begin{figure}
-\includegraphics[angle=0.5,trim={0 120bp 0 30bp},clip,width=\linewidth]{/Users/jim.maloney/Book/images/ch2/origPatentFig4.png}
+\includegraphics[angle=0.5,trim={0 120bp 0 30bp},clip,width=\linewidth]{ch2/origPatentFig4.png}
 \caption[First-stage trapezoidal strip parameterization]{First optimization stage: the aperture is described using trapezoidal conducting strips of variable length arranged about a coaxial feed.  This coarse parameterization enables rapid exploration of the design space \cite{MaloneyFragPatent}.}
 \label{fig:OFA4}
 \end{figure}
@@ -35,7 +35,7 @@ The original design process employed a two-stage optimization approach, as illus
 In the second stage, the best design from the first stage is converted to the full fragment representation and the GA continues to optimize at the fragment level, refining the antenna geometry to improve performance.  The flowchart for this second stage is shown in Figure~\ref{fig:OFA5}.
 
 \begin{figure}
-\includegraphics[angle=0.5,trim={0 400bp 0 0},clip,width=0.85\linewidth]{/Users/jim.maloney/Book/images/ch2/origPatentFig5.png}
+\includegraphics[angle=0.5,trim={0 400bp 0 0},clip,width=0.85\linewidth]{ch2/origPatentFig5.png}
 \caption[Genetic optimization flowchart for fragmented apertures]{Flowchart of the genetic optimization process for fragmented aperture design.  The algorithm iteratively toggles fragments between conducting and non-conducting states, evaluating the antenna performance at each step using full-wave electromagnetic simulation \cite{MaloneyFragPatent}.}
 \label{fig:OFA5}
 \end{figure}
@@ -58,7 +58,7 @@ To reduce the size of the design space and to ensure that the resulting antenna 
 The first successful fragmented aperture antenna design was a planar aperture optimized to operate from 800~MHz to 2.5~GHz (a bandwidth of approximately 3:1).  The aperture was 10 inches $\times$ 10 inches (25.4~cm $\times$ 25.4~cm) and was excited at a feed point near the center of the aperture.  The optimized design is shown in Figure~\ref{fig:OFA3}.
 
 \begin{figure}
-\includegraphics[angle=0.5,trim={0 580bp 0 250bp},clip,width=\linewidth]{/Users/jim.maloney/Book/images/ch2/origPatentFig3.png}
+\includegraphics[angle=0.5,trim={0 580bp 0 250bp},clip,width=\linewidth]{ch2/origPatentFig3.png}
 \caption[First successful fragmented aperture antenna design]{The first successful fragmented aperture antenna: a 10-inch $\times$ 10-inch aperture optimized for 800~MHz to 2.5~GHz.  The complex pattern of conducting (black) and non-conducting (white) regions was determined entirely by the genetic algorithm and FDTD simulation.  The feed is located at the right side of the aperture.  Left-right and top-bottom symmetry lines are indicated by the dashed lines \cite{MaloneyFragPatent}.}
 \label{fig:OFA3}
 \end{figure}
@@ -68,7 +68,7 @@ The visual complexity of the design in Figure~\ref{fig:OFA3} is striking.  The c
 Despite the non-intuitive appearance of the design, the measured performance was excellent.  Figure~\ref{fig:OFA7} compares the measured broadside gain with the FDTD prediction and with two reference curves: the uniform aperture gain limit ($2\pi A/\lambda^2$, since there is no ground plane) and the gain of a spiral antenna of the same aperture size.
 
 \begin{figure}
-\includegraphics[angle=0.5,trim={0 900bp 0 120bp},clip,width=\linewidth]{/Users/jim.maloney/Book/images/ch2/origPatentFig7.png}
+\includegraphics[angle=0.5,trim={0 900bp 0 120bp},clip,width=\linewidth]{ch2/origPatentFig7.png}
 \caption[Broadside gain of first fragmented aperture antenna]{Measured and predicted broadside gain for the first fragmented aperture antenna (Figure~\ref{fig:OFA3}).  The fragmented design closely approaches the uniform aperture gain limit across the 800~MHz to 2.5~GHz optimization range, and significantly outperforms a spiral antenna of the same aperture size.  The measured and FDTD-predicted gains are in excellent agreement \cite{MaloneyFragPatent}.}
 \label{fig:OFA7}
 \end{figure}
@@ -92,7 +92,7 @@ Several important observations can be drawn from Figure~\ref{fig:OFA7}:
 Because the first fragmented aperture antennas were single-layer planar structures with no ground plane, they radiated into both hemispheres.  Figure~\ref{fig:OFA8} shows the H-plane radiation pattern of the first successful design, comparing the FDTD prediction with the measured pattern.
 
 \begin{figure}
-\includegraphics[angle=0.5,trim={0 680bp 0 60bp},clip,width=\linewidth]{/Users/jim.maloney/Book/images/ch2/origPatentFig8.png}
+\includegraphics[angle=0.5,trim={0 680bp 0 60bp},clip,width=\linewidth]{ch2/origPatentFig8.png}
 \caption[Bidirectional H-plane pattern of first fragmented antenna]{H-plane radiation pattern of the first fragmented aperture antenna, comparing the measured pattern with the FDTD model prediction.  The pattern is clearly bidirectional, with roughly equal radiation into the forward and backward hemispheres \cite{MaloneyFragPatent}.}
 \label{fig:OFA8}
 \end{figure}
