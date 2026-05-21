@@ -1222,6 +1222,578 @@ fallback's behavior --- including when to escalate to SS-GA or
 memetic on the surrogate (Ch.~M) --- is what this appendix
 provides.
 
+
+% ────────────────────────────────────────────────────────────────────────
+% The following two sections compile the AI-pipeline-tier detail and the
+% band-hardness diagnostic from the 24-bit AI-design study of
+% Paper~2~\cite{Maloney2026Paper2}. They are reproduced here as the
+% canonical reference; readers consulting Paper~2 will be directed to
+% these sections for the underlying data.
+% ────────────────────────────────────────────────────────────────────────
+\section{Pareto Staircase of AI Tiers at 24 Bits}\label{sec:p2_tiers}
+
+The exhaustive 24-bit ground truth lets us benchmark every variant of
+the AI-accelerated design pipeline against a known absolute optimum.
+We compare six pipeline tiers under a single multi-seed methodology
+(N=20 deterministic HC bit-shuffle seeds, EPS=0.01\,dB strict basin
+criterion: post-HC fitness within 0.01\,dB of brute-force optimum):
+
+\begin{description}
+\item[Cold-start multistart HC.] First-improvement hill climbing from
+random binary starts; HC runs to convergence and is restarted from a
+fresh random seed if the current chain's endpoint is outside the BF
+basin. Cumulative FDTD-eval count to the first basin hit per band,
+capped at 100\,000 evals/band. The no-AI baseline.
+
+\item[n1: top-1 surrogate brute-force.] Score every one of the
+$2^{24}=16{,}777{,}216$ designs through the forward CNN
+(b3 + g3b) at the band's frequency grid, take the single
+highest-predicted design, polish it with HC. Embodies the question
+``is forward accuracy alone enough?''
+
+\item[n2: top-$K$ surrogate brute-force.] As n1 but with the top
+$K{=}10$ predicted designs HC-polished, retaining the best per band.
+Probes the surrogate's rank-2 through rank-10 picks for in-basin
+catches the rank-1 misses.
+
+\item[j2: S11-only inverse warm-start (narrow).] A tandem inverse-design
+network~\cite{Liu2018Tandem} maps a per-band target $|S_{11}|$
+spectrum to a 24-bit design vector; the design is HC-polished against
+the ground truth. Decoder hidden widths
+$(500, 500, 256)$, total 423\,k parameters. Trained on the same
+12.5\% data fraction as the forward surrogates.
+
+\item[j2-wide: same architecture, $3.79\times$ wider decoder.] Hidden
+widths $(1000, 1000, 512)$, total 1.6\,M parameters. Same training
+recipe, same data, basin-best early-stop at validation MSE 1.88
+(j2-wide-best); 12.5\% lower validation MSE than j2 (2.17).
+
+\item[n4 Mode~A: SS-GA on CNN fitness, top-1.] A steady-state genetic
+algorithm whose fitness oracle is the CNN surrogate runs 100 times
+per band; the highest-predicted endpoint across all 100 runs is
+HC-polished against the ground truth. Tests whether GA exploration
+adds value when brute-force surrogate ranking is already feasible.
+
+\item[n4 Mode~B: SS-GA on CNN fitness, top-$K$.] As Mode A but the
+top-$K{=}10$ unique GA endpoints (by predicted fitness) are
+HC-polished individually; best-of-$K$ is retained. Tests whether
+GA-driven candidate diversity adds basins beyond the rank-1 GA pick.
+\end{description}
+
+The j2 inverse net's HC chain and the j2-wide chain have stochastic
+outcomes under HC bit-shuffle order. n1, Mode~A, and the cold
+multistart are deterministic in basin count under the same multi-seed
+methodology; n2 and Mode~B vary marginally. We report all six AI tiers
+plus the cold baseline as $\bar B \pm \sigma$ across $N{=}20$ seeds.
+
+Cache-corrected evaluation counting~\cite{Maloney2013Genetic24bit}
+ensures that designs already touched by an earlier HC pass do not
+re-count when revisited; reported FDTD-eval counts are unique-design
+counts, summed across the eight bands.
+
+\subsection{Tier-by-Tier Results}\label{subsec:tier_results}
+
+We report each tier's basin recovery at the two complementary
+criteria the exhaustive ground truth uniquely enables: \emph{Strict}
+(post-HC fitness within 0.01\,dB of BF, the basin-recovery criterion)
+and \emph{Good Enough} (within 0.5\,dB, engineering acceptable
+tolerance, the criterion transferable to production scale).
+Table~\ref{tab:tier_summary} reports both, side by side.
+
+\begin{table*}[t]
+\centering
+\caption{Multi-seed pipeline-tier benchmark at 24 bits, both criteria
+(8 reference bands, $N{=}20$ HC bit-shuffle seeds). Strict =
+$0.01$\,dB basin recovery; Good Enough = $0.5$\,dB engineering
+acceptable tolerance. Median total evals are unique-design counts
+summed across all 8 bands per seed.}
+\label{tab:tier_summary}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Tier & Strict / 8 & Good Enough / 8 & Median evals & Evals/basin (strict) \\
+\midrule
+n1 (top-1 surr-BF)                     & $4.00 \pm 0.00$  & $7.00 \pm 0.00$ & $364$    & $91$ \\
+n4 Mode~A (SS-GA top-1)                & $4.00 \pm 0.00$  & $7.00 \pm 0.00$ & $389$    & $97$ \\
+j2-wide (wide tandem)                  & $4.45 \pm 1.07$  & $6.95 \pm 0.86$ & $404$    & $91$ \\
+j2 (narrow tandem)                     & $5.10 \pm 1.30$  & $6.90 \pm 0.83$ & $466$    & $91$ \\
+n4 Mode~B (SS-GA top-K)                & $5.40 \pm 0.49$  & $\mathbf{8.00 \pm 0.00}$ & $3{,}358$  & $622$ \\
+n2 (top-K=10 surr-BF)                  & $6.10 \pm 0.30$  & $\mathbf{8.00 \pm 0.00}$ & $3{,}341$  & $548$ \\
+Cold-multistart HC                     & $\mathbf{8.00 \pm 0.00}$ & $\mathbf{8.00 \pm 0.00}$ & $269{,}734$ & $33{,}717$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\textbf{Two distinct Pareto frontiers emerge from the dual criteria.}
+
+\paragraph{Strict Pareto staircase.} As established in Paper~1's
+companion work, the strict criterion is rigorous but unmeasurable
+without exhaustive ground truth. Under it, the Pareto frontier is the
+five-rung staircase:
+\begin{align*}
+&\textrm{n1 (4.00)} \to \textrm{j2-wide (4.45)} \to \textrm{j2-base (5.10)} \\
+&\quad\to \textrm{n2 (6.10)} \to \textrm{cold (8.00).}
+\end{align*}
+
+\paragraph{Good Enough Pareto staircase.} Under the looser criterion
+the picture changes dramatically. n2 and n4 Mode~B \emph{both reach
+8.00 deterministic Good Enough} of 8 bands, at $\sim 3{,}300$ median
+total evals --- $80\times$ cheaper than cold-multistart's
+$269{,}734$-eval Strict 8/8. The Good Enough Pareto frontier collapses
+to a two-rung staircase:
+\[
+\textrm{n1 (7.00, 364)} \to \textrm{n2 / Mode~B (8.00, $\sim$3300).}
+\]
+At production scale (168~bits, where Strict is unmeasurable) this
+$80\times$ improvement on the only available metric is the result
+this paper most directly hands to the follow-up.
+
+Three groups of findings emerge.
+
+\paragraph{Forward accuracy is not the 24-bit ceiling.}
+n1 reaches $4.00 \pm 0.00$ basins deterministically across 20 seeds.
+Replacing the gain head g3b with the 12.5\%-lower-val-MSE g4a does not
+change the basin count or the four bands recovered. The forward CNN's
+rank-1 prediction is either clearly in BF's HC catchment or clearly
+outside, and capacity tightening does not move the boundary.
+
+\paragraph{Inverse-net capacity hurts.}
+The 12.5\%-lower-val-MSE wider tandem (j2-wide) reaches
+$4.45 \pm 1.07$ basins --- 0.65 basins lower on average than the
+narrow j2 baseline ($5.10 \pm 1.30$, one-tailed unpaired
+$p \approx 0.05$). The most acute contrast is at 3.5--4.0\,GHz:
+j2-baseline finds the basin in 10/20 seeds, j2-wide in 0/20.
+On the wider network every seed lands at the same Hamming-2 local
+optimum 0.109\,dB shy of BF, an HC trap that the narrow network's
+noisier predictions allow seeds to occasionally escape. Multi-seed
+evaluation reveals that the apparently-equal single-seed basin counts
+of j2 and j2-wide (5/8 each) was a sampling artifact: the wider
+network is reliably worse.
+
+\paragraph{GA exploration adds nothing to the surrogate-BF baselines.}
+n4 Mode~A reaches $4.00 \pm 0.00$ basins with the same four bands as
+n1 --- the SS-GA's top-1 endpoint is in the same basin-or-not regime
+as the surrogate's global argmax. SS-GA exploration adds zero coverage
+at the cost of 25 extra evals/seed. Mode~B (top-K=10 from SS-GA
+endpoints) reaches $5.40 \pm 0.49$ basins at 3358 evals --- 0.7 basins
+lower than n2 (top-K=10 from the full 16.8\,M design pool) at
+comparable cost. Mode~B trades n2's 100\% coverage of 2.5--3.0\,GHz
+for 5\% coverage of 0.5--0.8 and 35\% of 0.8--1.2 (where n2 gets 0\%
+and 10\% respectively). The trade is asymmetric and net-negative.
+
+\paragraph{Top-$K$ on the global pool is the most expensive AI tier
+but reaches one band no other AI tier finds.}
+n2 reaches $6.10 \pm 0.30$ basins. It is the only tier in our study
+that recovers 2.5--3.0\,GHz (deterministic 20/20), and it does so via
+the rank-2 surrogate pick. j2-baseline finds this band in 5/20 seeds,
+j2-wide in 10/20, n4 Mode~B in 0/20, n1 and n4 Mode~A never. n2 also
+catches 3.5--4.0\,GHz deterministically (where n1 misses
+deterministically). On the cost axis n2 pays 6$\times$ more
+evals/basin than the rank-1 tiers (548 vs $\sim$91); the marginal cost
+of the +2 basins it adds over n1 is $\sim$1500 evals/marginal-basin,
+roughly tied with the j2-baseline route to 5 basins.
+
+\subsection{Pareto Frontier}
+
+Figure~\ref{fig:pareto_tiers} plots each tier in the
+(median total evals, mean basins) plane. The Pareto frontier is
+
+\[
+\{\,\textrm{n1},\ \textrm{j2-wide},\ \textrm{j2-baseline},\
+   \textrm{n2},\ \textrm{cold-multistart}\,\},
+\]
+
+a five-rung staircase that climbs from $4.00$ to $8.00$ mean basins
+across three orders of magnitude in evals. n4 Mode~A and Mode~B are
+strictly above the frontier (dominated by n1 and n2 respectively).
+The cost-per-basin of the first three AI tiers is essentially
+identical at $\sim$91 evals/basin; n2 trades a $6\times$ cost
+multiplier for $+1$ basin in mean coverage; cold-multistart trades
+two additional orders of magnitude for the remaining $\sim$2 basins
+of certainty.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.92\linewidth]{fig_pareto_24bit.pdf}
+\caption{Multi-seed pipeline-tier Pareto frontier at 24 bits. Each
+point is one tier; $x$-axis is the median total unique
+FDTD-equivalent evaluations across the eight reference bands per
+seed (log scale), $y$-axis is the mean basin count over $N{=}20$
+HC bit-shuffle seeds (vertical error bar: $\pm$ standard deviation;
+horizontal error bar: per-seed eval range). Pareto-optimal tiers
+(starred) connect via the staircase line. n4 Mode~A is dominated
+by n1; n4 Mode~B is dominated by n2. j2-wide is on the frontier
+despite having lower mean basin count than j2-baseline because
+j2-wide is also cheaper, so neither strictly dominates the
+other.}
+\label{fig:pareto_tiers}
+\end{figure*}
+
+\subsection{Hybrid Construction}
+
+Per-band success rates (Table~\ref{tab:per_band_rates},
+\S\ref{sec:p2_hardness}) reveal that the AI tiers fail on disjoint band
+sets: n1 misses bands the inverse nets find, and the inverse nets miss
+bands surrogate-BF finds. Constructing a hybrid that runs multiple
+tiers per band and keeps the best post-HC result yields:
+
+\begin{table}[H]
+\centering
+\caption{Hybrid-tier expected basin counts and median total evals,
+under independence assumptions on per-band per-seed success rates.}
+\label{tab:hybrids}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrr}
+\toprule
+Hybrid composition  & Exp.\ bas.\ & Med.\ evals & Evals/marg.-bas.\ \\
+\midrule
+j2-baseline alone                   & 5.10 & 466 & 91 \\
+j2-base $+$ j2-wide                 & 5.85 & 870 & 539 \\
+j2-base $+$ n2                      & 7.60 & 3{,}807 & 1{,}907 \\
+\textbf{j2-base $+$ j2-w. $+$ n2}   & \textbf{7.84} & \textbf{4{,}211} & \textbf{1{,}684} \\
+4-tier $+$ Mode~B                   & 7.89 & 7{,}569 & 67{,}160 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The optimal three-tier hybrid \textbf{j2-baseline + j2-wide + n2} reaches
+\textbf{7.84 of 8 expected basins for $\sim$4{,}211 median evals},
+a $64\times$ speedup over the cold-multistart 8/8 baseline at 270\,k
+evals. Adding n4 Mode~B as a fourth tier costs 3{,}358 marginal evals
+for only $0.05$ marginal expected basins ($\sim$67{,}000
+evals/marginal-basin) --- worse than just running cold-multistart on
+the residual hard band (0.8--1.2\,GHz, the only band on which the
+3-tier ensemble does not reach $\geq$95\% expected coverage). n1 is
+also redundant in the optimal hybrid: every band n1 reaches is also
+reached deterministically by either j2-baseline or n2.
+
+\subsection{Two-Metric Speedup}
+
+We adopt the engineering-vs-academic two-metric framing of
+Paper~1~\cite{Maloney2026Paper1}. The \emph{engineering speedup} is the
+geometric-mean ratio of baseline to warm-start median FDTD evals
+across the bands the warm tier reaches at $\geq 50\%$ rate. The
+\emph{academic speedup} amortises the network's training cost across
+$N_b$ design targets:
+
+\begin{equation}
+\mathrm{speedup}_{\rm acad}(N_b) =
+\frac{N_b \cdot \mathrm{baseline}_{\rm tot}}
+     {n_{\rm train} + N_b \cdot \mathrm{warm}_{\rm tot}},
+\label{eq:academic_speedup}
+\end{equation}
+
+where $n_{\rm train}$ is the FDTD-equivalent training-set size used
+to build the surrogate or inverse-net. All four AI tiers share the
+same training data --- a 12.5\% uniform random sample of the
+exhaustive database, $n_{\rm train} = 0.125 \cdot 2^{24} \approx
+2{,}097{,}000$ FDTD-equivalent evaluations.
+
+We report against \emph{two} baselines for the denominator:
+
+\begin{itemize}
+\item \textbf{Cold-multistart HC} ($269{,}734$ total evals across the
+eight bands): pure multistart hill climbing with no surrogate
+guidance --- the simplest no-AI baseline.
+\item \textbf{Memetic-24bit} (Paper~1's preferred denominator): the
+strongest non-AI optimizer on the cached database. Per-band
+expected evals to first basin hit are
+$\mathrm{budget}/\mathrm{reach}$ where $\mathrm{budget} = 5{,}000$;
+total $73{,}924$ evals.
+\end{itemize}
+
+The Memetic baseline is $3.65\times$ tighter than cold-multistart on
+total cost (Memetic dominates cold on six of eight bands;
+2.0--2.5\,GHz is the only band where cold finds the basin faster on
+expectation, because random restarts get lucky on its broad BF
+basin).
+
+\begin{table*}[t]
+\centering
+\caption{Engineering and academic speedups for each Pareto-frontier
+AI tier, against both the cold-multistart and Memetic-24bit baselines.
+``Reached'' is the count of bands recovered at multi-seed rate $\geq
+50\%$. ``Eng.''\ entries are geometric-mean per-band ratios over
+reached bands. ``$N_{\rm BE}$''\ is the break-even number of design
+targets. ``Acad.\ @1k''\ is $\mathrm{speedup}_{\rm acad}(N_b{=}1000)$,
+where $n_{\rm train} = 2.10\times 10^6$ FDTD-equivalent evals.}
+\label{tab:speedup}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular}{lrr|rrr|rrr}
+\toprule
+            &         &           & \multicolumn{3}{c|}{vs.\ Cold-multistart}
+                                  & \multicolumn{3}{c}{vs.\ Memetic-24bit} \\
+Tier        & Reached & Warm tot.\
+            & Eng.\ & $N_{\rm BE}$ & Acad.\ @1k
+            & Eng.\ & $N_{\rm BE}$ & Acad.\ @1k \\
+\midrule
+n1          & 4 / 8 & 195
+            & $360\times$ & 17 & $55\times$
+            & $202\times$ & 43 & $21\times$ \\
+j2-wide     & 6 / 8 & 297
+            & $373\times$ & 11 & $77\times$
+            & $178\times$ & 35 & $26\times$ \\
+j2-baseline & 6 / 8 & 322
+            & $277\times$ & 15 & $58\times$
+            & $158\times$ & 37 & $24\times$ \\
+n2          & 6 / 8 & 2{,}467
+            & $47\times$  & 11 & $41\times$
+            & $21\times$  & 35 & $14\times$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\paragraph{Engineering reading.}
+Against cold-multistart, the three rank-1 AI tiers (n1, j2-wide,
+j2-baseline) sit between $280\times$ and $375\times$. j2-wide's
+$373\times$ tops the table because it reaches six bands with very
+tight per-band warm budgets ($\sim 50$ evals each). n2 buys broader
+coverage at the cost of HC-polishing ten picks per band, dropping
+engineering speedup to $47\times$ but reaching all six bands at
+$\geq 60\%$ including 2.5--3.0\,GHz at 100\%.
+Against the Memetic baseline the speedups halve roughly uniformly
+($\sim 0.5\times$ multiplier on each tier), reflecting that Memetic
+itself buys roughly $2\times$ over cold-multistart on the geometric
+mean. Even on the Memetic baseline, n1 retains $202\times$
+engineering speedup --- the AI pipeline still pays for itself by an
+order of magnitude when measured against the strongest non-AI
+baseline.
+
+\paragraph{Academic reading.}
+Against cold-multistart, all four tiers cross break-even between 11
+and 17 design targets. Against the Memetic baseline the break-even
+shifts to 35--43 targets, reflecting Memetic's shorter total cost.
+A representative production campaign of $N_b = 1000$ targets sees
+$25\times$--$77\times$ academic speedup against cold and
+$14\times$--$26\times$ against Memetic. j2-wide leads at large $N_b$
+on both denominators, the same noteworthy reversal as on basin
+count: \emph{j2-wide is dominated by j2-baseline on mean basin
+recovery but wins on academic speedup at scale.} The production
+design choice between the two depends on whether one prizes mean
+basin coverage (j2-baseline) or amortised compute (j2-wide). The
+optimal hybrid combining both (Table~\ref{tab:hybrids}) sits
+between the two trade-offs at $7.84$ expected basins for $\sim
+4{,}200$ warm evals per target.
+
+
+\section{Band-Hardness Classes at 24 Bits}\label{sec:p2_hardness}
+
+The tier-by-tier benchmark in \S\ref{sec:p2_tiers} surfaces a structural
+finding: \emph{no single AI-pipeline tier reaches all eight basins,
+and the bands on which a tier fails depend on the tier}. Multi-seed
+evaluation (Table~\ref{tab:per_band_rates}) sharpens this: per-band
+success rates spread across deterministic Y, deterministic N, and
+stochastic regimes, with \emph{different bands} stochastic for
+different tiers.
+
+\begin{table*}[t]
+\centering
+\caption{Per-band success rates (\% of $N{=}20$ HC bit-shuffle seeds)
+under \emph{Strict} (0.01\,dB basin recovery, top) and \emph{Good
+Enough} (0.5\,dB engineering acceptable tolerance, bottom) for the
+five multi-seed AI tiers. Values are percentages.}
+\label{tab:per_band_rates}
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+\multicolumn{7}{c}{\emph{Strict (0.01\,dB)} per-band reach}\\
+Band            & n1  & Mode~A & j2-wide & j2-base & Mode~B & n2  \\
+\midrule
+0.5--0.8\,GHz   & 0   & 0      & 100     & 100     & 5      & 0   \\
+0.8--1.2\,GHz   & 0   & 0      & 60      & 55      & 35     & 10  \\
+1.2--1.6\,GHz   & 100 & 100    & 100     & 100     & 100    & 100 \\
+1.6--2.0\,GHz   & 100 & 100    & 25      & 25      & 100    & 100 \\
+2.0--2.5\,GHz   & 100 & 100    & 60      & 70      & 100    & 100 \\
+2.5--3.0\,GHz   & 0   & 0      & 50      & 25      & 0      & 100 \\
+3.0--3.5\,GHz   & 100 & 100    & 50      & 85      & 100    & 100 \\
+3.5--4.0\,GHz   & 0   & 0      & 0       & 50      & 100    & 100 \\
+\midrule
+mean basins / 8 & 4.00 & 4.00 & 4.45 & 5.10 & 5.40 & 6.10 \\
+\midrule
+\multicolumn{7}{c}{\emph{Good Enough (0.5\,dB)} per-band reach}\\
+\midrule
+0.5--0.8\,GHz   & 0   & 0      & 100     & 100     & 100    & 100 \\
+0.8--1.2\,GHz   & 100 & 100    & 100     & 100     & 100    & 100 \\
+1.2--1.6\,GHz   & 100 & 100    & 100     & 100     & 100    & 100 \\
+1.6--2.0\,GHz   & 100 & 100    & 60      & 90      & 100    & 100 \\
+2.0--2.5\,GHz   & 100 & 100    & 90      & 70      & 100    & 100 \\
+2.5--3.0\,GHz   & 100 & 100    & 55      & 35      & 100    & 100 \\
+3.0--3.5\,GHz   & 100 & 100    & 90      & 95      & 100    & 100 \\
+3.5--4.0\,GHz   & 100 & 100    & 100     & 100     & 100    & 100 \\
+\midrule
+mean basins / 8 & 7.00 & 7.00 & 6.95 & 6.90 & 8.00 & 8.00 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+The Good Enough table reveals the criterion's practical effect:
+\textbf{n2 and Mode~B reach all 8 bands deterministically under Good
+Enough} (mean 8.00, std 0), whereas under Strict only cold-multistart
+reaches 8/8. The 4 of 8 bands where Strict admits zero non-inverse-net
+tier (0.5--0.8, 0.8--1.2, 2.5--3.0, 3.5--4.0) all \emph{do} admit
+$\geq 4$ of the 5 AI tiers under Good Enough. The $1.5\times$ factor
+between mean-Strict and mean-Good-Enough reach (e.g., n1: 4.00 vs
+7.00; j2-base: 5.10 vs 6.90) calibrates the gap that an unmeasurable
+Strict criterion at production scale would impose on Good Enough
+numbers there.
+
+Six failure-mode classes emerge, organised by which tiers succeed
+and which fail.
+
+\begin{itemize}
+\item \textbf{Universal success} (1.2--1.6\,GHz): every tier finds
+this band deterministically. Aperture is electrically intermediate,
+fitness landscape is benign, BF basin is wide.
+
+\item \textbf{Surrogate density gap, rank-deep} (0.5--0.8\,GHz):
+n1, n4 Mode~A, n2, n4 Mode~B all miss deterministically (n2 0/20,
+Mode~B 1/20). The forward CNN's predicted-fitness landscape places
+\emph{none} of its top-10 designs inside the BF basin's HC catchment;
+SS-GA's stochastic exploration occasionally stumbles onto an
+in-basin design (Mode~B 5\% rate) but no global top-K probe does.
+Only the inverse nets (j2 and j2-wide, both 100\%) recover this band.
+At electrically-small aperture (0.5--0.8\,GHz, $A/\lambda \approx
+0.4$), the surrogate is systematically and broadly mis-ranking the
+design space.
+
+\item \textbf{Surrogate density gap, marginal} (0.8--1.2\,GHz):
+n1 and Mode~A still 0\%, but n2 catches 10\% and Mode~B catches 35\%.
+Inverse nets at 55--60\%. None of the AI tiers exceed 60\% on this
+band; expected coverage from the optimal three-tier hybrid is
+$\sim$83\%. This is the residual hard band that even the best
+ensemble does not reach $\geq 95$\% reliably.
+
+\item \textbf{Surrogate density gap, top-$K{=}10$ catches it}
+(2.5--3.0\,GHz): rank-1 surrogate-BF fails (n1, Mode~A both 0/20),
+top-K succeeds (n2 100/100, but only via the rank-2 surrogate pick;
+the rank-1 is a false maximum). Inverse nets partial: j2-wide 50\%,
+j2-baseline 25\%. Mode~B 0\% --- the SS-GA candidate pool's top-10
+does not include the in-basin design that the global top-10 does.
+
+\item \textbf{Inverse-net hallucination} (1.6--2.0\,GHz): all four
+surrogate-driven tiers (n1, Mode~A, n2, Mode~B) succeed at 100\%.
+Both inverse nets succeed at only 25\%. The inverse net's
+$|S_{11}|$-target seed lies near, but not in, the BF basin; HC
+escapes the inverse net's local opt only on a quarter of bit-shuffle
+orderings. The wider net does not fix this --- both narrow and
+wide reach 25\% identically.
+
+\item \textbf{HC trap (rank-1 deterministic miss)} (3.5--4.0\,GHz):
+n1, Mode~A, and j2-wide all reach the same Hamming-2 local optimum
+WGap${=}0.109$\,dB on every seed (deterministic 0/20). Only
+j2-baseline (50\%), n2 (100\%), and Mode~B (100\%) escape. The
+j2-wide vs j2-baseline contrast on this band is the single
+clearest demonstration of capacity hurting basin coverage at 24
+bits.
+\end{itemize}
+
+\subsection{Two Underlying Mechanisms}
+
+The six failure-mode classes collapse into two underlying mechanisms.
+
+\paragraph{Surrogate density gap.}
+The CNN surrogate's predicted-fitness landscape can place its top-1,
+top-$K$, or even SS-GA-explored picks outside the BF basin's HC
+catchment. We see this on three of the eight bands, with three
+distinct sub-patterns:
+\begin{itemize}
+\item \emph{Top-$K{=}10$ insufficient} (0.5--0.8 and 0.8--1.2\,GHz):
+even the rank-2 through rank-10 picks fail. SS-GA's locally-explored
+candidate pool partially helps on 0.8--1.2 (35\% rescue) but not on
+0.5--0.8 (5\% rescue). Only inverse-net warm-starts find these bands
+reliably.
+\item \emph{Top-$K{=}10$ sufficient} (2.5--3.0\,GHz): the BF basin
+is at the surrogate's rank-2 prediction. n2 catches it deterministically;
+n1 and Mode~A miss because they only HC the rank-1 pick.
+\end{itemize}
+The surrogate-density-gap mechanism is targetable by enlarging $K$
+on specific bands, or more efficiently by a complementary tier such
+as the inverse net that does not rely on outscoring false maxima.
+
+\paragraph{Inverse-net hallucination and HC traps.}
+The S11-only tandem inverse network~\cite{Liu2018Tandem} produces
+designs near the requested $|S_{11}|$ target spectrum, but the
+network has learned a spectrum-to-bits mapping that is close-fit on
+average and not basin-faithful in the
+electrically-intermediate ($A/\lambda \approx 1$) regime. On 1.6--2.0\,GHz both
+inverse-net variants miss 75\% of HC bit-shuffles. On 3.5--4.0\,GHz
+the wider inverse net is so confidently locked into a Hamming-2
+near-miss that HC cannot escape it (deterministic 0\%) while the
+narrower variant reaches the basin half the time.
+
+\textbf{Capacity hurts on this mechanism.} As established in
+Paper~2~\cite{Maloney2026Paper2}~\S 4, the wider tandem with 12.5\% lower validation
+MSE reaches $4.45 \pm 1.07$ basins compared to the narrow baseline's
+$5.10 \pm 1.30$. The bands that drive the difference are 3.5--4.0
+(wide 0\%, narrow 50\%), 3.0--3.5 (wide 50\%, narrow 85\%), and
+2.0--2.5 (wide 60\%, narrow 70\%). Wider does help on 0.8--1.2
+(60\% vs 55\%) and 2.5--3.0 (50\% vs 25\%), but the losses on three
+bands outweigh the gains on two. \emph{Capacity moves which bands
+hallucinate; at 24 bits it does so net unfavourably.}
+
+\subsection{Why No Single Tier Wins All Eight}
+
+The two mechanisms are \emph{complementary}: surrogate density gap
+fails on bands where inverse hallucination does not, and vice versa.
+Bands 0.5--0.8 and 0.8--1.2 belong to the surrogate-density-gap
+class; only inverse nets find them. Band 1.6--2.0 belongs to the
+inverse-net-hallucination class; only surrogate-BF tiers find it
+deterministically. Band 2.5--3.0 belongs to the rank>1 sub-class of
+surrogate-density-gap; only n2 (and partially the inverse nets)
+reaches it. Band 3.5--4.0 is the j2-baseline-uniquely-half-finds-it
+band, plus n2.
+
+\subsection{Implications for Production-Scale Design}
+
+The two-mechanism finding has practical implications for the
+168-bit production-scale pipeline (in preparation). At larger bit
+count the surrogate density gap is likely to deepen (more designs,
+sparser training coverage per region of design space) while the
+inverse-net hallucination footprint may shrink or migrate (more
+expressiveness for the spectrum-to-bits mapping). A robust production
+pipeline therefore should not rely on a single tier; the optimal
+three-tier hybrid \texttt{j2-baseline + j2-wide + n2}, which spends
+its evals on different mechanisms, realises the methodologically
+supported recipe. At 24 bits this construction yields
+\textbf{7.84 of 8 expected basins for $\sim$4{,}211 median FDTD
+evals}, the cheapest near-full-coverage tier in the present study
+(\S\ref{sec:p2_tiers}).
+
+The capacity-hurts finding implies that the production-scale inverse
+net should be early-stopped at the basin-best knee, not the
+val-MSE-best minimum, and that wider variants should be evaluated
+against multi-seed basin coverage rather than validation MSE before
+being adopted. Validation MSE is not a reliable proxy for the
+pipeline metric.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig_basin_matrix.pdf}
+\caption{Per-tier basin-recovery matrix at 24 bits, multi-seed.
+Each cell: shaded by the fraction of $N{=}20$ HC bit-shuffle seeds
+on which the tier's post-HC design lies in the BF basin
+(EPS${=}0.01$\,dB). Coloured strip below classifies each band's
+failure mode.}
+\label{fig:basin_matrix}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{fig_aperture_vs_band.pdf}
+\caption{Brute-force fitness ceiling vs aperture-to-wavelength
+ratio at band centre. Low-$A/\lambda$ bands (left) are
+gain-limited by classical aperture bounds and hard for surrogate-BF
+tiers; intermediate-$A/\lambda$ bands ($A/\lambda \approx 1$) are
+where inverse-net hallucination dominates. Bands with
+$A/\lambda > 2$ are uniformly easy. Markers coloured by failure
+mode (Fig.~\ref{fig:basin_matrix}).}
+\label{fig:aperture_vs_band}
+\end{figure}
+
 \section{What This Means for the Practicing Antenna Designer}
 \label{app:practitioner}
 
