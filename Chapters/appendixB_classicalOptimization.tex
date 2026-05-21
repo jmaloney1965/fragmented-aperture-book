@@ -1302,7 +1302,7 @@ Table~\ref{tab:tier_summary} reports both, side by side.
 
 \begin{table*}[t]
 \centering
-\caption{Multi-seed pipeline-tier benchmark at 24 bits, both criteria
+\caption[Multi-seed pipeline-tier benchmark (24-bit)]{Multi-seed pipeline-tier benchmark at 24 bits, both criteria
 (8 reference bands, $N{=}20$ HC bit-shuffle seeds). Strict =
 $0.01$\,dB basin recovery; Good Enough = $0.5$\,dB engineering
 acceptable tolerance. Median total evals are unique-design counts
@@ -1415,7 +1415,7 @@ of certainty.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.92\linewidth]{fig_pareto_24bit.pdf}
-\caption{Multi-seed pipeline-tier Pareto frontier at 24 bits. Each
+\caption[Pipeline-tier Pareto frontier (24-bit, multi-seed)]{Multi-seed pipeline-tier Pareto frontier at 24 bits. Each
 point is one tier; $x$-axis is the median total unique
 FDTD-equivalent evaluations across the eight reference bands per
 seed (log scale), $y$-axis is the mean basin count over $N{=}20$
@@ -1439,7 +1439,7 @@ tiers per band and keeps the best post-HC result yields:
 
 \begin{table}[H]
 \centering
-\caption{Hybrid-tier expected basin counts and median total evals,
+\caption[Hybrid-tier expected basin counts and median evals]{Hybrid-tier expected basin counts and median total evals,
 under independence assumptions on per-band per-seed success rates.}
 \label{tab:hybrids}
 \small
@@ -1511,7 +1511,7 @@ basin).
 
 \begin{table*}[t]
 \centering
-\caption{Engineering and academic speedups for each Pareto-frontier
+\caption[Engineering and academic speedups per Pareto-frontier tier]{Engineering and academic speedups for each Pareto-frontier
 AI tier, against both the cold-multistart and Memetic-24bit baselines.
 ``Reached'' is the count of bands recovered at multi-seed rate $\geq
 50\%$. ``Eng.''\ entries are geometric-mean per-band ratios over
@@ -1591,7 +1591,7 @@ different tiers.
 
 \begin{table*}[t]
 \centering
-\caption{Per-band success rates (\% of $N{=}20$ HC bit-shuffle seeds)
+\caption[Per-band Strict vs Good Enough success rates (24-bit, multi-seed)]{Per-band success rates (\% of $N{=}20$ HC bit-shuffle seeds)
 under \emph{Strict} (0.01\,dB basin recovery, top) and \emph{Good
 Enough} (0.5\,dB engineering acceptable tolerance, bottom) for the
 five multi-seed AI tiers. Values are percentages.}
@@ -1773,7 +1773,7 @@ pipeline metric.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{fig_basin_matrix.pdf}
-\caption{Per-tier basin-recovery matrix at 24 bits, multi-seed.
+\caption[Per-tier basin-recovery matrix (24-bit, multi-seed)]{Per-tier basin-recovery matrix at 24 bits, multi-seed.
 Each cell: shaded by the fraction of $N{=}20$ HC bit-shuffle seeds
 on which the tier's post-HC design lies in the BF basin
 (EPS${=}0.01$\,dB). Coloured strip below classifies each band's
@@ -1784,7 +1784,7 @@ failure mode.}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{fig_aperture_vs_band.pdf}
-\caption{Brute-force fitness ceiling vs aperture-to-wavelength
+\caption[Brute-force fitness ceiling vs aperture/wavelength]{Brute-force fitness ceiling vs aperture-to-wavelength
 ratio at band centre. Low-$A/\lambda$ bands (left) are
 gain-limited by classical aperture bounds and hard for surrogate-BF
 tiers; intermediate-$A/\lambda$ bands ($A/\lambda \approx 1$) are
