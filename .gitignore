@@ -22,9 +22,9 @@ texput.log
 *.scad
 *.mov
 
-# PDFs (too large for git tracking)
+# PDFs (too large for git tracking — including the built book)
+# topLevel.pdf is a build artifact; distribute via Google Drive backup instead
 *.pdf
-!Chapters/topLevel.pdf
 
 # Binaries
 openTDA
