@@ -1,5 +1,5 @@
-% Fix Adobe Acrobat compatibility - force PDF 1.7
-\pdfminorversion=7
+% Fix Adobe Acrobat compatibility - force PDF 1.7 (pdftex only; xelatex emits >=1.5 unconditionally)
+\ifdefined\pdfminorversion\pdfminorversion=7\fi
 
 \documentclass{book}
 \renewcommand\bibname{References}
@@ -19,6 +19,8 @@
 \pagestyle{fancy} % style for headers
 \usepackage{pifont} % for the copyright symbol
 \usepackage{url} % for \url command in App B
+\usepackage{booktabs} % \toprule \midrule \bottomrule in App B tables
+\usepackage{float} % [H] float placement in App B figures
 \headheight 0.25in % height of header
 \headsep 0.25in % dist between top of text and bottom of header
 \parskip 0in
